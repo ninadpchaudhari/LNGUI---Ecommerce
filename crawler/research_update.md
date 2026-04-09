@@ -1,26 +1,8 @@
 ---
 marp: true
-theme: uncover
+
 paginate: true
-backgroundColor: #0f1117
-color: #e0e0e0
-style: |
-  section {
-    font-family: 'Segoe UI', system-ui, sans-serif;
-  }
-  h1 { color: #fff; font-size: 1.6em; }
-  h2 { color: #fff; font-size: 1.3em; }
-  strong { color: #58a6ff; }
-  em { color: #f78166; }
-  code { background: #1a1d2e; color: #7ee787; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
-  table { font-size: 0.75em; margin: 0 auto; }
-  th { background: #1a1d2e; color: #888; }
-  td { border-color: #2a2d3e; }
-  blockquote { border-left: 4px solid #58a6ff; padding-left: 16px; color: #aaa; font-size: 0.85em; }
-  .columns { display: flex; gap: 24px; }
-  .col { flex: 1; }
-  footer { color: #555; font-size: 0.6em; }
-footer: "Chaudhari & Kuri · Testing NL-Mediated GUIs · Research Update April 2026"
+
 ---
 
 # Research Update: DM vs NL Reachability
@@ -29,7 +11,6 @@ footer: "Chaudhari & Kuri · Testing NL-Mediated GUIs · Research Update April 2
 **Ninad Chaudhari** & Sharmista Kuri
 *April 2026*
 
-<!-- _footer: "" -->
 
 ---
 
