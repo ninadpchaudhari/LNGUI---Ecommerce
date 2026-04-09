@@ -329,6 +329,12 @@ body {
 .meta-table tbody tr:nth-child(even) {
   background: #fafafa;
 }
+.meta-result-row {
+  cursor: pointer;
+}
+.meta-result-row:hover {
+  background: #f0f7ff !important;
+}
 .meta-variant-cell {
   max-width: 220px;
   overflow: hidden;
@@ -337,4 +343,62 @@ body {
 }
 .meta-reason-cell {
   color: #555;
+}
+
+.meta-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.meta-modal {
+  width: min(900px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+}
+
+.meta-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.meta-modal-header h3 {
+  font-size: 1rem;
+}
+
+.meta-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.86rem;
+}
+
+.meta-modal-block {
+  margin-top: 10px;
+}
+
+.meta-modal-pre {
+  margin-top: 4px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
 }

@@ -46,6 +46,7 @@ async function run(prompt: string): Promise<{ cmd: Command; snap: UISnapshot }> 
 function fail(relation: string, base: string, variant: string, msg: string, runIdx: number): MetamorphicResult {
   return {
     relation, basePrompt: base, variantPrompt: variant,
+    baseCommand: null, variantCommand: null,
     baseSnapshot: null, variantSnapshot: null,
     verdict: "FAIL", reason: `Error: ${msg}`, run: runIdx,
   };
@@ -60,6 +61,7 @@ async function caseInvariance(base: string, runIdx: number): Promise<Metamorphic
     const verdict = compareSnapshots(a.snap, b.snap);
     return {
       relation: "Case Invariance", basePrompt: base, variantPrompt: variant,
+      baseCommand: a.cmd, variantCommand: b.cmd,
       baseSnapshot: a.snap, variantSnapshot: b.snap, verdict,
       reason: verdict === "PASS" ? "Identical output" : verdict === "WEAK_PASS" ? "Same IDs, minor filter diff" : "Different results for case change",
       run: runIdx,
@@ -76,6 +78,7 @@ async function synonymPrefix(base: string, runIdx: number): Promise<MetamorphicR
     const verdict = compareSnapshots(a.snap, b.snap);
     return {
       relation: "Synonym Prefix", basePrompt: base, variantPrompt: variant,
+      baseCommand: a.cmd, variantCommand: b.cmd,
       baseSnapshot: a.snap, variantSnapshot: b.snap, verdict,
       reason: verdict === "PASS" ? "Synonym treated equally" : verdict === "WEAK_PASS" ? "Same IDs, minor filter diff" : "Different results for synonym",
       run: runIdx,
@@ -90,6 +93,7 @@ async function formatSuffix(base: string, runIdx: number): Promise<MetamorphicRe
     const verdict = compareSnapshots(a.snap, b.snap);
     return {
       relation: "Format Suffix", basePrompt: base, variantPrompt: variant,
+      baseCommand: a.cmd, variantCommand: b.cmd,
       baseSnapshot: a.snap, variantSnapshot: b.snap, verdict,
       reason: verdict === "PASS" ? "Format suffix ignored" : verdict === "WEAK_PASS" ? "Same IDs, minor filter diff" : "Format suffix altered results",
       run: runIdx,
@@ -104,6 +108,7 @@ async function idempotency(base: string, runIdx: number): Promise<MetamorphicRes
     const verdict = compareSnapshots(a.snap, b.snap);
     return {
       relation: "Idempotency", basePrompt: base, variantPrompt: base,
+      baseCommand: a.cmd, variantCommand: b.cmd,
       baseSnapshot: a.snap, variantSnapshot: b.snap, verdict,
       reason: verdict === "PASS" ? "Deterministic" : verdict === "WEAK_PASS" ? "Same IDs, minor filter diff" : "Non-deterministic",
       run: runIdx,
@@ -117,6 +122,7 @@ async function commutativity(base: string, runIdx: number): Promise<MetamorphicR
   if (!match) {
     return {
       relation: "Commutativity", basePrompt: base, variantPrompt: "",
+      baseCommand: null, variantCommand: null,
       baseSnapshot: null, variantSnapshot: null,
       verdict: "SKIPPED", reason: "No sort clause detected", run: runIdx,
     };
@@ -129,6 +135,7 @@ async function commutativity(base: string, runIdx: number): Promise<MetamorphicR
     const verdict = compareSnapshots(a.snap, b.snap);
     return {
       relation: "Commutativity", basePrompt: base, variantPrompt: variant,
+      baseCommand: a.cmd, variantCommand: b.cmd,
       baseSnapshot: a.snap, variantSnapshot: b.snap, verdict,
       reason: verdict === "PASS" ? "Order irrelevant" : verdict === "WEAK_PASS" ? "Same IDs, minor filter diff" : "Clause order changed results",
       run: runIdx,
@@ -155,7 +162,7 @@ export async function runAllRelations(
         basePrompt: result.basePrompt,
         relationName: result.relation,
         variantPrompt: result.variantPrompt,
-        returnedCommand: null,
+        returnedCommand: result.variantCommand,
         uiSnapshot: result.variantSnapshot,
         verdict: result.verdict,
         reason: result.reason,

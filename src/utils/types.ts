@@ -33,6 +33,8 @@ export interface MetamorphicResult {
   relation: string;
   basePrompt: string;
   variantPrompt: string;
+  baseCommand: Command | null;
+  variantCommand: Command | null;
   baseSnapshot: UISnapshot | null;
   variantSnapshot: UISnapshot | null;
   verdict: MetamorphicVerdict;

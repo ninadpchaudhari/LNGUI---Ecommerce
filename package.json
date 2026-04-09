@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite\" \"tsx server.ts\"",
+    "dev:docker": "concurrently \"vite --host 0.0.0.0 --port 5173\" \"tsx server.ts\"",
     "dev:client": "vite",
     "dev:server": "tsx server.ts",
     "build": "tsc -b && vite build",
@@ -12,6 +13,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "langfuse": "^3.38.20",
     "openai": "^6.22.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -23,7 +25,6 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@vercel/node": "^5.6.6",
     "@vitejs/plugin-react": "^5.1.1",
     "concurrently": "^9.2.1",
     "dotenv": "^17.3.1",

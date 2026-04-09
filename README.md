@@ -1,73 +1,138 @@
-# React + TypeScript + Vite
+# Chat-Assisted Ecommerce
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Vite + React demo where a natural language prompt is converted into structured product filters.
 
-Currently, two official plugins are available:
+## What Changed
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The API is now runtime-agnostic and uses the standard Fetch API instead of Vercel-specific request/response types.
 
-## React Compiler
+- Core handler: `api/command.ts` exports `handleCommandRequest(request, env?)`
+- Local dev adapter: `server.ts` maps Express requests to `Request`
+- Cloudflare entrypoint: `api/worker.ts`
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## LLM Routing (OpenRouter Default)
 
-## Expanding the ESLint configuration
+This project uses the OpenAI SDK with a configurable base URL.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Default behavior (when `LITELLM_BASE_URL` is not set):
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- `OPENAI_BASE_URL` defaults to `https://openrouter.ai/api/v1`
+- `OPENAI_MODEL` defaults to `openai/gpt-4o-mini`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Required for default OpenRouter usage:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- `OPENAI_API_KEY`
+
+Optional overrides in direct mode:
+
+- `OPENAI_BASE_URL`
+- `OPENAI_MODEL`
+
+Optional for LiteLLM usage:
+
+- `LITELLM_BASE_URL` (example: `https://litellm.example.com/v1`)
+- `LITELLM_MODEL` (example: `openai/gpt-4o-mini`)
+- `LITELLM_API_KEY` (if your LiteLLM proxy requires auth)
+- `LITELLM_API_KEY_HEADER` (custom auth header name when not using `Authorization`)
+
+## Observability (Langfuse)
+
+Langfuse tracing is enabled when both keys are present:
+
+- `LANGFUSE_PUBLIC_KEY`
+- `LANGFUSE_SECRET_KEY`
+
+Optional:
+
+- `LANGFUSE_BASE_URL`
+
+The command API records:
+
+- input prompt and available filters/sorts
+- model and routing metadata
+- initial LLM generation and repair attempt
+- final status and output/error
+
+## Run Locally
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Client runs on Vite and API is proxied to `http://localhost:3001/api/command`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Run Locally With Docker Compose
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+You can run both frontend and API in one containerized dev workflow.
+
+1. Add required env vars to `.env` (same env vars used by local Node run).
+2. Start services:
+
+```bash
+docker compose up --build
 ```
+
+3. Open the app at `http://localhost:5173`.
+
+The API is available at `http://localhost:3001/api/command` and Vite still proxies `/api` requests automatically.
+
+To stop:
+
+```bash
+docker compose down
+```
+
+### LiteLLM: Cloud vs Local Container
+
+You can use either mode:
+
+1. Cloud LiteLLM:
+- Set `LITELLM_BASE_URL` to your hosted LiteLLM endpoint (for example `https://<your-host>/v1`).
+- Run normal compose:
+
+```bash
+docker compose up --build
+```
+
+2. Local LiteLLM in Docker:
+- Add `OPENAI_API_KEY` in `.env` for the LiteLLM container.
+- Set app routing in `.env`:
+	- `LITELLM_BASE_URL=http://litellm:4000/v1`
+	- `LITELLM_MODEL=openai/gpt-4o-mini`
+- Start compose with LiteLLM profile:
+
+```bash
+docker compose --profile litellm up --build
+```
+
+LiteLLM local config is in `litellm.config.yaml` and exposes port `4000` on your machine.
+
+## Local Test Mode (No External LLM)
+
+If you want to test the full app flow locally without calling LiteLLM/OpenAI, set:
+
+- `LOCAL_TEST_MODE=true`
+
+When enabled, the API uses a deterministic prompt parser and returns a valid command payload without any network LLM call.
+
+Example `.env` for local-only testing:
+
+```bash
+LOCAL_TEST_MODE=true
+```
+
+This is useful for UI and filter workflow testing while keeping production behavior unchanged.
+
+## Cloudflare Workers
+
+Use `api/worker.ts` as your Worker entrypoint.
+
+Example pattern:
+
+```ts
+import worker from "./api/worker";
+export default worker;
+```
+
+Route `POST /api/command` to this worker and provide the env vars above in your worker configuration.
