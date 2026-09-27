@@ -1,0 +1,43 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "lngui-ecommerce",
+  "main": "api/worker.ts",
+  "compatibility_date": "2026-09-01",
+  // The OpenAI SDK and the Langfuse SDK both expect some Node built-ins.
+  "compatibility_flags": ["nodejs_compat"],
+
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // Without this, the SPA fallback would swallow /api/* before the Worker
+    // ever ran. Note this key nests inside "assets".
+    "run_worker_first": ["/api/*"]
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "lngui-turns",
+      // Paste the UUID printed by: wrangler d1 create lngui-turns
+      "database_id": "REPLACE_WITH_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  // Non-secret runtime configuration. P is server-authoritative, so changing
+  // these changes the experiment; secrets go through `wrangler secret put`.
+  "vars": {
+    "OPENROUTER_MODEL": "openai/gpt-4o-mini",
+    "OPENROUTER_MODELS": "openai/gpt-4o-mini,anthropic/claude-3.5-haiku,google/gemini-2.0-flash-001",
+    "OPENROUTER_MODEL_ALLOW_ANY": "true",
+    "OPENROUTER_APP_TITLE": "LNGUI Ecommerce Case Study",
+    "LLM_TEMPERATURE": "0",
+    "LLM_TOP_P": "1",
+    "HISTORY_POLICY": "full",
+    "CLEAR_ACTION_ENABLED": "true",
+    "LOCAL_TEST_MODE": "false"
+  },
+
+  "observability": { "enabled": true }
+}

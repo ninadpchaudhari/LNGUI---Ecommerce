@@ -133,7 +133,12 @@ export function resolveLLMConfig(env: RuntimeEnv): LLMConfig {
     provider: openAIApiKey ? "openai" : "none",
     apiKey: openAIApiKey ?? "",
     ...(openAIBaseURL ? { baseURL: openAIBaseURL } : {}),
-    model: str(env, "OPENAI_MODEL") || DEFAULT_OPENAI_MODEL,
+    // OPENROUTER_MODEL is honoured as a last resort so that the reported model
+    // reflects what is configured rather than which key happens to be present.
+    // Without it, a LOCAL_TEST_MODE run with OPENROUTER_MODEL set would
+    // advertise the hardcoded OpenAI default in P and lead the UI dropdown with
+    // a model nobody configured.
+    model: str(env, "OPENAI_MODEL") || str(env, "OPENROUTER_MODEL") || DEFAULT_OPENAI_MODEL,
   };
 }
 
