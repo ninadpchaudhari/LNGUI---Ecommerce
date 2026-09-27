@@ -280,9 +280,91 @@ addressed.
 
 ---
 
-## 9. Preliminary relation results — do not cite yet
+## 9. The (N, ε) grid is coarser than it looks, and this subject cannot calibrate it
 
-`[N=1]` — indicative only, listed so the numbers are not lost.
+`[structural]` for the arithmetic, `[open]` for what to do about it.
+
+### 9a. ε only takes effect at multiples of 1/N
+
+Because failure counts are integers, `fails/N > ε` is equivalent to
+
+```
+fails ≥ floor(ε·N) + 1
+```
+
+so the rule is really "fail if at least *k* of *N* trials fail", and every ε in
+`[k/N, (k+1)/N)` behaves identically. The `(N, ε)` space is far smaller than it
+appears:
+
+| N | distinguishable ε settings | ε = 0.2 means |
+| --- | --- | --- |
+| 1 | 1 — **ε is inert** | any failure is a fault |
+| 3 | 3 | **any failure is a fault** (`floor(0.6) + 1 = 1`) |
+| 5 | 5 | ≥ 2 of 5 |
+| 10 | 10 | ≥ 3 of 10 — the §4.19.3 example |
+| 20 | 20 | ≥ 5 of 20 |
+
+Two consequences:
+
+- **§5.4's calibration sweep is mostly measuring `N`, not ε.** It proposes
+  recalculating "from the first 1, 3, 5, and 10 runs using the candidate
+  thresholds", but at N=1 there is one distinguishable threshold and at N=3 there
+  are three. ε only becomes a real dial at the larger N.
+- **Some (N, ε) pairs give no tolerance at all.** N=3 with ε=0.2 reports a fault
+  on a single failing trial — the same rule as ε=0. If a table pairs a small `N`
+  with a nonzero ε, a reader may believe noise was tolerated when it was not.
+
+Recommendation: report the pair as `(N, k)` alongside ε, since `k` is what
+actually varies. The repo now shows the effective `k` next to the N and ε inputs
+so the operative rule is visible rather than implicit.
+
+### 9b. A temperature-0 subject has almost no variance to calibrate against
+
+`(N, ε)` exists to absorb stochastic variation (§4.18, "Stochasticity of LLMs").
+But this benchmark pins `temperature = 0` and `top_p = 1`, and every repeated
+probe returned identical output (3/3 on each of several utterances). That sample
+is far too small to claim determinism — and providers do not guarantee
+bit-determinism at temperature 0 regardless — but it does mean the observed
+variance is **small and unmeasured**, so failure rates here will cluster at 0
+and 1.
+
+Calibrating a noise threshold on a subject with near-zero variance fits ε to
+conditions that do not resemble where it will be applied.
+
+**This also affects the mutation plan.** §4.19.5 offers the seeded mutants as the
+known-faulty cases for calibrating `(N, ε)` under H2. But a mutation operator
+rewrites the emitted command *deterministically*, and the only stochastic stage
+is `M`. So at temperature 0 both `r_P(t)` and `r_m(t)` are near 0 or near 1, and
+the calibration set contains no noise to tune against either.
+
+Sources of the variance ε is meant to absorb, in rough order of cost:
+
+1. **OpenRouter routing** — already instrumented. If the same request is served
+   by different upstream providers, output can differ at temperature 0. The
+   `resolved_model` and `provider_name` columns exist precisely to catch this, so
+   this is free realistic variance if it occurs; worth checking whether it does
+   before assuming it does not.
+2. **`temperature > 0` as a declared condition.** `LLM_TEMPERATURE` is already an
+   env var and part of `P`, so a sweep over temperature is a config change, and
+   `systemPromptHash` plus the temperature column keep the conditions separable.
+   This is the controllable option, and it makes "tolerate noise" measurable
+   against a known ground truth.
+3. **The deployed subjects.** Appendix B.2 documents exactly the phenomenon —
+   the same Apartments.com request returning *Miami* in one session and *Chicago*
+   in another. Realistic variance, but no ground truth, so it can validate a
+   rule rather than calibrate one.
+
+**`[open]`** Should H2's calibration run at `temperature > 0` on the controlled
+benchmark, with the fixed `(N, ε)` then applied at temperature 0 and to the
+deployed subjects? That would give a calibration set that has both noise and
+known truth, which neither of the other two options provides alone.
+
+---
+
+## 10. Preliminary relation results — do not cite yet
+
+`[N=1]` — indicative only, listed so the numbers are not lost. Note from §9a that
+at N=1 ε is inert, so these carry no noise tolerance whatsoever.
 
 Baseline prompt, real mediator, one trial per case:
 
@@ -311,7 +393,7 @@ generated test set, which is the §4.11 behaviour working as intended.
 
 ---
 
-## 10. Appendix A and B need edits
+## 11. Appendix A and B need edits
 
 `[structural]`
 
@@ -331,7 +413,7 @@ generated test set, which is the §4.11 behaviour working as intended.
 
 ---
 
-## 11. Measurement caveats to keep in view
+## 12. Measurement caveats to keep in view
 
 - **`LOCAL_TEST_MODE` is stateless by construction.** It parses the current
   utterance alone and ignores `H`, so it behaves like `HISTORY_POLICY=none`

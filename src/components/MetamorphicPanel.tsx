@@ -52,6 +52,12 @@ export function MetamorphicPanel(props: Props) {
   const [open, setOpen] = useState<string | null>(null);
 
   const instances = buildInstances(basePrompt);
+
+  // Failure counts are integers, so `fails/N > ε` is really "fail if at least k
+  // of N trials fail". Every ε in [k/N, (k+1)/N) behaves identically, and some
+  // pairings give no tolerance at all — N=3 with ε=0.2 yields k=1, the same
+  // rule as ε=0. Showing k keeps the operative rule visible.
+  const failThreshold = Math.floor(epsilon * n) + 1;
   // MR_CA and the amnesia case run multi-utterance traces, so the call count is
   // not simply 2N per case (§4.18).
   const plannedCalls =
@@ -128,6 +134,13 @@ export function MetamorphicPanel(props: Props) {
       <p className="meta-log-count">
         {instances.length} instance{instances.length === 1 ? "" : "s"} · ≈{plannedCalls} mediator
         call{plannedCalls === 1 ? "" : "s"} at N={n}
+        {" · "}
+        <span title="fails/N > ε, which for integer counts means fails ≥ floor(εN)+1">
+          fails ≥ {failThreshold} of {n} to report a violation
+        </span>
+        {failThreshold === 1 && (
+          <span className="trace-flag-warn"> · no noise tolerance at this (N, ε)</span>
+        )}
         {localMode ? (
           <span className="trace-note"> · LOCAL_TEST_MODE: no LLM spend</span>
         ) : (
