@@ -8,19 +8,24 @@ const SORTS = ["price_asc", "price_desc", "rating_desc", "name_asc"] as const;
 type RuntimeEnv = Record<string, string | undefined>;
 
 export type CommandRuntimeEnv = {
-  OPENAI_API_KEY?: string;
+  /** OpenRouter is the default provider. Both spellings of the key are accepted. */
   OPEN_ROUTER_API_KEY?: string;
-  OPENAI_MODEL?: string;
+  OPENROUTER_API_KEY?: string;
+  OPENROUTER_BASE_URL?: string;
+  OPENROUTER_MODEL?: string;
+  OPENROUTER_SITE_URL?: string;
+  OPENROUTER_APP_TITLE?: string;
+  /** Direct OpenAI, used only when no OpenRouter key is present. */
+  OPENAI_API_KEY?: string;
   OPENAI_BASE_URL?: string;
-  LITELLM_BASE_URL?: string;
-  LITELLM_MODEL?: string;
-  LITELLM_API_KEY?: string;
-  LITELLM_API_KEY_HEADER?: string;
+  OPENAI_MODEL?: string;
   LANGFUSE_PUBLIC_KEY?: string;
   LANGFUSE_SECRET_KEY?: string;
   LANGFUSE_BASE_URL?: string;
   LOCAL_TEST_MODE?: string;
 };
+
+export type LlmProvider = "openrouter" | "openai" | "none";
 
 const CommandSchema = z.object({
   filters: z.object({
@@ -101,42 +106,51 @@ function getEnvVar(env: RuntimeEnv, key: string): string | undefined {
   return undefined;
 }
 
+const DEFAULT_OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
+const DEFAULT_OPENROUTER_MODEL = "openai/gpt-4o-mini";
+const DEFAULT_OPENAI_MODEL = "gpt-4o-mini";
+
+/**
+ * Provider resolution is key-first: an OpenRouter key selects OpenRouter, otherwise an
+ * OpenAI key selects direct OpenAI, otherwise there is no provider and the request fails.
+ */
 function resolveLLMConfig(env: RuntimeEnv): {
+  provider: LlmProvider;
   model: string;
   baseURL?: string;
   apiKey: string;
   defaultHeaders?: Record<string, string>;
-  usingLiteLLM: boolean;
 } {
-  const defaultOpenRouterBaseURL = "https://openrouter.ai/api/v1";
-  const defaultOpenRouterModel = "openai/gpt-4o-mini";
-  const liteBaseURL = getEnvVar(env, "LITELLM_BASE_URL")?.trim();
-  const openAIBaseURL = getEnvVar(env, "OPENAI_BASE_URL")?.trim();
-  const liteModel = getEnvVar(env, "LITELLM_MODEL")?.trim();
-  const openAIModel = getEnvVar(env, "OPENAI_MODEL")?.trim();
+  const openRouterApiKey =
+    getEnvVar(env, "OPEN_ROUTER_API_KEY")?.trim() || getEnvVar(env, "OPENROUTER_API_KEY")?.trim();
   const openAIApiKey = getEnvVar(env, "OPENAI_API_KEY")?.trim();
-  const openRouterApiKey = getEnvVar(env, "OPEN_ROUTER_API_KEY")?.trim();
-  const liteApiKey = getEnvVar(env, "LITELLM_API_KEY")?.trim();
-  const customHeaderName = getEnvVar(env, "LITELLM_API_KEY_HEADER")?.trim();
 
-  const useLiteLLM = Boolean(liteBaseURL);
-  const apiKey = useLiteLLM ? liteApiKey || "local-litellm" : openRouterApiKey || openAIApiKey || "";
-  const model = useLiteLLM
-    ? liteModel || openAIModel || defaultOpenRouterModel
-    : openAIModel || defaultOpenRouterModel;
-  const baseURL = useLiteLLM ? liteBaseURL : openAIBaseURL || defaultOpenRouterBaseURL;
-
-  let defaultHeaders: Record<string, string> | undefined;
-  if (useLiteLLM && customHeaderName && apiKey) {
-    defaultHeaders = { [customHeaderName]: apiKey };
+  if (openRouterApiKey) {
+    return {
+      provider: "openrouter",
+      apiKey: openRouterApiKey,
+      baseURL:
+        getEnvVar(env, "OPENROUTER_BASE_URL")?.trim() ||
+        getEnvVar(env, "OPENAI_BASE_URL")?.trim() ||
+        DEFAULT_OPENROUTER_BASE_URL,
+      model:
+        getEnvVar(env, "OPENROUTER_MODEL")?.trim() ||
+        getEnvVar(env, "OPENAI_MODEL")?.trim() ||
+        DEFAULT_OPENROUTER_MODEL,
+      // OpenRouter attribution headers; they surface this app in the OpenRouter dashboard.
+      defaultHeaders: {
+        "HTTP-Referer": getEnvVar(env, "OPENROUTER_SITE_URL")?.trim() || "http://localhost:5173",
+        "X-Title": getEnvVar(env, "OPENROUTER_APP_TITLE")?.trim() || "LNGUI Ecommerce Case Study",
+      },
+    };
   }
 
+  const openAIBaseURL = getEnvVar(env, "OPENAI_BASE_URL")?.trim();
   return {
-    model,
-    baseURL,
-    apiKey,
-    defaultHeaders,
-    usingLiteLLM: useLiteLLM,
+    provider: openAIApiKey ? "openai" : "none",
+    apiKey: openAIApiKey ?? "",
+    ...(openAIBaseURL ? { baseURL: openAIBaseURL } : {}),
+    model: getEnvVar(env, "OPENAI_MODEL")?.trim() || DEFAULT_OPENAI_MODEL,
   };
 }
 
@@ -292,10 +306,11 @@ export async function handleCommandRequest(
   }
 
   const llm = resolveLLMConfig(runtimeEnv as RuntimeEnv);
-  if (!llm.usingLiteLLM && !llm.apiKey) {
+  if (llm.provider === "none") {
     return jsonResponse(
       {
-        error: "Missing API key. Set OPEN_ROUTER_API_KEY (for OpenRouter) or OPENAI_API_KEY, or use LITELLM_BASE_URL with LITELLM_API_KEY.",
+        error:
+          "Missing API key. Set OPEN_ROUTER_API_KEY (OpenRouter) or OPENAI_API_KEY (direct OpenAI).",
       },
       { status: 500 },
     );
@@ -318,7 +333,7 @@ export async function handleCommandRequest(
     metadata: {
       model: llm.model,
       baseURL: llm.baseURL,
-      liteLLMEnabled: Boolean(getEnvVar(runtimeEnv as RuntimeEnv, "LITELLM_BASE_URL")),
+      provider: llm.provider,
     },
   });
 

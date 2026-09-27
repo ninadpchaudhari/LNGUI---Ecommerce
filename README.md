@@ -12,28 +12,19 @@ The API is now runtime-agnostic and uses the standard Fetch API instead of Verce
 
 ## LLM Routing (OpenRouter Default)
 
-This project uses the OpenAI SDK with a configurable base URL.
+This project uses the OpenAI SDK with a configurable base URL. Provider selection is
+**key-first**: whichever key is present decides the provider.
 
-Default behavior (when `LITELLM_BASE_URL` is not set):
+| Provider | Selected when | Base URL | Model default |
+| --- | --- | --- | --- |
+| `openrouter` | `OPEN_ROUTER_API_KEY` or `OPENROUTER_API_KEY` is set | `OPENROUTER_BASE_URL` → `OPENAI_BASE_URL` → `https://openrouter.ai/api/v1` | `OPENROUTER_MODEL` → `OPENAI_MODEL` → `openai/gpt-4o-mini` |
+| `openai` | only `OPENAI_API_KEY` is set | `OPENAI_BASE_URL`, else the SDK default | `OPENAI_MODEL` → `gpt-4o-mini` |
+| none | neither is set | — | request fails with HTTP 500 |
 
-- `OPENAI_BASE_URL` defaults to `https://openrouter.ai/api/v1`
-- `OPENAI_MODEL` defaults to `openai/gpt-4o-mini`
+Optional OpenRouter attribution, shown in the OpenRouter dashboard:
 
-Required for default OpenRouter usage:
-
-- `OPENAI_API_KEY`
-
-Optional overrides in direct mode:
-
-- `OPENAI_BASE_URL`
-- `OPENAI_MODEL`
-
-Optional for LiteLLM usage:
-
-- `LITELLM_BASE_URL` (example: `https://litellm.example.com/v1`)
-- `LITELLM_MODEL` (example: `openai/gpt-4o-mini`)
-- `LITELLM_API_KEY` (if your LiteLLM proxy requires auth)
-- `LITELLM_API_KEY_HEADER` (custom auth header name when not using `Authorization`)
+- `OPENROUTER_SITE_URL` (sent as `HTTP-Referer`)
+- `OPENROUTER_APP_TITLE` (sent as `X-Title`)
 
 ## Observability (Langfuse)
 
@@ -83,34 +74,9 @@ To stop:
 docker compose down
 ```
 
-### LiteLLM: Cloud vs Local Container
-
-You can use either mode:
-
-1. Cloud LiteLLM:
-- Set `LITELLM_BASE_URL` to your hosted LiteLLM endpoint (for example `https://<your-host>/v1`).
-- Run normal compose:
-
-```bash
-docker compose up --build
-```
-
-2. Local LiteLLM in Docker:
-- Add `OPENAI_API_KEY` in `.env` for the LiteLLM container.
-- Set app routing in `.env`:
-	- `LITELLM_BASE_URL=http://litellm:4000/v1`
-	- `LITELLM_MODEL=openai/gpt-4o-mini`
-- Start compose with LiteLLM profile:
-
-```bash
-docker compose --profile litellm up --build
-```
-
-LiteLLM local config is in `litellm.config.yaml` and exposes port `4000` on your machine.
-
 ## Local Test Mode (No External LLM)
 
-If you want to test the full app flow locally without calling LiteLLM/OpenAI, set:
+If you want to test the full app flow locally without calling OpenRouter/OpenAI, set:
 
 - `LOCAL_TEST_MODE=true`
 
