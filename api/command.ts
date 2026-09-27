@@ -1,10 +1,8 @@
 import OpenAI from "openai";
 import { Langfuse } from "langfuse";
-import { z } from "zod/v4";
 
 import {
   SCHEMA_VERSION,
-  hashString,
   type AttemptName,
   type AttemptOutcome,
   type AttemptRecord,
@@ -17,8 +15,9 @@ import {
   type PromptConfig,
   type TokenUsage,
 } from "../shared/contract.ts";
-import { CATEGORY_VALUES, SORT_VALUES } from "../shared/surface.generated.ts";
+import { CATEGORY_VALUES } from "../shared/surface.generated.ts";
 import { effectiveHistory, renderHistory, type ChatMessage } from "../shared/history.ts";
+import { buildCommandSchema, buildSystemPrompt, promptHashes } from "./prompt.ts";
 import {
   clearActionEnabled,
   getEnvVar,
@@ -34,75 +33,6 @@ export type { CommandRuntimeEnv } from "./config.ts";
 
 /** Hard cap on raw model text retained in a record. */
 const MAX_RAW_CHARS = 8000;
-
-// ── Q — the command schema ──────────────────────────────────────────────────
-
-/**
- * Numeric fields are deliberately permissive: an out-of-domain value such as
- * minRating 4.2 must be *representable* in q so that Apply can reject it and
- * the trace can attribute the fault to the mediator. Rejecting it here would
- * instead trigger the repair loop and hide the mediator's actual output.
- */
-function buildCommandSchema(clearEnabled: boolean) {
-  const base = {
-    filters: z.object({
-      category: z.enum(CATEGORY_VALUES).nullable(),
-      maxPrice: z.number().nullable(),
-      minRating: z.number().nullable(),
-      inStockOnly: z.boolean().nullable(),
-    }),
-    sort: z.enum(SORT_VALUES).nullable(),
-    explanation: z.string(),
-  };
-  return clearEnabled
-    ? z.object({ ...base, clearFilters: z.boolean().nullable().optional() })
-    : z.object(base);
-}
-
-function commandSchemaHash(clearEnabled: boolean): string {
-  return hashString(
-    JSON.stringify({
-      categories: CATEGORY_VALUES,
-      sorts: SORT_VALUES,
-      clearFilters: clearEnabled,
-    }),
-  );
-}
-
-// ── P — the system prompt ───────────────────────────────────────────────────
-
-function buildSystemPrompt(clearEnabled: boolean): string {
-  const clearField = clearEnabled
-    ? `,\n  "clearFilters": <true only when the user asks to clear/reset all filters, else null>`
-    : "";
-  const clearRule = clearEnabled
-    ? `\n- "clear filters" / "reset everything" means clearFilters = true. Only use it for an explicit request to clear.`
-    : "";
-
-  return `You are a product filter assistant. Given a user's natural language request, output ONLY a JSON object matching this schema:
-
-{
-  "filters": {
-    "category": <one of ${JSON.stringify(CATEGORY_VALUES)} or null>,
-    "maxPrice": <number or null>,
-    "minRating": <number or null>,
-    "inStockOnly": <boolean or null>
-  },
-  "sort": <one of ${JSON.stringify(SORT_VALUES)} or null>${clearField},
-  "explanation": "<short summary of what you set>"
-}
-
-Rules:
-- If the user does NOT mention a field, return null for it. Do NOT invent constraints.
-- category must be exactly one of the known values or null.
-- sort must be exactly one of the known values or null.
-- "under $X" or "less than $X" means maxPrice = X.
-- "highly rated" / "top rated" means minRating >= 4.0 and/or sort "rating_desc".
-- "in stock" / "available" means inStockOnly = true.${clearRule}
-- Earlier turns of the conversation are provided for context. Preserve constraints
-  the user established earlier unless the current request changes them.
-- Output ONLY the JSON object. No markdown fences, no extra text.`;
-}
 
 // ── Langfuse (structural types; the SDK surface is not imported) ────────────
 
@@ -330,6 +260,7 @@ export async function handleCommandRequest(
   const historyConfig = resolveHistoryConfig(env);
   const schema = buildCommandSchema(clearEnabled);
   const system = buildSystemPrompt(clearEnabled);
+  const hashes = promptHashes(clearEnabled);
   const requestId = crypto.randomUUID();
   const startedAtMs = Date.now();
   const timestamp = new Date().toISOString();
@@ -357,8 +288,8 @@ export async function handleCommandRequest(
             resolvedModel: null,
             temperature: llm.temperature,
             topP: llm.topP,
-            systemPromptHash: hashString(system),
-            commandSchemaHash: commandSchemaHash(clearEnabled),
+            systemPromptHash: hashes.systemPromptHash,
+            commandSchemaHash: hashes.commandSchemaHash,
             historyPolicy: historyConfig.policy,
             historyMaxTurns: historyConfig.maxTurns,
             clearActionEnabled: clearEnabled,
@@ -390,8 +321,8 @@ export async function handleCommandRequest(
     resolvedModel,
     temperature: llm.temperature,
     topP: llm.topP,
-    systemPromptHash: hashString(system),
-    commandSchemaHash: commandSchemaHash(clearEnabled),
+    systemPromptHash: hashes.systemPromptHash,
+    commandSchemaHash: hashes.commandSchemaHash,
     historyPolicy: historyConfig.policy,
     historyMaxTurns: historyConfig.maxTurns,
     clearActionEnabled: clearEnabled,
