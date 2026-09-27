@@ -1,5 +1,7 @@
 # Chat-Assisted Ecommerce — LNGUI benchmark
 
+[https://lngui-ecommerce.ninadpchaudhari.workers.dev/](https://lngui-ecommerce.ninadpchaudhari.workers.dev/)
+
 The controlled benchmark for *Metamorphic Testing of Natural-Language-Mediated
 Interfaces* (§4.16 and Appendix A of the proposal). A product catalog whose
 filter and sort controls are driven by a natural-language "ask" bar, instrumented
