@@ -30,7 +30,10 @@
   "vars": {
     "OPENROUTER_MODEL": "openai/gpt-4o-mini",
     "OPENROUTER_MODELS": "openai/gpt-4o-mini,anthropic/claude-3.5-haiku,google/gemini-2.0-flash-001",
-    "OPENROUTER_MODEL_ALLOW_ANY": "true",
+    // Deliberately false on the deployed instance: the URL is cited publicly in
+    // the dissertation, and allow-any would let a stranger invoke an arbitrarily
+    // expensive model on the account key. Local dev can still set it true.
+    "OPENROUTER_MODEL_ALLOW_ANY": "false",
     "OPENROUTER_APP_TITLE": "LNGUI Ecommerce Case Study",
     "LLM_TEMPERATURE": "0",
     "LLM_TOP_P": "1",
