@@ -13,6 +13,7 @@ import {
   type HistoryTurn,
   type ModelSource,
   type PromptConfig,
+  type SortValue,
   type TokenUsage,
 } from "../shared/contract.ts";
 import { CATEGORY_VALUES } from "../shared/surface.generated.ts";
@@ -201,6 +202,15 @@ async function parseRequestBody(request: Request): Promise<ParsedBody> {
 
 // ── Local test mode ─────────────────────────────────────────────────────────
 
+/**
+ * Deterministic stand-in for the mediator: no network call, no sampling.
+ *
+ * It is *stateless by construction* — it parses the current utterance alone and
+ * ignores H entirely. So local mode behaves like HISTORY_POLICY=none no matter
+ * what the policy is set to, and the amnesia and MR_AC/MR_CA/MR_REV relations
+ * must be exercised against a real mediator. Local mode is for UI and plumbing
+ * work, and for checking that a relation *runs*, not for measuring a mediator.
+ */
 function buildLocalTestCommand(prompt: string, clearEnabled: boolean): Command {
   const text = prompt.toLowerCase();
 
@@ -215,9 +225,16 @@ function buildLocalTestCommand(prompt: string, clearEnabled: boolean): Command {
   const highlyRated = /highly\s+rated|top\s+rated|best\s+rated/.test(text);
   const minRating = ratingMatch ? Number(ratingMatch[1]) : highlyRated ? 4 : null;
 
-  const inStockOnly = /in\s+stock|available/.test(text) ? true : null;
+  // Negative phrasings first: "show out-of-stock items again" is the inverse of
+  // "hide out-of-stock items", and a substring match would otherwise read the
+  // "stock" in both as a request to filter.
+  const inStockOnly = /\b(show|include|also)\b[^.]*out.of.stock/.test(text)
+    ? false
+    : /hide[^.]*out.of.stock|\bin\s+stock\b|\bavailable\b|\bexclude[^.]*out.of.stock/.test(text)
+      ? true
+      : null;
 
-  let sort: string | null = null;
+  let sort: SortValue | null = null;
   if (/(cheapest|lowest\s+price|budget|low\s+to\s+high)/.test(text)) sort = "price_asc";
   else if (/(most\s+expensive|highest\s+price|premium|high\s+to\s+low)/.test(text)) sort = "price_desc";
   else if (/(top\s+rated|rating|best\s+rated)/.test(text)) sort = "rating_desc";

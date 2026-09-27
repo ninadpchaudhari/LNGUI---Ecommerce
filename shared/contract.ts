@@ -6,13 +6,19 @@
  * Equation numbers refer to Chapter 4 of the dissertation proposal.
  */
 import {
+  CATEGORY_VALUES,
   CONTROL_IDS,
   CONTROLS,
+  SORT_VALUES,
   V0,
   type ControlId,
   type ControlValue,
   type Valuation,
 } from "./surface.generated.ts";
+
+/** Dom(category) and Dom(sort) minus ⊥, as literal unions. */
+export type CategoryValue = (typeof CATEGORY_VALUES)[number];
+export type SortValue = (typeof SORT_VALUES)[number];
 
 export type {
   ControlId,
@@ -94,7 +100,13 @@ export interface Observation {
  * implementation, not the reverse.
  */
 export interface CommandFilters {
-  category: string | null;
+  /** Constrained to Dom(category): zod validates the enum before a Command exists. */
+  category: CategoryValue | null;
+  /**
+   * Numerics are intentionally wider than their domains, so that a mediator
+   * emitting e.g. minRating 4.2 is representable in q and can be *rejected* by
+   * Apply rather than hidden behind a schema error.
+   */
   maxPrice: number | null;
   minRating: number | null;
   inStockOnly: boolean | null;
@@ -102,7 +114,7 @@ export interface CommandFilters {
 
 export interface Command {
   filters: CommandFilters;
-  sort: string | null;
+  sort: SortValue | null;
   /** Present only when CLEAR_ACTION_ENABLED; absent from the schema otherwise. */
   clearFilters?: boolean | null;
   explanation: string;

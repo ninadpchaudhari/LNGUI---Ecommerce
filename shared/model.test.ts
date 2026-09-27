@@ -34,13 +34,16 @@ import {
   type Command,
   type DataState,
   type HistoryTurn,
+  type SortValue,
 } from "./contract.ts";
 import { applyCommand, renderData, resetState, step, visibleProducts } from "./transition.ts";
 import { effectiveHistory, renderHistory } from "./history.ts";
 
 const APPLY_OPTS = { clearActionEnabled: true };
 
-function cmd(partial: Partial<Command["filters"]> & { sort?: string | null; clearFilters?: boolean }): Command {
+function cmd(
+  partial: Partial<Command["filters"]> & { sort?: SortValue | null; clearFilters?: boolean },
+): Command {
   const { sort = null, clearFilters, ...filters } = partial;
   return {
     filters: {

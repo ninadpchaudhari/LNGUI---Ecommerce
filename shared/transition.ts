@@ -41,11 +41,11 @@ import {
  */
 function requestedAssignments(q: Command): Array<[ControlId, ControlValue]> {
   return [
-    ["category", q.filters.category as ControlValue],
+    ["category", q.filters.category],
     ["maxPrice", q.filters.maxPrice],
     ["minRating", q.filters.minRating],
     ["inStockOnly", q.filters.inStockOnly],
-    ["sort", q.sort as ControlValue],
+    ["sort", q.sort],
   ];
 }
 

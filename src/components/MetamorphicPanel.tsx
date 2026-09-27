@@ -1,32 +1,94 @@
 import { useState } from "react";
-import type { MetamorphicResult } from "../utils/types.ts";
-import { runAllRelations } from "../utils/metamorphic.ts";
-import { getLogs, exportJSON, exportCSV, downloadFile, clearLogs } from "../utils/logging.ts";
+import type {
+  AppConfig,
+  MrCaseRecord,
+  PromptConfig,
+  RelationName,
+  TurnRecord,
+} from "../utils/types.ts";
+import { buildInstances, runRelations } from "../utils/relations.ts";
+import { saveMrCase } from "../utils/api.ts";
+import { downloadFile, exportCasesCsv } from "../utils/logging.ts";
 
-const VERDICT_COLOR: Record<string, string> = {
-  PASS: "#16a34a",
-  WEAK_PASS: "#ca8a04",
-  FAIL: "#dc2626",
-  SKIPPED: "#888",
+interface Props {
+  config: AppConfig | null;
+  model: string;
+  sessionId: string;
+  P: PromptConfig;
+  onTurn: (record: TurnRecord) => void;
+  onCases?: (cases: MrCaseRecord[]) => void;
+}
+
+const VERDICT_CLASS: Record<string, string> = {
+  pass: "verdict-pass",
+  fail: "verdict-fail",
+  skipped: "verdict-skipped",
 };
 
-export function MetamorphicPanel() {
-  const [basePrompt, setBasePrompt] = useState("show electronics under $100 sorted by rating");
-  const [repeatN, setRepeatN] = useState(3);
-  const [results, setResults] = useState<MetamorphicResult[]>([]);
-  const [running, setRunning] = useState(false);
-  const [logCount, setLogCount] = useState(0);
-  const [selectedResult, setSelectedResult] = useState<MetamorphicResult | null>(null);
+const RELATION_LABEL: Record<RelationName, string> = {
+  MR_SE: "MR_SE · Semantic Equivalence",
+  MR_AC: "MR_AC · Additive Constraining",
+  MR_CA: "MR_CA · Commuting Actions",
+  MR_REV: "MR_REV · Action Reversibility",
+  CONTEXT_AMNESIA: "Context Amnesia (multi-turn MR_CA)",
+};
 
-  const handleRun = async () => {
+/**
+ * Drives Algorithm 1 over the four relations of Table 4.1.
+ *
+ * A verdict is a property of N trials, not of one run: `fails/N > ε` (Eq. 4.18).
+ * There is no WEAK_PASS — under O(σ) = ⟨V,D⟩ a V difference is a violation.
+ */
+export function MetamorphicPanel(props: Props) {
+  const [basePrompt, setBasePrompt] = useState("show electronics under $100 sorted by rating");
+  const [n, setN] = useState(3);
+  const [epsilon, setEpsilon] = useState(0.2);
+  const [cases, setCases] = useState<MrCaseRecord[]>([]);
+  const [running, setRunning] = useState(false);
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+  const [summary, setSummary] = useState<{ covNL: number; covMR: number; invocations: number } | null>(
+    null,
+  );
+  const [open, setOpen] = useState<string | null>(null);
+
+  const instances = buildInstances(basePrompt);
+  // MR_CA and the amnesia case run multi-utterance traces, so the call count is
+  // not simply 2N per case (§4.18).
+  const plannedCalls =
+    instances.reduce((sum, i) => sum + i.sourceTrace.length + i.followupTrace.length, 0) * n;
+
+  const run = async () => {
     setRunning(true);
-    setResults([]);
-    await runAllRelations(basePrompt, repeatN, (r) => {
-      setResults((prev) => [...prev, r]);
-    });
-    setLogCount(getLogs().length);
-    setRunning(false);
+    setCases([]);
+    setSummary(null);
+    setProgress({ done: 0, total: instances.length });
+    try {
+      const result = await runRelations(basePrompt, {
+        n,
+        epsilon,
+        ...(props.model ? { model: props.model } : {}),
+        sessionId: props.sessionId,
+        P: props.P,
+        onTurn: props.onTurn,
+        onCase: (c) => {
+          setCases((prev) => [...prev.filter((p) => p.id !== c.id), c]);
+          saveMrCase(c);
+        },
+        onProgress: (done, total) => setProgress({ done, total }),
+      });
+      setSummary({
+        covNL: result.covNL,
+        covMR: result.covMR,
+        invocations: result.invocations,
+      });
+      props.onCases?.(result.cases);
+    } finally {
+      setRunning(false);
+      setProgress(null);
+    }
   };
+
+  const localMode = props.config?.mode === "local-test";
 
   return (
     <section className="metamorphic-section">
@@ -34,7 +96,7 @@ export function MetamorphicPanel() {
 
       <div className="meta-controls">
         <label className="field-label" style={{ flex: 1 }}>
-          Base Prompt
+          Base utterance
           <input
             type="text"
             value={basePrompt}
@@ -42,135 +104,110 @@ export function MetamorphicPanel() {
             style={{ width: "100%" }}
           />
         </label>
-        <label className="field-label">
-          Repeat N
+        <label className="field-label" title="Repetitions per test case (Algorithm 1)">
+          N
           <input
-            type="number" min={1} max={20} value={repeatN}
-            onChange={(e) => setRepeatN(Number(e.target.value) || 1)}
-            style={{ width: 60 }}
+            type="number" min={1} max={20} value={n}
+            onChange={(e) => setN(Math.max(1, Number(e.target.value) || 1))}
+            style={{ width: 56 }}
           />
         </label>
-        <button
-          className="meta-run-btn"
-          onClick={handleRun}
-          disabled={running || !basePrompt.trim()}
-        >
-          {running ? "Running..." : "Run All Tests"}
+        <label className="field-label" title="Tolerated failure rate ε (Eq. 4.18)">
+          ε
+          <input
+            type="number" min={0} max={0.99} step={0.05} value={epsilon}
+            onChange={(e) => setEpsilon(Math.min(0.99, Math.max(0, Number(e.target.value) || 0)))}
+            style={{ width: 64 }}
+          />
+        </label>
+        <button className="meta-run-btn" onClick={run} disabled={running || !basePrompt.trim()}>
+          {running ? "Running…" : "Run relations"}
         </button>
       </div>
+
+      <p className="meta-log-count">
+        {instances.length} instance{instances.length === 1 ? "" : "s"} · ≈{plannedCalls} mediator
+        call{plannedCalls === 1 ? "" : "s"} at N={n}
+        {localMode ? (
+          <span className="trace-note"> · LOCAL_TEST_MODE: no LLM spend</span>
+        ) : (
+          <span className="trace-flag-warn"> · live model: this will spend tokens</span>
+        )}
+        {progress && ` · ${progress.done}/${progress.total} cases`}
+      </p>
+
+      {summary && (
+        <p className="meta-log-count">
+          Cov<sub>NL</sub> = {(summary.covNL * 100).toFixed(0)}% · Cov<sub>MR</sub> ={" "}
+          {(summary.covMR * 100).toFixed(0)}% · {summary.invocations} invocations
+        </p>
+      )}
 
       <div className="meta-export-row">
-        <button className="clear-btn" onClick={() => downloadFile(exportJSON(), "log.json", "application/json")}>
-          Export JSON
+        <button
+          className="clear-btn"
+          onClick={() => downloadFile(exportCasesCsv(cases), "mr-cases.csv", "text/csv")}
+          disabled={cases.length === 0}
+        >
+          Export cases CSV
         </button>
-        <button className="clear-btn" onClick={() => downloadFile(exportCSV(), "log.csv", "text/csv")}>
-          Export CSV
-        </button>
-        <button className="clear-btn" onClick={() => { clearLogs(); setResults([]); setLogCount(0); }}>
-          Clear Logs
-        </button>
-        <span className="meta-log-count">{logCount} log entries</span>
       </div>
 
-      {results.length > 0 && (
+      {cases.length > 0 && (
         <table className="meta-table">
           <thead>
             <tr>
-              <th>Run</th>
-              <th>Relation</th>
-              <th>Variant Prompt</th>
-              <th>Verdict</th>
-              <th>Reason</th>
+              <th>relation</th>
+              <th>predicate</th>
+              <th>source → follow-up</th>
+              <th>fails/N</th>
+              <th>rate</th>
+              <th>verdict</th>
             </tr>
           </thead>
           <tbody>
-            {results.map((r, i) => (
-              <tr
-                key={i}
-                className="meta-result-row"
-                onClick={() => setSelectedResult(r)}
-                title="Click to view full test details"
-              >
-                <td>{r.run}</td>
-                <td>{r.relation}</td>
-                <td title={r.variantPrompt} className="meta-variant-cell">
-                  {r.variantPrompt || "—"}
-                </td>
-                <td style={{ fontWeight: 700, color: VERDICT_COLOR[r.verdict] }}>
-                  {r.verdict}
-                </td>
-                <td className="meta-reason-cell">{r.reason}</td>
-              </tr>
-            ))}
+            {cases.map((c) => {
+              const isOpen = open === c.id;
+              return [
+                <tr
+                  key={c.id}
+                  className="meta-result-row"
+                  onClick={() => setOpen(isOpen ? null : c.id)}
+                >
+                  <td>{RELATION_LABEL[c.relation] ?? c.relation}</td>
+                  <td><code>{c.predicate}</code></td>
+                  <td className="meta-variant-cell">
+                    {c.sourceTrace.join(" · ") || "σ₀"} → {c.followupTrace.join(" · ")}
+                  </td>
+                  <td>{c.fails}/{c.n}</td>
+                  <td>{(c.failureRate * 100).toFixed(0)}%</td>
+                  <td className={VERDICT_CLASS[c.verdict]}>
+                    {c.verdict.toUpperCase()}
+                    {c.verdict === "fail" && ` (> ${c.epsilon})`}
+                  </td>
+                </tr>,
+                isOpen ? (
+                  <tr key={c.id + "-d"}>
+                    <td colSpan={6}>
+                      <div className="trace-detail trace-p">
+                        <span>legacy label: {c.legacyName ?? "—"}</span>
+                        <span>ε = {c.epsilon}</span>
+                        <span>invocations: {c.mediatorInvocations}</span>
+                        <span>tokens: {c.totalTokens ?? "—"}</span>
+                        <span>
+                          time to first failure:{" "}
+                          {c.firstFailureMs === null ? "—" : `${c.firstFailureMs} ms`}
+                        </span>
+                        {c.skipReason && <span>skipped: {c.skipReason}</span>}
+                        <span>evidence: {c.evidenceTurnIds.length} turn records</span>
+                      </div>
+                    </td>
+                  </tr>
+                ) : null,
+              ];
+            })}
           </tbody>
         </table>
-      )}
-
-      {selectedResult && (
-        <div className="meta-modal-backdrop" onClick={() => setSelectedResult(null)}>
-          <div className="meta-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="meta-modal-header">
-              <h3>Test Details</h3>
-              <button className="clear-btn" onClick={() => setSelectedResult(null)}>Close</button>
-            </div>
-
-            <div className="meta-modal-grid">
-              <div><strong>Run:</strong> {selectedResult.run}</div>
-              <div><strong>Relation:</strong> {selectedResult.relation}</div>
-              <div>
-                <strong>Verdict:</strong>{" "}
-                <span style={{ color: VERDICT_COLOR[selectedResult.verdict], fontWeight: 700 }}>
-                  {selectedResult.verdict}
-                </span>
-              </div>
-            </div>
-
-            <div className="meta-modal-block">
-              <strong>Base Query Tested</strong>
-              <pre className="meta-modal-pre">{selectedResult.basePrompt || "—"}</pre>
-            </div>
-
-            <div className="meta-modal-block">
-              <strong>Variant Query Tested</strong>
-              <pre className="meta-modal-pre">{selectedResult.variantPrompt || "—"}</pre>
-            </div>
-
-            <div className="meta-modal-block">
-              <strong>Reason</strong>
-              <pre className="meta-modal-pre">{selectedResult.reason || "—"}</pre>
-            </div>
-
-            <div className="meta-modal-block">
-              <strong>Base LLM Output Text</strong>
-              <pre className="meta-modal-pre">{selectedResult.baseCommand?.explanation || "—"}</pre>
-            </div>
-
-            <div className="meta-modal-block">
-              <strong>Variant LLM Output Text</strong>
-              <pre className="meta-modal-pre">{selectedResult.variantCommand?.explanation || "—"}</pre>
-            </div>
-
-            <div className="meta-modal-block">
-              <strong>Base Returned Command</strong>
-              <pre className="meta-modal-pre">{JSON.stringify(selectedResult.baseCommand, null, 2) || "null"}</pre>
-            </div>
-
-            <div className="meta-modal-block">
-              <strong>Variant Returned Command</strong>
-              <pre className="meta-modal-pre">{JSON.stringify(selectedResult.variantCommand, null, 2) || "null"}</pre>
-            </div>
-
-            <div className="meta-modal-block">
-              <strong>Base Snapshot</strong>
-              <pre className="meta-modal-pre">{JSON.stringify(selectedResult.baseSnapshot, null, 2) || "null"}</pre>
-            </div>
-
-            <div className="meta-modal-block">
-              <strong>Variant Snapshot</strong>
-              <pre className="meta-modal-pre">{JSON.stringify(selectedResult.variantSnapshot, null, 2) || "null"}</pre>
-            </div>
-          </div>
-        </div>
       )}
     </section>
   );

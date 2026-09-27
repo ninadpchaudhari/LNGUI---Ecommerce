@@ -402,3 +402,320 @@ body {
   word-break: break-word;
   overflow-x: auto;
 }
+
+/* ── Model picker ───────────────────────────────────────────────────────── */
+
+.model-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.model-picker-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.model-picker-label select,
+.model-picker-input {
+  flex: 1;
+  font-size: 0.8rem;
+  padding: 4px 6px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.model-picker-input {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ── Chat panel additions ───────────────────────────────────────────────── */
+
+.chat-panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.chat-panel-head h2 {
+  margin: 0;
+}
+
+.chat-msg-error {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.model-line,
+.chat-context-line {
+  margin: 6px 0 0;
+  font-size: 0.75rem;
+  color: #666;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.model-line-warn {
+  color: #b45309;
+}
+
+.chat-context-line code {
+  font-size: 0.72rem;
+}
+
+/* ── Footprint highlight on the control surface ─────────────────────────── */
+
+.field-label-touched {
+  outline: 2px solid #2563eb33;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.control-flag {
+  font-size: 0.7rem;
+  color: #b45309;
+}
+
+/* ── Trace panel ────────────────────────────────────────────────────────── */
+
+.trace-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.trace-toolbar h2 {
+  margin: 0;
+}
+
+.trace-spacer {
+  flex: 1;
+}
+
+.trace-cov {
+  font-size: 0.78rem;
+  color: #444;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.trace-table {
+  font-size: 0.78rem;
+}
+
+.trace-row {
+  cursor: pointer;
+}
+
+.trace-row:hover {
+  background: #f8fafc;
+}
+
+.trace-row-open {
+  background: #eff6ff;
+}
+
+.trace-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  background: #eef2ff;
+  color: #3730a3;
+  white-space: nowrap;
+}
+
+.trace-badge-chat {
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+.trace-badge-mr {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.trace-badge-model {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+}
+
+.trace-badge-warn {
+  color: #b45309;
+  font-weight: 600;
+}
+
+.trace-delta {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  white-space: nowrap;
+}
+
+.trace-delta-up .trace-delta-n {
+  color: #b45309;
+}
+
+.trace-delta-down .trace-delta-n {
+  color: #166534;
+}
+
+.trace-flags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.trace-flag-bad {
+  color: #b91c1c;
+  font-size: 0.7rem;
+}
+
+.trace-flag-warn {
+  color: #b45309;
+  font-size: 0.7rem;
+}
+
+.trace-note {
+  color: #888;
+  font-size: 0.72rem;
+}
+
+/* The expanded u -> q -> V' -> D' chain */
+
+.trace-detail {
+  padding: 10px 12px;
+  background: #fbfdff;
+  border-left: 3px solid #2563eb;
+}
+
+.trace-stage {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 4px 0;
+}
+
+.trace-stage-label {
+  width: 2.2rem;
+  flex: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.trace-stage-body {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8rem;
+}
+
+.trace-stage-arrow {
+  margin: 2px 0 2px 0.5rem;
+  font-size: 0.75rem;
+  color: #666;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.trace-attempt {
+  margin: 4px 0 8px 2.2rem;
+  padding: 6px 8px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+
+.trace-attempt-head,
+.trace-attempt-meta {
+  font-size: 0.74rem;
+  color: #444;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.trace-attempt-meta {
+  color: #666;
+  margin-top: 2px;
+}
+
+.trace-error {
+  font-size: 0.74rem;
+  color: #b91c1c;
+  margin-top: 2px;
+}
+
+.trace-diff-table {
+  border-collapse: collapse;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+}
+
+.trace-diff-table td {
+  padding: 1px 8px 1px 0;
+}
+
+.trace-row-still {
+  color: #aaa;
+}
+
+.trace-row-moved {
+  color: #111;
+  font-weight: 600;
+}
+
+.trace-sets {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.74rem;
+  color: #444;
+}
+
+.trace-flag {
+  margin-top: 4px;
+  font-size: 0.75rem;
+}
+
+.trace-added {
+  color: #166534;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+}
+
+.trace-removed {
+  color: #b91c1c;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+}
+
+.trace-p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.73rem;
+  color: #555;
+}
+
+/* ── Verdicts ───────────────────────────────────────────────────────────── */
+
+.verdict-pass {
+  color: #166534;
+  font-weight: 600;
+}
+
+.verdict-fail {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.verdict-skipped {
+  color: #888;
+}
