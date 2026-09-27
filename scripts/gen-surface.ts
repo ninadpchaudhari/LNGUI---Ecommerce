@@ -183,7 +183,40 @@ if (problems.length > 0) {
 // Pretty-printed so the committed generated file stays reviewable and diffs
 // cleanly when the YAML changes.
 const lit = (v: unknown) => JSON.stringify(v, null, 2);
-const union = ids.map((id) => lit(id)).join(" | ");
+const union = ids.map((id) => JSON.stringify(id)).join(" | ");
+
+/** The inhabited (non-⊥) part of Dom(c), as a TypeScript literal union. */
+const domainType = (c: z.infer<typeof Control>): string => {
+  switch (c.domain.kind) {
+    case "enum":
+      return c.domain.values.map((v) => JSON.stringify(v.value)).join(" | ");
+    case "number":
+      return "number";
+    case "boolean":
+      return "boolean";
+    case "action":
+      // Dom = {⊥, "invoked"} — a sticky flag; see control-surface.yaml.
+      return '"invoked"';
+  }
+};
+
+/** Runtime value lists, for the controls whose domain enumerates values. */
+const enumValueConsts = surface.controls
+  .filter((c) => c.domain.kind === "enum")
+  .map((c) => {
+    const values = (c.domain as { kind: "enum"; values: { value: string | number }[] }).values.map(
+      (v) => v.value,
+    );
+    const constName = `${c.id.replace(/[A-Z]/g, (m) => `_${m}`).toUpperCase()}_VALUES`;
+    return `/** Dom(${c.id}) minus ⊥. */\nexport const ${constName} = ${JSON.stringify(
+      values,
+    )} as const;`;
+  })
+  .join("\n\n");
+
+const valuationFields = surface.controls
+  .map((c) => `  ${c.id}: ${domainType(c)} | null;`)
+  .join("\n");
 
 const out = `/**
  * GENERATED FILE — do not edit.
@@ -201,6 +234,18 @@ export const CONTROL_IDS = ${lit(ids)} as const;
 export type ControlId = ${union};
 
 export type ControlValue = string | number | boolean | null;
+
+${enumValueConsts}
+
+/**
+ * V ∈ Val(C) — a *total* map over C (Eq. 4.2). \`null\` encodes ⊥.
+ *
+ * Typed per control rather than as Record<ControlId, ControlValue>, so that an
+ * out-of-domain assignment is a compile error rather than a runtime surprise.
+ */
+export interface Valuation {
+${valuationFields}
+}
 
 /** Domains Dom(c). \`phrases[0]\` is the canonical natural-language surface form. */
 export type ControlDomain =
@@ -228,9 +273,9 @@ export const CONTROLS: Readonly<Record<ControlId, ControlSpec>> = Object.freeze(
 export const CONTROL_LIST: readonly ControlSpec[] = CONTROL_IDS.map((id) => CONTROLS[id]);
 
 /** V₀ — the reset valuation (§4.10.2). */
-export const V0: Readonly<Record<ControlId, ControlValue>> = Object.freeze(${lit(
+export const V0: Readonly<Valuation> = Object.freeze(${lit(
   Object.fromEntries(surface.controls.map((c) => [c.id, c.reset])),
-)}) as Readonly<Record<ControlId, ControlValue>>;
+)}) as Readonly<Valuation>;
 
 /** C_con — constraining controls a refinement clause may target (Eq. 4.12). */
 export const C_CON: readonly ControlId[] = ${lit(

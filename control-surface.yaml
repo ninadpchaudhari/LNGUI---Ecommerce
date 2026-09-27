@@ -67,9 +67,15 @@ controls:
 
   - id: clearFilters
     label: Clear Filters
+    # Dom(c₆) = {⊥, "invoked"}: a sticky flag, returned to ⊥ only by ResetApp.
+    # Sticky rather than a counter so that clearing twice stays observationally
+    # equal to clearing once — a count would leak H into O = ⟨V,D⟩. Being
+    # value-bearing is what lets c₆ enter a footprint, which §A.7 requires when
+    # it says c₆ can be "never reached by language under this suite".
     domain: { kind: action }
     # Prior values are discarded and cannot be requested back in one utterance,
-    # so this is excluded from C_rev and generates no MR_REV case (§A.4).
+    # so this is excluded from C_rev and generates no MR_REV case (§A.4). It is
+    # also what makes any trace containing a clear unable to return to σ₀.
     reset: null
     constraining: false
     reversible: false

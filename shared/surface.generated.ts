@@ -22,6 +22,30 @@ export type ControlId = "category" | "maxPrice" | "minRating" | "inStockOnly" | 
 
 export type ControlValue = string | number | boolean | null;
 
+/** Dom(category) minus ⊥. */
+export const CATEGORY_VALUES = ["electronics","books","clothing","home","sports"] as const;
+
+/** Dom(minRating) minus ⊥. */
+export const MIN_RATING_VALUES = [3,3.5,4,4.5] as const;
+
+/** Dom(sort) minus ⊥. */
+export const SORT_VALUES = ["price_asc","price_desc","rating_desc","name_asc"] as const;
+
+/**
+ * V ∈ Val(C) — a *total* map over C (Eq. 4.2). `null` encodes ⊥.
+ *
+ * Typed per control rather than as Record<ControlId, ControlValue>, so that an
+ * out-of-domain assignment is a compile error rather than a runtime surprise.
+ */
+export interface Valuation {
+  category: "electronics" | "books" | "clothing" | "home" | "sports" | null;
+  maxPrice: number | null;
+  minRating: 3 | 3.5 | 4 | 4.5 | null;
+  inStockOnly: boolean | null;
+  sort: "price_asc" | "price_desc" | "rating_desc" | "name_asc" | null;
+  clearFilters: "invoked" | null;
+}
+
 /** Domains Dom(c). `phrases[0]` is the canonical natural-language surface form. */
 export type ControlDomain =
   | { kind: "enum"; values: ReadonlyArray<{ value: string | number; phrases: readonly string[] }> }
@@ -197,14 +221,14 @@ export const CONTROLS: Readonly<Record<ControlId, ControlSpec>> = Object.freeze(
 export const CONTROL_LIST: readonly ControlSpec[] = CONTROL_IDS.map((id) => CONTROLS[id]);
 
 /** V₀ — the reset valuation (§4.10.2). */
-export const V0: Readonly<Record<ControlId, ControlValue>> = Object.freeze({
+export const V0: Readonly<Valuation> = Object.freeze({
   "category": null,
   "maxPrice": 500,
   "minRating": null,
   "inStockOnly": false,
   "sort": null,
   "clearFilters": null
-}) as Readonly<Record<ControlId, ControlValue>>;
+}) as Readonly<Valuation>;
 
 /** C_con — constraining controls a refinement clause may target (Eq. 4.12). */
 export const C_CON: readonly ControlId[] = [

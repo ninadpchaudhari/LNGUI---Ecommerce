@@ -20,5 +20,8 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "shared"]
+  "include": ["src", "shared"],
+  // Tests use node:test and node:assert; they are type-checked by the node
+  // project, which has @types/node. The browser project has no Node types.
+  "exclude": ["shared/**/*.test.ts"]
 }
