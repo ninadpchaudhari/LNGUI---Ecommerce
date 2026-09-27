@@ -16,10 +16,11 @@ import {
   resolveHistoryConfig,
   resolveLLMConfig,
   resolveModelPolicy,
+  resolvePromptVariant,
   type CommandRuntimeEnv,
   type RuntimeEnv,
 } from "./config.ts";
-import { promptHashes } from "./prompt.ts";
+import { effectiveClearAction, promptHashes } from "./prompt.ts";
 import {
   ValidationError,
   clampLimit,
@@ -44,8 +45,9 @@ function buildConfig(env: RuntimeEnv, persistence: AppConfig["persistence"]): Ap
   const llm = resolveLLMConfig(env);
   const policy = resolveModelPolicy(env);
   const history = resolveHistoryConfig(env);
-  const clearEnabled = clearActionEnabled(env);
-  const hashes = promptHashes(clearEnabled);
+  const promptVariant = resolvePromptVariant(env);
+  const clearEnabled = effectiveClearAction(promptVariant, clearActionEnabled(env));
+  const hashes = promptHashes(promptVariant, clearActionEnabled(env));
 
   return {
     schemaVersion: SCHEMA_VERSION,
@@ -59,6 +61,7 @@ function buildConfig(env: RuntimeEnv, persistence: AppConfig["persistence"]): Ap
     topP: llm.topP,
     systemPromptHash: hashes.systemPromptHash,
     commandSchemaHash: hashes.commandSchemaHash,
+    promptVariant,
     historyPolicy: history.policy,
     historyMaxTurns: history.maxTurns,
     clearActionEnabled: clearEnabled,

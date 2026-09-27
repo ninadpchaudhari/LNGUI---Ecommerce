@@ -9,7 +9,7 @@
     "dev:client": "vite",
     "dev:server": "tsx server.ts",
     "gen:surface": "tsx scripts/gen-surface.ts",
-    "test": "tsx --test shared/*.test.ts",
+    "test": "tsx --test shared/*.test.ts api/*.test.ts",
     "build": "npm run gen:surface && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",

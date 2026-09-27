@@ -7,7 +7,12 @@
  * "every reported result will be paired with the model identifier and
  * parameters" — and what §5.7 needs in order to hold P fixed across mediators.
  */
-import { MODEL_ID_RE, type HistoryPolicy, type LlmProvider } from "../shared/contract.ts";
+import {
+  MODEL_ID_RE,
+  type HistoryPolicy,
+  type LlmProvider,
+  type PromptVariant,
+} from "../shared/contract.ts";
 import type { HistoryConfig } from "../shared/history.ts";
 
 export type { HistoryConfig } from "../shared/history.ts";
@@ -38,6 +43,8 @@ export type CommandRuntimeEnv = {
   HISTORY_MAX_TURNS?: string;
   /** "false" removes clearFilters from Q and from the system prompt. */
   CLEAR_ACTION_ENABLED?: string;
+  /** baseline | extended. See api/prompt.ts — the two are not interchangeable. */
+  PROMPT_VARIANT?: string;
   LANGFUSE_PUBLIC_KEY?: string;
   LANGFUSE_SECRET_KEY?: string;
   LANGFUSE_BASE_URL?: string;
@@ -219,6 +226,15 @@ export function resolveHistoryConfig(env: RuntimeEnv): HistoryConfig {
 
 export function clearActionEnabled(env: RuntimeEnv): boolean {
   return bool(env, "CLEAR_ACTION_ENABLED", true);
+}
+
+/**
+ * Which system prompt is in force. Defaults to `baseline`, the prompt as
+ * recorded with Figure 1.2, so the benchmark keeps its motivating fault unless
+ * a study deliberately selects the other condition.
+ */
+export function resolvePromptVariant(env: RuntimeEnv): PromptVariant {
+  return str(env, "PROMPT_VARIANT")?.toLowerCase() === "extended" ? "extended" : "baseline";
 }
 
 export function langfuseEnabled(env: RuntimeEnv): boolean {

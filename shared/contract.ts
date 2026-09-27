@@ -57,6 +57,13 @@ export type History = HistoryTurn[];
 export type HistoryPolicy = "full" | "last-k" | "none";
 
 /**
+ * Which system prompt is in force. `baseline` is the prompt as recorded with
+ * Figure 1.2; `extended` adds the preserve-context rule and the clearFilters
+ * field. The two are not interchangeable — see api/prompt.ts.
+ */
+export type PromptVariant = "baseline" | "extended";
+
+/**
  * P — prompt and runtime configuration.
  *
  * Deliberately *not* part of `Observation`: §A.2 states H and P "are not shown
@@ -71,6 +78,7 @@ export interface PromptConfig {
   topP: number;
   systemPromptHash: string;
   commandSchemaHash: string;
+  promptVariant: PromptVariant;
   historyPolicy: HistoryPolicy;
   historyMaxTurns: number | null;
   clearActionEnabled: boolean;
@@ -321,6 +329,7 @@ export interface AppConfig {
   topP: number;
   systemPromptHash: string;
   commandSchemaHash: string;
+  promptVariant: PromptVariant;
   historyPolicy: HistoryPolicy;
   historyMaxTurns: number | null;
   clearActionEnabled: boolean;

@@ -18,13 +18,19 @@ import {
 } from "../shared/contract.ts";
 import { CATEGORY_VALUES } from "../shared/surface.generated.ts";
 import { effectiveHistory, renderHistory, type ChatMessage } from "../shared/history.ts";
-import { buildCommandSchema, buildSystemPrompt, promptHashes } from "./prompt.ts";
+import {
+  buildCommandSchema,
+  buildSystemPrompt,
+  effectiveClearAction,
+  promptHashes,
+} from "./prompt.ts";
 import {
   clearActionEnabled,
   getEnvVar,
   isLocalTestMode,
   resolveHistoryConfig,
   resolveLLMConfig,
+  resolvePromptVariant,
   selectModel,
   type CommandRuntimeEnv,
   type RuntimeEnv,
@@ -273,11 +279,13 @@ export async function handleCommandRequest(
   }
 
   const env = runtimeEnv as RuntimeEnv;
-  const clearEnabled = clearActionEnabled(env);
+  const promptVariant = resolvePromptVariant(env);
+  // The baseline variant has no clear action, so c₆ is not expressible in Q.
+  const clearEnabled = effectiveClearAction(promptVariant, clearActionEnabled(env));
   const historyConfig = resolveHistoryConfig(env);
   const schema = buildCommandSchema(clearEnabled);
-  const system = buildSystemPrompt(clearEnabled);
-  const hashes = promptHashes(clearEnabled);
+  const system = buildSystemPrompt(promptVariant, clearActionEnabled(env));
+  const hashes = promptHashes(promptVariant, clearActionEnabled(env));
   const requestId = crypto.randomUUID();
   const startedAtMs = Date.now();
   const timestamp = new Date().toISOString();
@@ -307,6 +315,7 @@ export async function handleCommandRequest(
             topP: llm.topP,
             systemPromptHash: hashes.systemPromptHash,
             commandSchemaHash: hashes.commandSchemaHash,
+            promptVariant,
             historyPolicy: historyConfig.policy,
             historyMaxTurns: historyConfig.maxTurns,
             clearActionEnabled: clearEnabled,
@@ -340,6 +349,7 @@ export async function handleCommandRequest(
     topP: llm.topP,
     systemPromptHash: hashes.systemPromptHash,
     commandSchemaHash: hashes.commandSchemaHash,
+    promptVariant,
     historyPolicy: historyConfig.policy,
     historyMaxTurns: historyConfig.maxTurns,
     clearActionEnabled: clearEnabled,

@@ -117,6 +117,38 @@ bubble.
 
 ---
 
+## The system prompt is an experimental condition
+
+The prompt cannot simultaneously *avoid inventing constraints* and *preserve
+constraints across turns*. Measured on `gpt-4o-mini` at temperature 0 with
+"show electronics under $100 sorted by rating":
+
+| `PROMPT_VARIANT` | Figure 1.2 (case invariance) | Multi-turn refinement (MR_AC) | `Cov_NL` ceiling |
+| --- | --- | --- | --- |
+| `baseline` *(default)* | **violated** — lower `null`, UPPER `4` | leaks — category dropped, D 4 → 13 | 5/6 |
+| `extended` | passes — both `4` | works — category kept, D 4 → 2 | 6/6 |
+
+`baseline` is the prompt in force when Figure 1.2 was recorded, pinned character
+for character by [`api/prompt.test.ts`](api/prompt.test.ts). Adding **either**
+the preserve-context rule **or** the `clearFilters` field is individually enough
+to make the lowercase utterance set `minRating = 4`, which destroys the
+case-invariance violation. `CLEAR_ACTION_ENABLED` is therefore inert under
+`baseline`, and `c₆` is unreachable through language there.
+
+The instruction that makes the mediator carry context forward is the same one
+that makes it over-apply `minRating`: fixing constraint leakage *introduces*
+synonym blindness. That tension is why this is a declared condition rather than
+a choice buried in a prompt string, and `systemPromptHash` separates the two in
+every record. §2.3.2 is the reason:
+
+> Each model swap, prompt revision, or schema change silently alters that
+> mapping without producing a code diff that anyone can review.
+
+If `api/prompt.test.ts` fails, Figure 1.2 must be re-recorded or the change
+reverted. Do not update that fixture casually.
+
+---
+
 ## Context policy — inducing amnesia
 
 `H` is sent to the mediator, and `HISTORY_POLICY` controls how much of it
@@ -214,7 +246,8 @@ would swallow `/api/*`.
 | `LLM_TIMEOUT_MS` | `30000` | |
 | `HISTORY_POLICY` | `full` | `full` \| `last-k` \| `none` |
 | `HISTORY_MAX_TURNS` | `3` | with `last-k` |
-| `CLEAR_ACTION_ENABLED` | `true` | `false` removes `c₆` from `Q` and the prompt |
+| `PROMPT_VARIANT` | `baseline` | `baseline` \| `extended` — **changes which fault the benchmark exhibits** |
+| `CLEAR_ACTION_ENABLED` | `true` | `false` removes `c₆` from `Q` and the prompt; inert under `baseline` |
 | `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY` | — | tracing needs both |
 | `LOCAL_TEST_MODE` | `false` | deterministic parser, no network |
 | `RUNS_WRITE_TOKEN` / `RUNS_READ_TOKEN` | — | shared-secret gates, off by default |

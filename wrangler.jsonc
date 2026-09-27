@@ -37,6 +37,11 @@
     "LLM_TEMPERATURE": "0",
     "LLM_TOP_P": "1",
     "HISTORY_POLICY": "full",
+    // baseline is the prompt as recorded with Figure 1.2, so the deployed
+    // instance keeps the motivating fault. Switching to "extended" makes
+    // multi-turn refinement work but loses the case-invariance violation —
+    // see api/prompt.ts. Under baseline the clear action below is inert.
+    "PROMPT_VARIANT": "baseline",
     "CLEAR_ACTION_ENABLED": "true",
     "LANGFUSE_BASE_URL": "https://us.cloud.langfuse.com",
     "LOCAL_TEST_MODE": "false"

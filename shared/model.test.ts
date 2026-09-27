@@ -296,7 +296,7 @@ describe("observationallyEqual — Eq. 4.6", () => {
   test("ignores H and P, comparing only ⟨V,D⟩", () => {
     const P = {
       requestedModel: "m", resolvedModel: "m", temperature: 0, topP: 1,
-      systemPromptHash: "h", commandSchemaHash: "h",
+      systemPromptHash: "h", commandSchemaHash: "h", promptVariant: "baseline" as const,
       historyPolicy: "full" as const, historyMaxTurns: null, clearActionEnabled: true,
     };
     const a = resetState(P);
@@ -319,7 +319,7 @@ describe("observationallyEqual — Eq. 4.6", () => {
 describe("step — Eq. 4.9", () => {
   const P = {
     requestedModel: "m", resolvedModel: "m", temperature: 0, topP: 1,
-    systemPromptHash: "h", commandSchemaHash: "h",
+    systemPromptHash: "h", commandSchemaHash: "h", promptVariant: "baseline" as const,
     historyPolicy: "full" as const, historyMaxTurns: null, clearActionEnabled: true,
   };
 
