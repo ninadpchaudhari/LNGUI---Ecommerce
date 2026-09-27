@@ -33,8 +33,10 @@ import {
   verdictFor,
   type Command,
   type DataState,
+  type HistoryTurn,
 } from "./contract.ts";
 import { applyCommand, renderData, resetState, step, visibleProducts } from "./transition.ts";
+import { effectiveHistory, renderHistory } from "./history.ts";
 
 const APPLY_OPTS = { clearActionEnabled: true };
 
@@ -386,5 +388,65 @@ describe("hashString", () => {
     assert.equal(hashString("abc"), hashString("abc"));
     assert.notEqual(hashString("abc"), hashString("abd"));
     assert.match(hashString("abc"), /^fnv1a32:[0-9a-f]{8}$/);
+  });
+});
+
+describe("effectiveHistory — the context-management policy dial", () => {
+  const turn = (u: string): HistoryTurn => ({
+    u,
+    q: cmd({}),
+    V: resetValuation(),
+    D: renderData(resetValuation()),
+  });
+  const H = [turn("one"), turn("two"), turn("three"), turn("four")];
+
+  test('"full" sends every prior turn', () => {
+    assert.equal(effectiveHistory(H, { policy: "full", maxTurns: null }).length, 4);
+  });
+
+  test('"last-k" truncates to the most recent k, the §1.2 mechanism', () => {
+    const kept = effectiveHistory(H, { policy: "last-k", maxTurns: 2 });
+    assert.deepEqual(kept.map((t) => t.u), ["three", "four"]);
+  });
+
+  test('"none" sends nothing — display-only history, amnesia at k = 0', () => {
+    assert.deepEqual(effectiveHistory(H, { policy: "none", maxTurns: null }), []);
+  });
+
+  test("k = 0 under last-k degenerates to none", () => {
+    assert.deepEqual(effectiveHistory(H, { policy: "last-k", maxTurns: 0 }), []);
+  });
+
+  test("the policy induces a monotone amount of retained context", () => {
+    // The dose-response ordering the §5.4 sweep depends on.
+    const sizes = [
+      effectiveHistory(H, { policy: "none", maxTurns: null }).length,
+      effectiveHistory(H, { policy: "last-k", maxTurns: 1 }).length,
+      effectiveHistory(H, { policy: "last-k", maxTurns: 3 }).length,
+      effectiveHistory(H, { policy: "full", maxTurns: null }).length,
+    ];
+    assert.deepEqual(sizes, [0, 1, 3, 4]);
+    assert.deepEqual([...sizes].sort((a, b) => a - b), sizes, "must be non-decreasing");
+  });
+});
+
+describe("renderHistory", () => {
+  test("emits q as the assistant turn, per §4.5", () => {
+    const q = cmd({ category: "books" });
+    const msgs = renderHistory([
+      { u: "show books", q, V: resetValuation(), D: renderData(resetValuation()) },
+    ]);
+    assert.deepEqual(msgs, [
+      { role: "user", content: "show books" },
+      { role: "assistant", content: JSON.stringify(q) },
+    ]);
+  });
+
+  test("a failed turn still occupies a slot in the context", () => {
+    const msgs = renderHistory([
+      { u: "???", q: null, V: resetValuation(), D: renderData(resetValuation()) },
+    ]);
+    assert.equal(msgs.length, 2);
+    assert.match(msgs[1].content, /no command emitted/);
   });
 });
