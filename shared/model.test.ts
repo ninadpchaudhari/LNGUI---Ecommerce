@@ -38,6 +38,7 @@ import {
 } from "./contract.ts";
 import { applyCommand, renderData, resetState, step, visibleProducts } from "./transition.ts";
 import { effectiveHistory, renderHistory } from "./history.ts";
+import { inferWriteSet } from "../src/utils/relations.ts";
 
 const APPLY_OPTS = { clearActionEnabled: true };
 
@@ -451,5 +452,42 @@ describe("renderHistory", () => {
     ]);
     assert.equal(msgs.length, 2);
     assert.match(msgs[1].content, /no command emitted/);
+  });
+});
+
+describe("inferWriteSet — W for a free-text chat utterance", () => {
+  test('"sorted by rating" asks for an ordering, not a rating threshold', () => {
+    // The bug this pins: treating the bare word "rating" as minRating put it in
+    // W, which suppressed the over-reach report for exactly the Figure 1.2
+    // fault — a mediator setting minRating=4 on an utterance that never asked.
+    const W = inferWriteSet("show electronics under $100 sorted by rating");
+    assert.deepEqual(W.sort(), ["category", "maxPrice", "sort"]);
+    assert.ok(!W.includes("minRating"), "bare 'rating' must not imply minRating");
+  });
+
+  test("so the spurious minRating is reported as over-reach", () => {
+    const W = inferWriteSet("show electronics under $100 sorted by rating");
+    const fp: typeof W = ["category", "maxPrice", "minRating", "sort"];
+    assert.deepEqual(overReach(fp, W), ["minRating"]);
+  });
+
+  test("an explicit threshold does imply minRating", () => {
+    for (const u of [
+      "show items rated 4 stars and up",
+      "only 4.5 star products",
+      "highly rated electronics",
+      "minimum rating of 4",
+    ]) {
+      assert.ok(inferWriteSet(u).includes("minRating"), u);
+    }
+  });
+
+  test("stock phrasings, including the negated form", () => {
+    assert.ok(inferWriteSet("hide out-of-stock items").includes("inStockOnly"));
+    assert.ok(inferWriteSet("only show what is in stock").includes("inStockOnly"));
+  });
+
+  test("clear is attributed to c₆", () => {
+    assert.ok(inferWriteSet("clear all filters").includes("clearFilters"));
   });
 });

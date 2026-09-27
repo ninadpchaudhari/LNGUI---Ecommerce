@@ -19,8 +19,7 @@
     {
       "binding": "DB",
       "database_name": "lngui-turns",
-      // Paste the UUID printed by: wrangler d1 create lngui-turns
-      "database_id": "REPLACE_WITH_DATABASE_ID",
+      "database_id": "9a4c852e-9650-4182-88db-6e110fe70aba",
       "migrations_dir": "migrations"
     }
   ],
@@ -39,6 +38,7 @@
     "LLM_TOP_P": "1",
     "HISTORY_POLICY": "full",
     "CLEAR_ACTION_ENABLED": "true",
+    "LANGFUSE_BASE_URL": "https://us.cloud.langfuse.com",
     "LOCAL_TEST_MODE": "false"
   },
 
