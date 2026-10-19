@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { LANGFUSE_HEADER } from "../shared/overrides.ts";
 import { Langfuse } from "langfuse";
 
 import {
@@ -20,8 +21,6 @@ import { CATEGORY_VALUES } from "../shared/surface.generated.ts";
 import { effectiveHistory, renderHistory, type ChatMessage } from "../shared/history.ts";
 import {
   buildCommandSchema,
-  buildSystemPrompt,
-  effectiveClearAction,
   promptHashes,
 } from "./prompt.ts";
 import {
@@ -30,7 +29,7 @@ import {
   isLocalTestMode,
   resolveHistoryConfig,
   resolveLLMConfig,
-  resolvePromptVariant,
+  resolveSystemPrompt,
   selectModel,
   type CommandRuntimeEnv,
   type RuntimeEnv,
@@ -121,14 +120,16 @@ async function callLLM(
   client: OpenAI,
   model: string,
   messages: ChatMessage[],
-  sampling: { temperature: number; topP: number; timeoutMs: number },
+  sampling: { temperature: number | null; topP: number | null; timeoutMs: number },
 ): Promise<LLMCallResult> {
   const started = Date.now();
   const res = await client.chat.completions.create(
     {
       model,
-      temperature: sampling.temperature,
-      top_p: sampling.topP,
+      // Unset sampling parameters are left out, so the provider's default for
+      // this model applies. P records them as null.
+      ...(sampling.temperature !== null ? { temperature: sampling.temperature } : {}),
+      ...(sampling.topP !== null ? { top_p: sampling.topP } : {}),
       messages,
     },
     { timeout: sampling.timeoutMs },
@@ -279,13 +280,11 @@ export async function handleCommandRequest(
   }
 
   const env = runtimeEnv as RuntimeEnv;
-  const promptVariant = resolvePromptVariant(env);
-  // The baseline variant has no clear action, so c₆ is not expressible in Q.
-  const clearEnabled = effectiveClearAction(promptVariant, clearActionEnabled(env));
+  const clearEnabled = clearActionEnabled(env);
   const historyConfig = resolveHistoryConfig(env);
   const schema = buildCommandSchema(clearEnabled);
-  const system = buildSystemPrompt(promptVariant, clearActionEnabled(env));
-  const hashes = promptHashes(promptVariant, clearActionEnabled(env));
+  const system = resolveSystemPrompt(env);
+  const hashes = promptHashes(system, clearEnabled);
   const requestId = crypto.randomUUID();
   const startedAtMs = Date.now();
   const timestamp = new Date().toISOString();
@@ -315,7 +314,6 @@ export async function handleCommandRequest(
             topP: llm.topP,
             systemPromptHash: hashes.systemPromptHash,
             commandSchemaHash: hashes.commandSchemaHash,
-            promptVariant,
             historyPolicy: historyConfig.policy,
             historyMaxTurns: historyConfig.maxTurns,
             clearActionEnabled: clearEnabled,
@@ -349,13 +347,14 @@ export async function handleCommandRequest(
     topP: llm.topP,
     systemPromptHash: hashes.systemPromptHash,
     commandSchemaHash: hashes.commandSchemaHash,
-    promptVariant,
     historyPolicy: historyConfig.policy,
     historyMaxTurns: historyConfig.maxTurns,
     clearActionEnabled: clearEnabled,
   });
 
-  const langfuse = localMode ? undefined : createLangfuseClient(env);
+  // Sweeps send `x-lngui-langfuse: off` unless the experimenter opts in.
+  const tracingOff = request.headers.get(LANGFUSE_HEADER)?.toLowerCase() === "off";
+  const langfuse = localMode || tracingOff ? undefined : createLangfuseClient(env);
   const trace = langfuse?.trace?.({
     // Reusing requestId as the trace id means the D1 record and the Langfuse
     // trace join on a single key.

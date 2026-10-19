@@ -71,7 +71,7 @@ controls:
     # Sticky rather than a counter so that clearing twice stays observationally
     # equal to clearing once — a count would leak H into O = ⟨V,D⟩. Being
     # value-bearing is what lets c₆ enter a footprint, which §A.7 requires when
-    # it says c₆ can be "never reached by language under this suite".
+    # it says c₆ can be "never reached by language under this test set".
     domain: { kind: action }
     # Prior values are discarded and cannot be requested back in one utterance,
     # so this is excluded from C_rev and generates no MR_REV case (§A.4). It is
@@ -168,7 +168,7 @@ refinementClauses:
 
 # ── Surface-form transforms ──────────────────────────────────────────────────
 # Functions over an utterance that preserve its target, so Syn holds by
-# construction. These generate MR_SE instances without human review.
+# construction. These generate MR_CE instances without human review.
 surfaceTransforms:
   - id: uppercase
     kind: uppercase
@@ -185,7 +185,7 @@ surfaceTransforms:
     note: A presentation request that must not alter any control value.
   - id: clauseReorder
     kind: moveSortClauseFirst
-    note: Reorders clauses within one utterance; still MR_SE, not MR_CA.
+    note: Reorders clauses within one utterance; still MR_CE, not MR_CA.
 
 # ── Gold_Syn ─────────────────────────────────────────────────────────────────
 # Human-reviewed paraphrase pairs whose equivalence is NOT guaranteed by

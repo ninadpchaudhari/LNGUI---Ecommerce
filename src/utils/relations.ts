@@ -1,71 +1,49 @@
 /**
- * The four metamorphic relations of Table 4.1, plus the repeated-input
- * diagnostic of §5.4, run under the (N, ε) rule of Eq. 4.18.
+ * Running MR traces through M, and ad-hoc cases built from one utterance.
  *
  * Each relation pairs a *precondition* — a semantic predicate over utterances,
  * evaluated from generation labels only — with a *postcondition* over
  * observations O(σ) = ⟨V, D⟩. A mediator that mishandles an utterance cannot
  * falsify a precondition; it can only fail the relation (§A.4).
  *
- * Replaces the previous five-relation set, which was not conformant: Case
- * Invariance, Synonym Prefix, Format Suffix and "Commutativity" (which
- * reordered clauses inside a single utterance) are all MR_SE instances, and
- * Idempotency is the repeated-input stability diagnostic rather than an MR.
+ * The instance shape and the postcondition check live in shared/relations.ts.
+ * This module holds what needs M: `runTrace` and `runTrial`, which the sweep
+ * engine (sweep.ts) calls for every trial. It also turns a hand-typed
+ * utterance into validated ad-hoc cases for exploration. Frozen experiment
+ * cases come from the generator (shared/generate.ts).
+ *
+ * Case Invariance, Synonym Prefix, Format Suffix and the old "Commutativity"
+ * (which reordered clauses inside a single utterance) are all MR_CE
+ * instances, and Idempotency is an MR_COMP instance (s = ⟨u, u⟩, u_s = u).
  */
 import {
-  CORE_RELATIONS,
-  covMR,
-  covNL,
-  dataEqual,
-  dataSubset,
-  observationallyEqual,
-  pointUpdate,
-  valuationEqual,
-  verdictFor,
   type ControlId,
-  type MrCaseRecord,
-  type MrVerdict,
-  type Observation,
   type PromptConfig,
   type RelationName,
-  type SystemState,
   type TraceRole,
   type TurnRecord,
 } from "../../shared/contract.ts";
+import { validateCase, type MrCase } from "../../shared/cases.ts";
+import { check, type CheckResult, type MrInstance, type TraceResult } from "../../shared/relations.ts";
 import { C_REV, type ControlValue } from "../../shared/surface.generated.ts";
 import { resetState } from "../../shared/transition.ts";
 import { runTurn } from "./mediator.ts";
+import type { FetchLike } from "./api.ts";
+import type { Overrides } from "../../shared/overrides.ts";
+
+export type { MrInstance } from "../../shared/relations.ts";
 
 // ── Instances ───────────────────────────────────────────────────────────────
 
 /**
- * One executable MR instance: two traces plus the labels Check needs.
- *
- * `writeSets` are declared before execution (Eq. 4.14), which is what makes the
- * fp ⊆ W standing check meaningful.
+ * MR_CE instances via surface-form transforms. Each transform preserves the
+ * target by construction, so Para(u1, u2) holds without human review.
  */
-export interface MrInstance {
-  relation: RelationName;
-  predicate: string;
-  /** Label from the pre-conformance set, kept so old exports can be joined. */
-  legacyName: string | null;
-  description: string;
-  sourceTrace: string[];
-  followupTrace: string[];
-  writeSets: { source: ControlId[][]; followup: ControlId[][] };
-  /** MR_AC only: the (d, w) that δ is expected to assign (Eq. 4.13). */
-  refinement?: { control: ControlId; value: ControlValue };
-}
-
-/**
- * MR_SE instances via surface-form transforms. Each transform preserves the
- * target by construction, so Syn(u1, u2) holds without human review.
- */
-function seInstances(base: string): MrInstance[] {
+function ceInstances(base: string): MrInstance[] {
   const W = inferWriteSet(base);
   const mk = (legacy: string, variant: string, description: string): MrInstance => ({
-    relation: "MR_SE",
-    predicate: "Syn",
+    relation: "MR_CE",
+    predicate: "Para",
     legacyName: legacy,
     description,
     sourceTrace: [base],
@@ -84,7 +62,7 @@ function seInstances(base: string): MrInstance[] {
     mk("Format Suffix", `${base} in a table`, "A presentation request must not change any control"),
   ];
 
-  // Clause reordering within one utterance: still MR_SE, not MR_CA, because it
+  // Clause reordering within one utterance: still MR_CE, not MR_CA, because it
   // is a single utterance from a single starting state.
   const sortClause = base.match(/\b(sorted?\s+by\s+[\w\s]+)$/i);
   if (sortClause) {
@@ -155,6 +133,42 @@ function revInstances(): MrInstance[] {
 }
 
 /**
+ * MR_COMP: a multi-turn sequence s against one utterance u_s that composes it
+ * (Eq. comp). The second instance is idempotence, s = ⟨u, u⟩ with u_s = u.
+ */
+function compInstances(): MrInstance[] {
+  const turns = [
+    { u: "show electronics", W: ["category"] as ControlId[] },
+    { u: "under $100", W: ["maxPrice"] as ControlId[] },
+    { u: "sort by rating", W: ["sort"] as ControlId[] },
+  ];
+  const repeated = { u: "sort by rating", W: ["sort"] as ControlId[] };
+  return [
+    {
+      relation: "MR_COMP",
+      predicate: "Comp",
+      legacyName: null,
+      description: "A request spread over turns must match the same request in one turn",
+      sourceTrace: turns.map((t) => t.u),
+      followupTrace: ["show electronics under $100 sorted by rating"],
+      writeSets: {
+        source: turns.map((t) => t.W),
+        followup: [turns.flatMap((t) => t.W)],
+      },
+    },
+    {
+      relation: "MR_COMP",
+      predicate: "Comp (idempotence)",
+      legacyName: "Idempotency",
+      description: "Repeating an absolute request must change nothing",
+      sourceTrace: [repeated.u, repeated.u],
+      followupTrace: [repeated.u],
+      writeSets: { source: [repeated.W, repeated.W], followup: [repeated.W] },
+    },
+  ];
+}
+
+/**
  * Context amnesia: the multi-turn stretch of MR_CA (§4.8). u1 sets a control,
  * then unrelated turns must not disturb it.
  */
@@ -216,109 +230,58 @@ export function inferWriteSet(u: string): ControlId[] {
   return W;
 }
 
+/**
+ * Ad-hoc cases from one typed utterance, for exploration in the Experiments
+ * page. They run through the same engine as a frozen test set. Each is validated,
+ * and any whose precondition fails is dropped. Their write sets come from
+ * `inferWriteSet`, a heuristic, so results from ad-hoc cases are exploratory
+ * and do not belong in a results table.
+ */
+export function adhocCases(base: string): MrCase[] {
+  const out: MrCase[] = [];
+  buildInstances(base).forEach((inst, i) => {
+    const c: MrCase = {
+      ...inst,
+      id: `ADHOC-${String(i + 1).padStart(2, "0")}`,
+      semanticGroup: `adhoc:${inst.relation}`,
+      strata: inst.relation === "MR_CE" ? ["ce:surface", "adhoc"] : ["adhoc"],
+      provenance: { generator: "manual", sources: ["adhoc"] },
+    };
+    if (validateCase(c).length === 0) out.push(c);
+  });
+  return out;
+}
+
 export function buildInstances(base: string): MrInstance[] {
   return [
-    ...seInstances(base),
+    ...ceInstances(base),
     ...acInstances(base),
     ...caInstances(),
     ...revInstances(),
+    ...compInstances(),
     ...amnesiaInstances(),
   ];
 }
 
-// ── Check ───────────────────────────────────────────────────────────────────
-
-export interface TrialOutcome {
-  holds: boolean;
-  reason: string;
-  sourceObservation: Observation | null;
-  followupObservation: Observation | null;
-  turnIds: string[];
-  latencyMs: number;
-  tokens: number | null;
-  invocations: number;
-}
-
-/**
- * The postconditions of Table 4.1. Note the two distinct D comparators:
- * equality for MR_SE/MR_CA/MR_REV, containment for MR_AC.
- */
-function check(
-  instance: MrInstance,
-  source: { state: SystemState; records: TurnRecord[] },
-  followup: { state: SystemState; records: TurnRecord[] },
-): { holds: boolean; reason: string } {
-  const o1: Observation = { V: source.state.V, D: source.state.D };
-  const o2: Observation = { V: followup.state.V, D: followup.state.D };
-
-  const failedTurn = [...source.records, ...followup.records].find((r) => !r.ok);
-  if (failedTurn) {
-    return { holds: false, reason: `mediator error: ${failedTurn.error ?? "unknown"}` };
-  }
-
-  switch (instance.relation) {
-    case "MR_SE":
-    case "MR_CA":
-    case "MR_REV": {
-      if (observationallyEqual(o1, o2)) return { holds: true, reason: "O(σ′) = O(σ″)" };
-      const vDiff = !valuationEqual(o1.V, o2.V);
-      const dDiff = !dataEqual(o1.D, o2.D);
-      return {
-        holds: false,
-        reason: vDiff && dDiff
-          ? "V and D both differ"
-          : vDiff
-            ? "V differs (D matched)"
-            : "D differs (V matched)",
-      };
-    }
-
-    case "MR_AC": {
-      // V_ur = V_ub[d ↦ w] ∧ D_ur ⊆ D_ub
-      const r = instance.refinement;
-      if (!r) return { holds: false, reason: "MR_AC instance is missing its refinement target" };
-      const expected = pointUpdate(o1.V, r.control, r.value);
-      const vOk = valuationEqual(o2.V, expected);
-      const dOk = dataSubset(o2.D, o1.D);
-      if (vOk && dOk) return { holds: true, reason: "V point-updated and D contained" };
-      if (!vOk && !dOk) return { holds: false, reason: "constraint leaked and D not contained" };
-      return {
-        holds: false,
-        reason: vOk
-          ? `D not contained in the base result set (${o1.D.count} → ${o2.D.count})`
-          : "V is not the expected point update — an earlier constraint moved",
-      };
-    }
-
-    case "CONTEXT_AMNESIA": {
-      // ∃c ∈ fp(u1,σ). σ″.V(c) ≠ σ′.V(c), with W(u2) ∩ fp(u1,σ) = ∅.
-      const established = source.records[0]?.fp ?? [];
-      const laterWrites = new Set(
-        followup.records.slice(1).flatMap((r) => r.writeSet ?? []),
-      );
-      const shouldPersist = established.filter((c) => !laterWrites.has(c));
-      const lost = shouldPersist.filter((c) => source.state.V[c] !== followup.state.V[c]);
-      return lost.length === 0
-        ? { holds: true, reason: "earlier constraints survived" }
-        : { holds: false, reason: `silently lost: ${lost.join(", ")}` };
-    }
-  }
-}
-
 // ── Runner (Algorithm 1) ────────────────────────────────────────────────────
 
-async function runTrace(
+export interface TraceOptions {
+  model?: string;
+  sessionId: string;
+  relation: RelationName;
+  role: TraceRole;
+  trial: number;
+  fetchImpl?: FetchLike;
+  headers?: Record<string, string>;
+  overrides?: Overrides;
+}
+
+export async function runTrace(
   P: PromptConfig,
   utterances: string[],
   writeSets: ControlId[][],
-  opts: {
-    model?: string;
-    sessionId: string;
-    relation: RelationName;
-    role: TraceRole;
-    trial: number;
-  },
-): Promise<{ state: SystemState; records: TurnRecord[] }> {
+  opts: TraceOptions,
+): Promise<TraceResult> {
   // ResetApp before each trace (Algorithm 1 lines 9 and 11).
   let state = resetState(P);
   const records: TurnRecord[] = [];
@@ -326,6 +289,9 @@ async function runTrace(
   for (let i = 0; i < utterances.length; i++) {
     const outcome = await runTurn(state, utterances[i], {
       ...(opts.model ? { model: opts.model } : {}),
+      ...(opts.fetchImpl ? { fetchImpl: opts.fetchImpl } : {}),
+      ...(opts.headers ? { headers: opts.headers } : {}),
+      ...(opts.overrides ? { overrides: opts.overrides } : {}),
       sessionId: opts.sessionId,
       turnIndex: i,
       kind: "mr",
@@ -341,129 +307,30 @@ async function runTrace(
   return { state, records };
 }
 
-export interface RunOptions {
-  n: number;
-  epsilon: number;
-  model?: string;
-  sessionId: string;
-  P: PromptConfig;
-  onTurn?: (record: TurnRecord) => void;
-  onCase?: (record: MrCaseRecord) => void;
-  onProgress?: (done: number, total: number) => void;
-}
-
-export interface RunSummary {
-  cases: MrCaseRecord[];
-  covNL: number;
-  covMR: number;
-  invocations: number;
+export interface TrialResult {
+  source: TraceResult;
+  followup: TraceResult;
+  outcome: CheckResult;
 }
 
 /**
- * Algorithm 1. For each instance, run both traces N times from a reset state
- * and report a verdict from the failure rate against ε (Eq. 4.18).
- *
- * There is no WEAK_PASS: under O(σ) = ⟨V,D⟩ a V difference is a violation.
- * "skipped" means the precondition did not hold, which is a different thing and
- * is excluded from Cov_MR.
+ * One trial of one instance: both traces, each from a fresh σ₀, then Check.
+ * Shared by the panel and the headless sweep.
  */
-export async function runRelations(
-  base: string,
-  options: RunOptions,
-): Promise<RunSummary> {
-  const instances = buildInstances(base);
-  const cases: MrCaseRecord[] = [];
-  const footprints: ControlId[][] = [];
-  let invocations = 0;
-  let done = 0;
-
-  for (const instance of instances) {
-    const startedAt = Date.now();
-    const evidence: string[] = [];
-    let fails = 0;
-    let tokens: number | null = null;
-    let firstFailureMs: number | null = null;
-    let lastReason = "";
-
-    for (let trial = 1; trial <= options.n; trial++) {
-      const source = await runTrace(options.P, instance.sourceTrace, instance.writeSets.source, {
-        ...(options.model ? { model: options.model } : {}),
-        sessionId: options.sessionId,
-        relation: instance.relation,
-        role: "source",
-        trial,
-      });
-      const followup = await runTrace(
-        options.P,
-        instance.followupTrace,
-        instance.writeSets.followup,
-        {
-          ...(options.model ? { model: options.model } : {}),
-          sessionId: options.sessionId,
-          relation: instance.relation,
-          role: "followup",
-          trial,
-        },
-      );
-
-      for (const r of [...source.records, ...followup.records]) {
-        invocations += 1;
-        evidence.push(r.id);
-        footprints.push(r.fp);
-        const t = r.meta?.usageTotal?.totalTokens;
-        if (typeof t === "number") tokens = (tokens ?? 0) + t;
-        options.onTurn?.(r);
-      }
-
-      const outcome = check(instance, source, followup);
-      lastReason = outcome.reason;
-      if (!outcome.holds) {
-        fails += 1;
-        if (firstFailureMs === null) firstFailureMs = Date.now() - startedAt;
-      }
-    }
-
-    const verdict: MrVerdict = verdictFor(fails, options.n, options.epsilon);
-    const record: MrCaseRecord = {
-      schemaVersion: 1,
-      id: crypto.randomUUID(),
-      sessionId: options.sessionId,
-      createdAt: new Date().toISOString(),
-      relation: instance.relation,
-      predicate: instance.predicate,
-      legacyName: instance.legacyName,
-      sourceTrace: instance.sourceTrace,
-      followupTrace: instance.followupTrace,
-      n: options.n,
-      epsilon: options.epsilon,
-      fails,
-      failureRate: options.n > 0 ? fails / options.n : 0,
-      verdict,
-      skipReason: verdict === "skipped" ? lastReason : null,
-      covNL: 0,
-      covMR: 0,
-      firstFailureMs,
-      mediatorInvocations:
-        (instance.sourceTrace.length + instance.followupTrace.length) * options.n,
-      totalTokens: tokens,
-      evidenceTurnIds: evidence,
-    };
-    cases.push(record);
-    done += 1;
-    options.onProgress?.(done, instances.length);
-  }
-
-  // Coverage is a property of the whole sweep, so it is stamped once all cases
-  // are in and then back-filled onto each record.
-  const nl = covNL(footprints);
-  const mr = covMR(cases);
-  for (const c of cases) {
-    c.covNL = nl;
-    c.covMR = mr;
-    options.onCase?.(c);
-  }
-
-  return { cases, covNL: nl, covMR: mr, invocations };
+export async function runTrial(
+  P: PromptConfig,
+  instance: MrInstance,
+  opts: Omit<TraceOptions, "role" | "relation">,
+): Promise<TrialResult> {
+  const base = { ...opts, relation: instance.relation };
+  const source = await runTrace(P, instance.sourceTrace, instance.writeSets.source, {
+    ...base,
+    role: "source",
+  });
+  const followup = await runTrace(P, instance.followupTrace, instance.writeSets.followup, {
+    ...base,
+    role: "followup",
+  });
+  return { source, followup, outcome: check(instance, source, followup) };
 }
 
-export { CORE_RELATIONS };

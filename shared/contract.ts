@@ -56,12 +56,6 @@ export type History = HistoryTurn[];
 /** How H is rendered into the prompt. Part of P, and the dial for §4.8 amnesia. */
 export type HistoryPolicy = "full" | "last-k" | "none";
 
-/**
- * Which system prompt is in force. `baseline` is the prompt as recorded with
- * Figure 1.2; `extended` adds the preserve-context rule and the clearFilters
- * field. The two are not interchangeable — see api/prompt.ts.
- */
-export type PromptVariant = "baseline" | "extended";
 
 /**
  * P — prompt and runtime configuration.
@@ -74,11 +68,11 @@ export interface PromptConfig {
   requestedModel: string;
   /** What the provider actually served; may differ after routing. */
   resolvedModel: string | null;
-  temperature: number;
-  topP: number;
+  /** Null: not sent, so the provider's default for the model applied. */
+  temperature: number | null;
+  topP: number | null;
   systemPromptHash: string;
   commandSchemaHash: string;
-  promptVariant: PromptVariant;
   historyPolicy: HistoryPolicy;
   historyMaxTurns: number | null;
   clearActionEnabled: boolean;
@@ -153,7 +147,7 @@ export interface ApplyResult {
 
 // ── Execution metadata (P provenance + per-attempt record) ──────────────────
 
-export type LlmProvider = "openrouter" | "openai" | "local-test" | "none";
+export type LlmProvider = "openrouter" | "openai" | "ollama" | "local-test" | "none";
 export type RunMode = "llm" | "local-test";
 export type AttemptName = "initial" | "repair";
 export type AttemptOutcome = "parsed" | "schema-invalid" | "json-invalid" | "llm-error";
@@ -285,7 +279,13 @@ export interface TurnRecord {
 }
 
 export type MrVerdict = "pass" | "fail" | "skipped";
-export type RelationName = "MR_SE" | "MR_AC" | "MR_CA" | "MR_REV" | "CONTEXT_AMNESIA";
+export type RelationName =
+  | "MR_CE"
+  | "MR_AC"
+  | "MR_CA"
+  | "MR_REV"
+  | "MR_COMP"
+  | "CONTEXT_AMNESIA";
 
 /** One MR test case over N trials: the report T of Algorithm 1. */
 export interface MrCaseRecord {
@@ -325,11 +325,10 @@ export interface AppConfig {
   defaultModel: string;
   models: string[];
   allowAnyModel: boolean;
-  temperature: number;
-  topP: number;
+  temperature: number | null;
+  topP: number | null;
   systemPromptHash: string;
   commandSchemaHash: string;
-  promptVariant: PromptVariant;
   historyPolicy: HistoryPolicy;
   historyMaxTurns: number | null;
   clearActionEnabled: boolean;
@@ -338,6 +337,25 @@ export interface AppConfig {
   /** C, Dom and V₀, so the client never hardcodes the control surface. */
   controls: typeof CONTROLS;
   v0: Valuation;
+}
+
+/**
+ * P as the client starts from it: the server's configuration plus the model
+ * the client will request. `resolvedModel` stays null until a response says
+ * what was actually served.
+ */
+export function promptConfigFrom(config: AppConfig, model: string): PromptConfig {
+  return {
+    requestedModel: model,
+    resolvedModel: null,
+    temperature: config.temperature,
+    topP: config.topP,
+    systemPromptHash: config.systemPromptHash,
+    commandSchemaHash: config.commandSchemaHash,
+    historyPolicy: config.historyPolicy,
+    historyMaxTurns: config.historyMaxTurns,
+    clearActionEnabled: config.clearActionEnabled,
+  };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -394,7 +412,7 @@ export function valuationEqual(a: Valuation, b: Valuation): boolean {
 }
 
 /**
- * Ordered equality of D. Used by MR_SE, MR_CA and MR_REV, whose postconditions
+ * Ordered equality of D. Used by MR_CE, MR_CA, MR_REV and MR_COMP, whose postconditions
  * are O(σ′) = O(σ″) — and `sort` is a control, so a permutation is a real
  * difference, not noise.
  */
@@ -443,7 +461,13 @@ export function unreachedControls(
   return CONTROL_IDS.filter((c) => !reached.has(c));
 }
 
-export const CORE_RELATIONS: readonly RelationName[] = ["MR_SE", "MR_AC", "MR_CA", "MR_REV"];
+export const CORE_RELATIONS: readonly RelationName[] = [
+  "MR_CE",
+  "MR_AC",
+  "MR_CA",
+  "MR_REV",
+  "MR_COMP",
+];
 
 /**
  * Cov_MR(T) = |{MR_i ∈ R : T has a valid instance}| / |R| (Eq. 4.20).

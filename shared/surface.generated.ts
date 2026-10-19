@@ -469,7 +469,7 @@ export const SURFACE_TRANSFORMS: readonly SurfaceTransformSpec[] = Object.freeze
   {
     "id": "clauseReorder",
     "kind": "moveSortClauseFirst",
-    "note": "Reorders clauses within one utterance; still MR_SE, not MR_CA."
+    "note": "Reorders clauses within one utterance; still MR_CE, not MR_CA."
   }
 ]) as readonly SurfaceTransformSpec[];
 

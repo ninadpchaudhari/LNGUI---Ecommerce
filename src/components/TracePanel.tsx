@@ -140,11 +140,16 @@ function Detail({ turn }: { turn: TurnRecord }) {
           <ValuationDiff turn={turn} />
           <div className="trace-sets">
             <span>fp = {`{${turn.fp.join(", ")}}`}</span>
-            <span>W = {turn.writeSet === null ? "(unlabelled)" : `{${turn.writeSet.join(", ")}}`}</span>
+            <span title={turn.kind === "chat" ? "Guessed from the wording of the typed utterance (inferWriteSet)" : "Declared by the case's generation template"}>
+              W = {turn.writeSet === null ? "(unlabelled)" : `{${turn.writeSet.join(", ")}}`}
+              {turn.writeSet !== null && <em>{turn.kind === "chat" ? " inferred from wording" : " declared by the case"}</em>}
+            </span>
           </div>
           {turn.flags.commandOverReach && (
             <div className="trace-flag trace-flag-bad">
-              ⚠ command over-reach: {turn.flags.overReachControls.join(", ")} ∉ W
+              ⚠ command over-reach: the mediator changed {turn.flags.overReachControls.join(", ")}, which this utterance's write set W
+              {turn.kind === "chat" ? " (guessed from your wording)" : ""} does not include.
+              {turn.kind === "chat" && " If you did ask for it, the guess was too narrow and this is a false alarm."}
             </div>
           )}
           {turn.rejected.length > 0 && (
@@ -177,8 +182,8 @@ function Detail({ turn }: { turn: TurnRecord }) {
         <div className="trace-stage">
           <div className="trace-stage-label">P</div>
           <div className="trace-stage-body trace-p">
-            <span>temp {m.P.temperature}</span>
-            <span>top_p {m.P.topP}</span>
+            <span>temp {m.P.temperature ?? "provider default"}</span>
+            <span>top_p {m.P.topP ?? "provider default"}</span>
             <span>prompt {m.P.systemPromptHash}</span>
             <span>schema {m.P.commandSchemaHash}</span>
             <span>

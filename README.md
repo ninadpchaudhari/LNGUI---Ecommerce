@@ -25,7 +25,14 @@ refer to that chapter.
 | [`shared/transition.ts`](shared/transition.ts) | `Apply` and `A` (Eq. 4.7), `step` (Eq. 4.9), `ResetApp` |
 | [`shared/history.ts`](shared/history.ts) | how `H` becomes the effective context |
 | [`src/utils/mediator.ts`](src/utils/mediator.ts) | `M` — the only impure stage |
-| [`src/utils/relations.ts`](src/utils/relations.ts) | Table 4.1 and Algorithm 1 |
+| [`shared/relations.ts`](shared/relations.ts) | Table 4.1 postconditions (`check`) |
+| [`shared/cases.ts`](shared/cases.ts) | the frozen-case schema and each relation's precondition check |
+| [`shared/generate.ts`](shared/generate.ts) | template-driven generation `G` and seeded test set selection |
+| [`shared/experiment.ts`](shared/experiment.ts) | the experiment-file schema, shared by the page and the CLI |
+| [`shared/overrides.ts`](shared/overrides.ts) | per-request P overrides: how a condition reaches the server |
+| [`shared/report.ts`](shared/report.ts) | fail@k, report rows, Markdown / LaTeX / CSV tables |
+| [`src/utils/relations.ts`](src/utils/relations.ts) | running traces through `M`, and ad-hoc cases from one utterance |
+| [`src/utils/sweep.ts`](src/utils/sweep.ts) | **the** sweep engine, used by the Experiments page and `npm run sweep` |
 | [`api/prompt.ts`](api/prompt.ts) | `P` — the system prompt and `Q` |
 
 Two boundaries are load-bearing and deliberately explicit:
@@ -53,12 +60,13 @@ the pair apart.
 than a counter so that clearing twice stays observationally equal to clearing
 once; a count would leak `H` into `O`. Being value-bearing is what lets `c₆`
 enter a footprint, which §A.7 requires when it speaks of `c₆` being "never
-reached by language under this suite".
+reached by language under this test set".
 
 Because clearing cannot be undone in one utterance, `c₆ ∉ C_rev` and it generates
-no `MR_REV` case. Setting `CLEAR_ACTION_ENABLED=false` removes it from both `Q`
-and the system prompt — so `P` genuinely differs between the two configurations
-and `Cov_NL` 6/6 vs 5/6 is a controlled comparison rather than a confound.
+no `MR_REV` case. `CLEAR_ACTION_ENABLED` (off by default) controls whether `Q`
+accepts it. The prompt text is separate, so `c₆` is reachable only when the
+switch is on and the prompt tells the model how to use it. `Cov_NL` then
+depends on both, and `P` records both.
 
 ---
 
@@ -66,24 +74,27 @@ and `Cov_NL` 6/6 vs 5/6 is a controlled comparison rather than a confound.
 
 | Relation | Precondition | Postcondition | Fault exposed |
 | --- | --- | --- | --- |
-| `MR_SE` | `Syn(u₁,u₂)` | `O(σ′) = O(σ″)` | synonym blindness |
+| `MR_CE` | `Para(u₁,u₂)` | `O(σ′) = O(σ″)` | phrasing sensitivity |
 | `MR_AC` | `Refine(u_r,u_b,δ)` | `V_ur = V_ub[d↦w]` ∧ `D_ur ⊆ D_ub` | constraint leakage |
 | `MR_CA` | `Indep(u₁,u₂)` | `O(σ_f) = O(σ′_f)` | order sensitivity |
 | `MR_REV` | `Rev(u_f,u_i)` | `O(σ_f) = O(σ₀)` | irreversibility |
-| Context amnesia | multi-turn `MR_CA` | earlier constraints survive | context amnesia |
+| `MR_COMP` | `Comp(s,u_s)` | `O(σ_c) = O(σ_s)` | phrasing sensitivity across turns |
+| Context amnesia | multi-turn `MR_CA` (Table 4.3), reported as `MR_CA (multi-turn)` | earlier constraints survive | context amnesia |
 
-A verdict is a property of `N` trials, not one run: `violation ⟺ fails/N > ε`
-(Eq. 4.18). Defaults are `N = 10`, `ε = 0.2`, matching the §4.19.3 example.
+Every case runs `N` times and every trial is recorded. The report gives each
+case's failure count, the pass / intermittent / fail split and fail@k. The
+benchmark no longer applies the `fails/N > ε` verdict rule.
 
 **There is no `WEAK_PASS`.** Under `O(σ) = ⟨V,D⟩`, a `V` difference is a
 violation even when the product set matches. `skipped` means the precondition did
 not hold, which is a different thing and is excluded from `Cov_MR`.
 
-The earlier five-relation set was not conformant. Case Invariance, Synonym
-Prefix, Format Suffix and the old "Commutativity" (which reordered clauses
-*within one utterance*, from a single starting state) are all `MR_SE` instances;
-Idempotency is the §5.4 repeated-input diagnostic, not an MR. Their labels are
-kept in `mr_cases.legacy_name` so older exports can still be joined.
+`MR_CE` was called `MR_SE` in older records; read the two as the same relation.
+Case Invariance, Synonym Prefix, Format Suffix and the old "Commutativity"
+(which reordered clauses *within one utterance*, from a single starting state)
+are all `MR_CE` instances. Idempotency is the `MR_COMP` special case
+`s = ⟨u,u⟩, u_s = u`. Their labels are kept in `legacy_name` so older exports
+can still be joined.
 
 ### Standing assertions
 
@@ -119,14 +130,63 @@ bubble.
 
 ---
 
-## The system prompt is an experimental condition
+## The system prompt is an input to the experiment
 
-The prompt cannot simultaneously *avoid inventing constraints* and *preserve
-constraints across turns*. Measured on `gpt-4o-mini` at temperature 0 with
-"show electronics under $100 sorted by rating":
+The prompt is plain text, never a named variant. Two prompts are committed in
+`prompts/`:
 
-| `PROMPT_VARIANT` | Figure 1.2 (case invariance) | Multi-turn refinement (MR_AC) | `Cov_NL` ceiling |
-| --- | --- | --- | --- |
+- [`default.txt`](prompts/default.txt), the prompt the app has always used and
+  the one Figure 1.2 was recorded with. It is pinned character for character by
+  [`api/prompt.test.ts`](api/prompt.test.ts), and its hash is `fnv1a32:5a348657`.
+  The server uses it when a request carries no prompt. Its text also lives in
+  [`shared/default-prompt.ts`](shared/default-prompt.ts) so the Worker, the
+  browser and Node can import it with no build step. A test fails if the two
+  differ, so edit both together.
+- [`minimal.txt`](prompts/minimal.txt), the default with exactly one line
+  removed: "If the user does NOT mention a field, return null for it. Do NOT
+  invent constraints." A test guarantees that is the only difference.
+
+Every record carries the hash of the exact text the model received
+(`systemPromptHash`).
+
+Any other prompt is another text file in `prompts/`. An experiment condition
+names its prompt file and pins it with a SHA-256, the same way it pins a cases
+file, and the sweep refuses to run if the file changed. The Experiments page
+shows the full text, lets you duplicate and edit it, and turns each ticked
+prompt into its own set of conditions, so two prompts can be compared in one
+run. A run manifest stores the exact prompt texts used.
+
+`CLEAR_ACTION_ENABLED` is a separate switch. It decides whether the model's
+JSON may contain `clearFilters` (the schema `Q`) and nothing in the prompt
+text. It is off by default. A prompt that should make the model clear filters
+has to say so itself, and the default prompt does not, so `c₆` is unreachable
+through language unless a prompt asks for it.
+
+> **What the default prompt does on the Figure 1.2 utterance.** Measured by
+> hand, not by a sweep: 5 calls per cell, `gpt-4o-mini` through OpenRouter,
+> "show electronics under $100 sorted by rating". Lowercase got
+> `minRating: null` in 4 of 5 calls and `4` in 1. UPPERCASE got `4` in 5 of 5.
+> Removing the line "If the user does NOT mention a field, return null for it.
+> Do NOT invent constraints." changed nothing (same split), so that line is not
+> the cause. Adding these two lines made lowercase `minRating: 4` in 20 of 20
+> calls, at temperature 0 and at the provider default:
+>
+> ```
+> - Earlier turns of the conversation are provided for context. Preserve constraints
+>   the user established earlier unless the current request changes them.
+> ```
+>
+> With full history, "show books" then "only the ones under $50" kept both
+> constraints in 5 of 5 calls with the default prompt, and "show electronics"
+> then the same follow-up kept both in 4 of 5. The older claim of a
+> deterministic leak (results widening from 4 to 13) did not reproduce at the
+> provider-default temperature and has not been retested at 0. Treat all of
+> this as a pointer for the pilot, not as a result.
+
+If `api/prompt.test.ts` fails, Figure 1.2 must be re-recorded or the change
+reverted. Do not update the pin casually.
+
+--- | --- | --- | --- |
 | `baseline` *(default)* | **violated** — lower `null`, UPPER `4` | leaks — category dropped, D 4 → 13 | 5/6 |
 | `extended` | passes — both `4` | works — category kept, D 4 → 2 | 6/6 |
 
@@ -204,12 +264,78 @@ npm run dev              # Vite on :5173, API on :3001
 | `npm run dev` | Vite + Express. The primary loop. |
 | `npm test` | oracle tests (`node:test` via tsx) |
 | `npm run gen:surface` | regenerate after editing `control-surface.yaml` |
+| `npm run gen:cases` | build a frozen cases file from `Γ_app` (see below) |
+| `npm run sweep` | run an experiment headlessly (see below) |
+| `npm run report` | print a results table for a sweep |
 | `npm run dev:cf` | build, then `wrangler dev` in the real Workers runtime |
 | `npm run deploy` | build and deploy |
 | `npm run d1:migrate[:local]` | apply migrations |
 
 `wrangler dev` serves `dist/` from disk with no HMR, which is why Express + Vite
 stays the primary loop.
+
+### Running experiments
+
+There is **one sweep engine** ([`src/utils/sweep.ts`](src/utils/sweep.ts)) and
+two front ends:
+
+- the **Experiments page** (`#experiments` in the app): pick or generate a
+  test set, choose conditions, copy the experiment JSON, or run it in the browser
+  and read the report;
+- **`npm run sweep`**: the same engine from Node, calling the API handler
+  in-process, writing JSONL files.
+
+The front ends differ only in the transport (browser `fetch` or in-process)
+and the sink (memory or files). A condition's P always travels as request
+overrides in the JSON request body, and the router merges them over
+the server environment, so both front ends resolve P through one code path.
+The server applies condition settings directly and rejects any key outside
+the whitelist. A parity test
+(`scripts/lib/sweep.test.ts`) runs one test set through both transports and
+requires identical trial outcomes.
+
+```bash
+npm run gen:cases -- --out cases/pilot.jsonl --groups 10 --per-group 2 --seed 1
+npm run sweep -- experiments/pilot-gpt-4o-mini-4cond-n10.json --dry-run   # resolved P, planned calls
+npm run sweep -- experiments/pilot-gpt-4o-mini-4cond-n10.json             # writes runs/<name>-<time>/
+npm run report -- runs/pilot-<time>                 # Markdown table
+npm run report -- runs/pilot-<time> --format latex  # booktabs, for \input
+npm run report -- runs/pilot-<time> --by case       # one row per case
+```
+
+- **Cases** (`cases/*.jsonl`) are frozen: one fixed instance per line, with a
+  `semanticGroup` (rewordings of one situation are clustered, not independent)
+  and strata. [docs/case-generation.md](docs/case-generation.md) compares the
+  generator with the proposal and justifies its two deviations: a separately
+  reported surface-transform family for `MR_CE`, and the `MR_AC` narrowing
+  filter. Context amnesia is in the test set by default (`--no-amnesia` drops it). `validateCase` rejects any case whose precondition fails, and
+  `<out>.rejected.jsonl` logs filtered candidates. `<out>.manifest.json`
+  records the seed, quotas, git commit and SHA-256. An experiment pins its
+  test set with `casesSha256`, and the sweep refuses to start or resume when the
+  file's hash differs.
+- **Trials** run in complete rounds in a seeded shuffled order, and every case
+  is repeated N times, including cases that pass first time.
+- **Infrastructure failures** (timeouts, provider errors) are retried and,
+  if they persist, recorded as `infra`, separate from mediator failures. A
+  malformed or schema-invalid command counts as a mediator failure.
+- **Output**: `manifest.json` (config, cases hash, git commit, resolved P),
+  `trials.jsonl` (one row per trial, with observations and standing flags) and
+  `turns.jsonl` (every `TurnRecord`). `--resume runs/<dir>` continues a run.
+- **Conditions state P in full.** A condition's overrides are the only source
+  of P. Any P key it leaves out is unset on the server, so `.env` never fills
+  a gap. An unset key takes its code default, and an unset temperature or
+  top_p is not sent, so the provider's default for that model applies. The
+  page shows each condition's P as the server resolves it.
+- **Providers.** `LLM_PROVIDER` selects `openrouter`, `openai` or `ollama` per
+  condition, and `LLM_MODEL` names the model. Ollama runs on the server's
+  machine at `OLLAMA_BASE_URL` (default `http://localhost:11434/v1`), and the
+  page's "Load installed models" asks it for its model list.
+- **Langfuse** is off during sweeps unless you pass `--langfuse` or tick
+  "Trace every call to Langfuse" on the page. Both send the same
+  `x-lngui-langfuse` header.
+- `experiments/pilot-local-smoke.json` runs everything in `LOCAL_TEST_MODE` with no
+  LLM spend. A sweep refuses a local-mode condition unless the condition sets
+  `LOCAL_TEST_MODE` explicitly.
 
 ### Deploying
 
@@ -241,24 +367,46 @@ would swallow `/api/*`.
 | --- | --- | --- |
 | `OPEN_ROUTER_API_KEY` / `OPENROUTER_API_KEY` | — | presence selects OpenRouter |
 | `OPENAI_API_KEY` | — | selects direct OpenAI when no OpenRouter key |
-| `OPENROUTER_MODEL` | `openai/gpt-4o-mini` | the default model; **experiments repeat by leaving this alone** |
+| `LLM_PROVIDER` | — | `openrouter` \| `openai` \| `ollama`. Unset: key-first resolution |
+| `LLM_MODEL` | — | model id for the selected provider; wins over the provider-specific keys |
+| `OPENROUTER_MODEL` | `openai/gpt-4o-mini` | the chat UI's default OpenRouter model |
+| `OLLAMA_BASE_URL` / `OLLAMA_MODEL` | `http://localhost:11434/v1` / `llama3.1:8b` | local models through Ollama |
 | `OPENROUTER_MODELS` | — | comma-separated allowlist for the UI dropdown |
 | `OPENROUTER_MODEL_ALLOW_ANY` | `false` | permits arbitrary client model ids |
-| `LLM_TEMPERATURE` / `LLM_TOP_P` | `0` / `1` | pinned deterministic, so a difference between runs is attributable to the mediator |
+| `LLM_TEMPERATURE` / `LLM_TOP_P` | unset | unset means not sent: the provider's default applies and P records null. Figure 1.2 was recorded at `0` |
 | `LLM_TIMEOUT_MS` | `30000` | |
 | `HISTORY_POLICY` | `full` | `full` \| `last-k` \| `none` |
 | `HISTORY_MAX_TURNS` | `3` | with `last-k` |
-| `PROMPT_VARIANT` | `baseline` | `baseline` \| `extended` — **changes which fault the benchmark exhibits** |
-| `CLEAR_ACTION_ENABLED` | `true` | `false` removes `c₆` from `Q` and the prompt; inert under `baseline` |
+| `SYSTEM_PROMPT` | — | the prompt text. Unset: `prompts/default.txt`. Experiment conditions set it per request |
+| `CLEAR_ACTION_ENABLED` | `false` | `true` lets `Q` accept `clearFilters`. Changes the schema, not the prompt text |
 | `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY` | — | tracing needs both |
 | `LOCAL_TEST_MODE` | `false` | deterministic parser, no network |
-| `RUNS_WRITE_TOKEN` / `RUNS_READ_TOKEN` | — | shared-secret gates, off by default |
+| `RUNS_WRITE_TOKEN` / `RUNS_READ_TOKEN` | — | shared-secret gates for stored runs, off by default |
 | `TURNS_FILE` | `.data/turns.jsonl` | Express dev store |
 
-Provider resolution is key-first: OpenRouter key → OpenRouter; else OpenAI key →
+With `LLM_PROVIDER` set, that provider is used. Otherwise resolution is key-first: OpenRouter key → OpenRouter; else OpenAI key →
 direct OpenAI; else HTTP 500.
 
 ---
+
+## Langfuse
+
+Langfuse is an LLM tracing service. With `LANGFUSE_PUBLIC_KEY`,
+`LANGFUSE_SECRET_KEY` and `LANGFUSE_BASE_URL` set, every `/api/command` call
+from the chat UI becomes one trace. The trace holds a generation for the
+initial attempt and, when needed, one for the JSON repair. Each generation
+records the exact messages sent (system prompt, rendered history, utterance),
+the raw reply, token usage and latency. The trace id equals the turn's
+`requestId`, which is also the `TurnRecord.id`. The trace panel's "Langfuse
+trace ↗" link opens it.
+
+Use it to read what the model actually saw and said for a suspicious turn,
+to compare prompt variants side by side, and to watch cost and latency. The
+benchmark never depends on it: `turns.jsonl` and D1 hold the same attempt
+records, and every verdict comes from `O(σ)`.
+
+Sweeps leave it off by default. Turn it on for a sweep with `--langfuse`, or
+the matching checkbox on the Experiments page.
 
 ## Records
 
@@ -268,8 +416,9 @@ Two tables, matching the two artifacts Chapter 4 asks for.
 transition: `u`, `q`, `V` and `D` before and after, `fp`, `W`, the standing
 flags, and `P` denormalized into columns.
 
-**`mr_cases`** — the test report `T` of Algorithm 1. One row per case over `N`
-trials: `fails`, `failure_rate`, `verdict`, `epsilon`, `cov_nl`, `cov_mr`,
+**`mr_cases`** — legacy. The old panel wrote one row per case under the
+`fails/N > ε` rule. Nothing writes it now; sweeps write `trials.jsonl`. The
+table and endpoints remain so earlier records stay readable. Its columns: `fails`, `failure_rate`, `verdict`, `epsilon`, `cov_nl`, `cov_mr`,
 `first_failure_ms`, `mediator_invocations`, and the evidence set `E` as turn ids.
 
 Scalar columns are denormalized so the §4.15 metrics are plain SQL:
@@ -312,6 +461,6 @@ API: `POST /api/command`, `GET /api/config`, `POST|GET|DELETE /api/runs`,
 
 ## Not implemented
 
-Template-driven generation `G` beyond the `Γ_app` data (§4.10.1), mutation
+LLM paraphrase and translation generation for `Para` (§4.10.1), mutation
 analysis (§4.19), the LLM-as-judge baseline (§5.3), and the external subjects —
 Home Assistant, WebArena, and the Appendix B probes.

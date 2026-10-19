@@ -13,14 +13,16 @@ import {
   getEnvVar,
   isLocalTestMode,
   langfuseEnabled,
+  ollamaRoot,
   resolveHistoryConfig,
   resolveLLMConfig,
   resolveModelPolicy,
-  resolvePromptVariant,
+  resolveSystemPrompt,
   type CommandRuntimeEnv,
   type RuntimeEnv,
 } from "./config.ts";
-import { effectiveClearAction, promptHashes } from "./prompt.ts";
+import { promptHashes } from "./prompt.ts";
+import { OVERRIDE_KEYS, checkOverrides, type Overrides } from "../shared/overrides.ts";
 import {
   ValidationError,
   clampLimit,
@@ -45,9 +47,8 @@ function buildConfig(env: RuntimeEnv, persistence: AppConfig["persistence"]): Ap
   const llm = resolveLLMConfig(env);
   const policy = resolveModelPolicy(env);
   const history = resolveHistoryConfig(env);
-  const promptVariant = resolvePromptVariant(env);
-  const clearEnabled = effectiveClearAction(promptVariant, clearActionEnabled(env));
-  const hashes = promptHashes(promptVariant, clearActionEnabled(env));
+  const clearEnabled = clearActionEnabled(env);
+  const hashes = promptHashes(resolveSystemPrompt(env), clearEnabled);
 
   return {
     schemaVersion: SCHEMA_VERSION,
@@ -61,7 +62,6 @@ function buildConfig(env: RuntimeEnv, persistence: AppConfig["persistence"]): Ap
     topP: llm.topP,
     systemPromptHash: hashes.systemPromptHash,
     commandSchemaHash: hashes.commandSchemaHash,
-    promptVariant,
     historyPolicy: history.policy,
     historyMaxTurns: history.maxTurns,
     clearActionEnabled: clearEnabled,
@@ -95,6 +95,41 @@ function listQuery(url: URL): TurnListQuery {
   };
 }
 
+/** Routes whose JSON body may carry `overrides`: the two that resolve P. */
+const OVERRIDE_ROUTES = new Set(["/api/command", "/api/config"]);
+
+/**
+ * Merges a request's P overrides (the `overrides` object in its JSON body)
+ * over the server environment.
+ *
+ * A request whose overrides are malformed is rejected outright.
+ * Ignoring them would run the request under a
+ * P the caller did not ask for, and the caller would record the wrong one.
+ *
+ * The body is read from a clone, so the handler can still read the original.
+ */
+export async function applyOverrides(
+  request: Request,
+  env: RuntimeEnv,
+  path: string,
+): Promise<{ env: RuntimeEnv } | { error: string; status: number }> {
+  if (request.method !== "POST" || !OVERRIDE_ROUTES.has(path)) return { env };
+  let raw: unknown;
+  try {
+    raw = ((await request.clone().json()) as { overrides?: unknown } | null)?.overrides;
+  } catch {
+    return { env };
+  }
+  if (raw === undefined) return { env };
+
+  const { overrides, problems } = checkOverrides(raw);
+  if (problems.length > 0) return { error: `Invalid overrides: ${problems.join("; ")}`, status: 400 };
+  // Every P key the condition leaves out is explicitly unset, so the server's
+  // .env cannot leak into a condition (see getEnvVar).
+  const unset = Object.fromEntries(OVERRIDE_KEYS.map((k) => [k, ""])) as Overrides;
+  return { env: { ...env, ...unset, ...overrides } };
+}
+
 export async function handleApiRequest(
   request: Request,
   runtimeEnv: CommandRuntimeEnv | RuntimeEnv,
@@ -104,14 +139,29 @@ export async function handleApiRequest(
   const path = url.pathname;
   if (!path.startsWith("/api/")) return null;
 
-  const env = runtimeEnv as RuntimeEnv;
+  const merged = await applyOverrides(request, runtimeEnv as RuntimeEnv, path);
+  if ("error" in merged) return json({ error: merged.error }, merged.status);
+  const env = merged.env;
   const { store } = deps;
 
   if (path === "/api/command") {
-    return handleCommandRequest(request, runtimeEnv, deps);
+    return handleCommandRequest(request, env, deps);
   }
 
-  if (path === "/api/config" && request.method === "GET") {
+  if (path === "/api/ollama/models" && request.method === "GET") {
+    // Lists models installed in the server's Ollama, for the Experiments page.
+    try {
+      const res = await fetch(`${ollamaRoot(env)}/api/tags`, { signal: AbortSignal.timeout(3000) });
+      if (!res.ok) return json({ models: [], error: `Ollama answered ${res.status}` });
+      const body = (await res.json()) as { models?: Array<{ name?: string }> };
+      return json({ models: (body.models ?? []).map((m) => m.name).filter(Boolean) });
+    } catch {
+      return json({ models: [], error: `No Ollama server at ${ollamaRoot(env)}` });
+    }
+  }
+
+  // GET reads the server's own P. POST with `overrides` resolves a condition's P.
+  if (path === "/api/config" && (request.method === "GET" || request.method === "POST")) {
     return json(buildConfig(env, store ? store.kind : "none"));
   }
 

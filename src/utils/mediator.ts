@@ -15,8 +15,9 @@ import {
   type SystemState,
   type TurnRecord,
 } from "../../shared/contract.ts";
+import type { Overrides } from "../../shared/overrides.ts";
 import { step } from "../../shared/transition.ts";
-import { CommandApiError, sendCommand } from "./api.ts";
+import { CommandApiError, sendCommand, type FetchLike } from "./api.ts";
 
 export interface MediateResult {
   q: Command | null;
@@ -29,11 +30,14 @@ export interface MediateResult {
 export async function mediate(
   state: SystemState,
   u: string,
-  options: { model?: string; sessionId: string },
+  options: { model?: string; sessionId: string; fetchImpl?: FetchLike; headers?: Record<string, string>; overrides?: Overrides },
 ): Promise<MediateResult> {
   try {
     const res = await sendCommand(u, {
       ...(options.model ? { model: options.model } : {}),
+      ...(options.fetchImpl ? { fetchImpl: options.fetchImpl } : {}),
+      ...(options.headers ? { headers: options.headers } : {}),
+      ...(options.overrides ? { overrides: options.overrides } : {}),
       history: state.H,
       historyDisplayedCount: state.H.length,
       sessionId: options.sessionId,
@@ -93,11 +97,17 @@ export async function runTurn(
     role?: TurnRecord["role"];
     trial?: number | null;
     writeSet?: ControlId[] | null;
+    fetchImpl?: FetchLike;
+    headers?: Record<string, string>;
+    overrides?: Overrides;
   },
 ): Promise<TurnOutcome> {
   const before = state;
   const { q, meta, ok, error } = await mediate(state, u, {
     ...(options.model ? { model: options.model } : {}),
+    ...(options.fetchImpl ? { fetchImpl: options.fetchImpl } : {}),
+    ...(options.headers ? { headers: options.headers } : {}),
+    ...(options.overrides ? { overrides: options.overrides } : {}),
     sessionId: options.sessionId,
   });
 

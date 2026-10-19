@@ -2,6 +2,7 @@
  * HTTP client for the API. Every failure path preserves `meta`, so a failed
  * turn reaches the trace panel instead of being swallowed into a chat bubble.
  */
+import type { Overrides } from "../../shared/overrides.ts";
 import type {
   AppConfig,
   CommandMeta,
@@ -51,21 +52,35 @@ export interface SendCommandOptions {
   /** Turns visible on screen, which may exceed what the policy actually sends. */
   historyDisplayedCount?: number;
   sessionId?: string;
+  /**
+   * Transport. Defaults to the global fetch; the headless sweep passes one
+   * that calls the API handler in-process, so a run needs no server and each
+   * experimental condition can carry its own environment.
+   */
+  fetchImpl?: FetchLike;
+  /** Extra headers, e.g. x-runs-token and the Langfuse switch. */
+  headers?: Record<string, string>;
+  /** P overrides for this request (shared/overrides.ts). Sent in the body. */
+  overrides?: Overrides;
 }
+
+export type FetchLike = (input: string, init: RequestInit) => Promise<Response>;
 
 export async function sendCommand(
   prompt: string,
   options: SendCommandOptions = {},
 ): Promise<CommandResponse> {
-  const res = await fetch(url("/api/command"), {
+  const doFetch: FetchLike = options.fetchImpl ?? ((input, init) => fetch(input, init));
+  const res = await doFetch(url("/api/command"), {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...options.headers },
     body: JSON.stringify({
       prompt,
       ...(options.model ? { model: options.model } : {}),
       history: options.history ?? [],
       historyDisplayedCount: options.historyDisplayedCount ?? options.history?.length ?? 0,
       ...(options.sessionId ? { sessionId: options.sessionId } : {}),
+      ...(options.overrides ? { overrides: options.overrides } : {}),
     }),
   });
 

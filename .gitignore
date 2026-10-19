@@ -33,3 +33,6 @@ dist-ssr
 
 # wrangler local state (D1 sqlite, asset cache)
 .wrangler/
+
+# Sweep outputs (scripts/sweep.ts). Large; archive the ones you report.
+runs/

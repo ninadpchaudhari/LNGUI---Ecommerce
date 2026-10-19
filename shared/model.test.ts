@@ -296,7 +296,7 @@ describe("observationallyEqual — Eq. 4.6", () => {
   test("ignores H and P, comparing only ⟨V,D⟩", () => {
     const P = {
       requestedModel: "m", resolvedModel: "m", temperature: 0, topP: 1,
-      systemPromptHash: "h", commandSchemaHash: "h", promptVariant: "baseline" as const,
+      systemPromptHash: "h", commandSchemaHash: "h",
       historyPolicy: "full" as const, historyMaxTurns: null, clearActionEnabled: true,
     };
     const a = resetState(P);
@@ -319,7 +319,7 @@ describe("observationallyEqual — Eq. 4.6", () => {
 describe("step — Eq. 4.9", () => {
   const P = {
     requestedModel: "m", resolvedModel: "m", temperature: 0, topP: 1,
-    systemPromptHash: "h", commandSchemaHash: "h", promptVariant: "baseline" as const,
+    systemPromptHash: "h", commandSchemaHash: "h",
     historyPolicy: "full" as const, historyMaxTurns: null, clearActionEnabled: true,
   };
 
@@ -358,18 +358,19 @@ describe("coverage metrics", () => {
   });
 
   test("Cov_MR counts a relation only when its precondition held", () => {
-    assert.equal(covMR([{ relation: "MR_SE", verdict: "pass" }]), 1 / 4);
+    assert.equal(covMR([{ relation: "MR_CE", verdict: "pass" }]), 1 / 5);
     assert.equal(
-      covMR([{ relation: "MR_SE", verdict: "pass" }, { relation: "MR_CA", verdict: "skipped" }]),
-      1 / 4,
+      covMR([{ relation: "MR_CE", verdict: "pass" }, { relation: "MR_CA", verdict: "skipped" }]),
+      1 / 5,
       "a skipped case is not a valid instance",
     );
     assert.equal(
       covMR([
-        { relation: "MR_SE", verdict: "pass" },
+        { relation: "MR_CE", verdict: "pass" },
         { relation: "MR_AC", verdict: "fail" },
         { relation: "MR_CA", verdict: "pass" },
         { relation: "MR_REV", verdict: "fail" },
+        { relation: "MR_COMP", verdict: "pass" },
       ]),
       1,
       "a failing case still exercised the relation",

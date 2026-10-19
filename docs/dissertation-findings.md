@@ -1,5 +1,14 @@
 # Findings from instrumenting the benchmark
 
+> **Superseded in part (Oct 2026).** `PROMPT_VARIANT` (`baseline`, `extended`)
+> no longer exists. The prompt is now a text file that experiments name and
+> pin (see README, "The system prompt is an input to the experiment"). Hand
+> measurements made later at N=5 per cell did not reproduce two claims below:
+> that the baseline prompt leaks the category on a two-turn refinement
+> deterministically, and that removing the "Do NOT invent constraints" line
+> matters for Figure 1.2. Rerun them through a sweep before citing §1 to §3.
+
+
 Working notes from conforming the case-study application to Chapter 4 and
 deploying it. Intended for review and discussion, not as dissertation prose.
 
@@ -86,7 +95,7 @@ there may be no single prompt that satisfies all four simultaneously, so a
 mediator's fault profile is a point on a trade-off surface rather than a list of
 defects to be fixed one by one.
 
-If that generalizes, it changes what a passing suite means. "All relations pass"
+If that generalizes, it changes what a passing test set means. "All relations pass"
 might be unreachable by construction for some control surfaces, and the useful
 report becomes *which* relations a given `P` trades against which.
 
@@ -163,7 +172,7 @@ metric is relative to it.
 
 §4.3 puts "menu actions" in `C`, and §A.1 lists Clear Filters as `c₆`. But
 `Val(C)` assumes each control has a value domain, and §A.7's worked example
-treats `c₆` as coverable ("never reached by language under this suite").
+treats `c₆` as coverable ("never reached by language under this test set").
 
 An action has no persistent value, so a literal reading makes `c₆` permanently
 outside every footprint and `Cov_NL` structurally sub-1 for any subject with an

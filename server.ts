@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import { handleApiRequest } from "./api/router.ts";
 import { createFileTurnStore } from "./api/store-file.ts";
+import { toFetchRequest } from "./api/node-adapter.ts";
 
 const app = express();
 app.use(express.json({ limit: "512kb" }));
@@ -12,18 +13,14 @@ const store = await createFileTurnStore(process.env.TURNS_FILE ?? ".data/turns.j
 app.all("/api/*splat", async (req, res) => {
   const baseUrl = `${req.protocol}://${req.get("host") ?? "localhost:3001"}`;
 
-  const headers: Record<string, string> = { "content-type": "application/json" };
-  const token = req.headers["x-runs-token"];
-  if (typeof token === "string") headers["x-runs-token"] = token;
-
-  const request = new Request(`${baseUrl}${req.originalUrl}`, {
-    method: req.method,
-    headers,
-    // A Fetch Request throws if a GET or HEAD carries a body.
-    ...(req.method === "GET" || req.method === "HEAD"
-      ? {}
-      : { body: JSON.stringify(req.body ?? {}) }),
-  });
+  // Forwards every header (Langfuse switch, runs token). The
+  // parity test uses the same adapter, so a dropped header fails a test.
+  const request = toFetchRequest(
+    `${baseUrl}${req.originalUrl}`,
+    req.method,
+    req.headers,
+    req.method === "GET" || req.method === "HEAD" ? undefined : JSON.stringify(req.body ?? {}),
+  );
 
   // Express has no ctx.waitUntil, so background work is collected and awaited
   // after the response is sent. That keeps the Langfuse round-trip off the

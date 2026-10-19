@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { covNL, footprint, unreachedControls } from "../shared/contract.ts";
+import { covNL, footprint, promptConfigFrom, unreachedControls } from "../shared/contract.ts";
 import type {
   AppConfig,
   ChatMessage,
   Command,
   ControlId,
-  MrCaseRecord,
   PromptConfig,
   SystemState,
   TurnRecord,
@@ -19,38 +18,31 @@ import { FilterPanel } from "./components/FilterPanel.tsx";
 import { ProductGrid } from "./components/ProductGrid.tsx";
 import { ChatPanel } from "./components/ChatPanel.tsx";
 import { TracePanel } from "./components/TracePanel.tsx";
-import { MetamorphicPanel } from "./components/MetamorphicPanel.tsx";
+import { ExperimentsPage } from "./components/ExperimentsPage.tsx";
+
+type View = "benchmark" | "experiments";
+const viewFromHash = (): View => (window.location.hash === "#experiments" ? "experiments" : "benchmark");
 
 /** P before /api/config answers. Replaced on mount and by each response. */
 const BOOTSTRAP_P: PromptConfig = {
   requestedModel: "",
   resolvedModel: null,
-  temperature: 0,
-  topP: 1,
+  temperature: null,
+  topP: null,
   systemPromptHash: "",
   commandSchemaHash: "",
-  promptVariant: "baseline",
   historyPolicy: "full",
   historyMaxTurns: null,
-  clearActionEnabled: true,
+  clearActionEnabled: false,
 };
 
-function promptConfigFrom(config: AppConfig, model: string): PromptConfig {
-  return {
-    requestedModel: model,
-    resolvedModel: null,
-    temperature: config.temperature,
-    topP: config.topP,
-    systemPromptHash: config.systemPromptHash,
-    commandSchemaHash: config.commandSchemaHash,
-    promptVariant: config.promptVariant,
-    historyPolicy: config.historyPolicy,
-    historyMaxTurns: config.historyMaxTurns,
-    clearActionEnabled: config.clearActionEnabled,
-  };
-}
-
 export default function App() {
+  const [view, setView] = useState<View>(viewFromHash);
+  useEffect(() => {
+    const onHash = () => setView(viewFromHash());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
   // σ = ⟨V, H, P, D⟩ is the single source of truth. The filter sidebar and the
   // product grid are both projections of it, so they cannot disagree.
   const [state, setState] = useState<SystemState>(() => resetState(BOOTSTRAP_P));
@@ -187,10 +179,18 @@ export default function App() {
 
   return (
     <div className="app">
-      <header className="header">
+      <header className="header header-nav">
         <h1>Chat-Assisted Ecommerce Case Study</h1>
+        <nav className="view-tabs" aria-label="View">
+          <a href="#benchmark" className={view === "benchmark" ? "on" : ""} aria-current={view === "benchmark" ? "page" : undefined}>Benchmark</a>
+          <a href="#experiments" className={view === "experiments" ? "on" : ""} aria-current={view === "experiments" ? "page" : undefined}>Experiments</a>
+        </nav>
       </header>
 
+      {view === "experiments" ? (
+        <ExperimentsPage config={config} />
+      ) : (
+      <>
       <div className="layout">
         <FilterPanel
           V={state.V}
@@ -229,15 +229,8 @@ export default function App() {
         onLoadMore={handleLoadMore}
         onClear={handleClearRecords}
       />
-
-      <MetamorphicPanel
-        config={config}
-        model={model}
-        sessionId={sessionId}
-        P={state.P}
-        onTurn={record}
-        onCases={(cases: MrCaseRecord[]) => void cases}
-      />
+      </>
+      )}
     </div>
   );
 }
