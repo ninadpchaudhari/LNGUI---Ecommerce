@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 .env
+.dev.vars
+
+# Local run records (file-backed TurnStore used by the Express dev server)
+.data/
+
+# Reference documents kept alongside the code but never committed
+*.pdf
 
 # Editor directories and files
 .vscode/*
@@ -23,3 +30,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# wrangler local state (D1 sqlite, asset cache)
+.wrangler/
+
+# Sweep outputs (scripts/sweep.ts). Large; archive the ones you report.
+runs/

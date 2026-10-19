@@ -1,0 +1,57 @@
+{"relation":"MR_AC","description":"show electronics items under $25","reason":"refined result set is empty"}
+{"relation":"MR_AC","description":"show electronics items under $200","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show electronics items rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show electronics items rated 3.5 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show books items under $50","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show books items under $100","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show books items under $200","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show books items rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show books items rated 3.5 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show books items rated 4 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show clothing items under $200","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show clothing items rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show clothing items rated 3.5 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show home goods items under $100","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show home goods items under $200","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show home goods items rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show sports gear items rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show sports gear items rated 3.5 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to electronics only under $25","reason":"refined result set is empty"}
+{"relation":"MR_AC","description":"filter to electronics only under $200","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to electronics only rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to electronics only rated 3.5 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to books only under $50","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to books only under $100","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to books only under $200","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to books only rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to books only rated 3.5 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to books only rated 4 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to clothing only under $200","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to clothing only rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to clothing only rated 3.5 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to home goods only under $100","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to home goods only under $200","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to home goods only rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to sports gear only rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"filter to sports gear only rated 3.5 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items under $25 rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items under $25 rated 3.5 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items under $25 that are in stock","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items under $25 in electronics","reason":"refined result set is empty"}
+{"relation":"MR_AC","description":"show items under $50 rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items under $50 rated 3.5 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items under $100 rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items under $200 rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items cheaper than $25 rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items cheaper than $25 rated 3.5 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items cheaper than $25 that are in stock","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items cheaper than $25 in electronics","reason":"refined result set is empty"}
+{"relation":"MR_AC","description":"show items cheaper than $50 rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items cheaper than $50 rated 3.5 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items cheaper than $100 rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items cheaper than $200 rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items rated 4.5 stars and up under $200","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"show items rated 4.5 stars and up that are in stock","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"hide out-of-stock items under $200","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"hide out-of-stock items rated 3 stars and up","reason":"refinement does not narrow D"}
+{"relation":"MR_AC","description":"hide out-of-stock items rated 3.5 stars and up","reason":"refinement does not narrow D"}

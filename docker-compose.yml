@@ -15,15 +15,3 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-
-  litellm:
-    image: ghcr.io/berriai/litellm:main-stable
-    profiles:
-      - litellm
-    command: ["--config", "/app/litellm.config.yaml", "--port", "4000", "--host", "0.0.0.0"]
-    env_file:
-      - .env
-    ports:
-      - "4000:4000"
-    volumes:
-      - ./litellm.config.yaml:/app/litellm.config.yaml:ro

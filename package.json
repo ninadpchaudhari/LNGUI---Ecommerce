@@ -8,9 +8,19 @@
     "dev:docker": "concurrently \"vite --host 0.0.0.0 --port 5173\" \"tsx server.ts\"",
     "dev:client": "vite",
     "dev:server": "tsx server.ts",
-    "build": "tsc -b && vite build",
+    "gen:surface": "tsx scripts/gen-surface.ts",
+    "gen:cases": "tsx scripts/gen-cases.ts",
+    "sweep": "tsx scripts/sweep.ts",
+    "report": "tsx scripts/report.ts",
+    "test": "tsx --test shared/*.test.ts api/*.test.ts scripts/lib/*.test.ts",
+    "build": "npm run gen:surface && tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:cf": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
+    "d1:migrate:local": "wrangler d1 migrations apply lngui-turns --local",
+    "d1:migrate": "wrangler d1 migrations apply lngui-turns --remote",
+    "cf:tail": "wrangler tail"
   },
   "dependencies": {
     "langfuse": "^3.38.20",
@@ -36,6 +46,8 @@
     "tsx": "^4.21.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.48.0",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "wrangler": "^4.142.0",
+    "yaml": "^2.9.1"
   }
 }

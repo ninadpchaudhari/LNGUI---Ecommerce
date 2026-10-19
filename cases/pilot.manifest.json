@@ -1,0 +1,25 @@
+{
+  "file": "cases/pilot.jsonl",
+  "sha256": "a3c32eae2d7edeaf753290944f231f5488d0d4e52fc09706c7ca43aab1331d67",
+  "caseCount": 100,
+  "generator": {
+    "seed": 1,
+    "groups": 10,
+    "perGroup": 2,
+    "amnesia": true
+  },
+  "git": {
+    "commit": "25fd3cd8c18b07e51a6b3bc6b48701cedc822c18",
+    "dirty": true
+  },
+  "createdAt": "2026-10-18T21:19:01.903Z",
+  "counts": {
+    "MR_CE (para)": 13,
+    "MR_CE (surface)": 21,
+    "MR_AC": 20,
+    "MR_CA": 20,
+    "MR_CA (multi-turn)": 6,
+    "MR_REV": 1,
+    "MR_COMP": 19
+  }
+}

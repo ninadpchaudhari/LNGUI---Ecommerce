@@ -1,0 +1,15 @@
+# `wrangler dev` reads .dev.vars, not .env. Copy this to .dev.vars.
+# Non-secret configuration lives in wrangler.jsonc under "vars".
+
+OPEN_ROUTER_API_KEY=sk-or-v1-...
+
+LANGFUSE_PUBLIC_KEY=
+LANGFUSE_SECRET_KEY=
+LANGFUSE_BASE_URL=https://cloud.langfuse.com
+
+# Start here: exercises the whole stack with no LLM spend.
+LOCAL_TEST_MODE=true
+
+# Set before sharing a deployed URL, or POST /api/runs is a public write.
+# RUNS_WRITE_TOKEN=
+# RUNS_READ_TOKEN=

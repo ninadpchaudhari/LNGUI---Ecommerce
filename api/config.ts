@@ -1,0 +1,301 @@
+/**
+ * Environment and runtime-configuration resolution.
+ *
+ * Extracted from command.ts because P (prompt and runtime configuration) is now
+ * needed by two endpoints: POST /api/command and GET /api/config. Keeping the
+ * resolution in one place is what makes P reportable, which §4.17 requires —
+ * "every reported result will be paired with the model identifier and
+ * parameters" — and what §5.7 needs in order to hold P fixed across mediators.
+ */
+import { DEFAULT_SYSTEM_PROMPT } from "../shared/default-prompt.ts";
+import { normalizePrompt } from "../shared/prompt-text.ts";
+import {
+  MODEL_ID_RE,
+  type HistoryPolicy,
+  type LlmProvider,
+} from "../shared/contract.ts";
+import type { HistoryConfig } from "../shared/history.ts";
+
+export type { HistoryConfig } from "../shared/history.ts";
+
+export type RuntimeEnv = Record<string, string | undefined>;
+
+export type CommandRuntimeEnv = {
+  /** OpenRouter is the default provider. Both spellings of the key are accepted. */
+  OPEN_ROUTER_API_KEY?: string;
+  OPENROUTER_API_KEY?: string;
+  OPENROUTER_BASE_URL?: string;
+  OPENROUTER_MODEL?: string;
+  /** Comma-separated allowlist offered in the UI dropdown. */
+  OPENROUTER_MODELS?: string;
+  /** "true" lets the client send any syntactically valid model id. */
+  OPENROUTER_MODEL_ALLOW_ANY?: string;
+  OPENROUTER_SITE_URL?: string;
+  OPENROUTER_APP_TITLE?: string;
+  /** Direct OpenAI, used only when no OpenRouter key is present. */
+  OPENAI_API_KEY?: string;
+  OPENAI_BASE_URL?: string;
+  OPENAI_MODEL?: string;
+  LLM_TEMPERATURE?: string;
+  LLM_TOP_P?: string;
+  LLM_TIMEOUT_MS?: string;
+  /** full | last-k | none. "none" seeds the display-only-history fault. */
+  HISTORY_POLICY?: string;
+  HISTORY_MAX_TURNS?: string;
+  /** "false" removes clearFilters from Q and from the system prompt. */
+  /** "true" lets Q accept clearFilters. Off by default. */
+  CLEAR_ACTION_ENABLED?: string;
+  /** baseline | extended. See api/prompt.ts — the two are not interchangeable. */
+  /** The system prompt text. Unset: prompts/default.txt. Set per request by experiment conditions. */
+  SYSTEM_PROMPT?: string;
+  LANGFUSE_PUBLIC_KEY?: string;
+  LANGFUSE_SECRET_KEY?: string;
+  LANGFUSE_BASE_URL?: string;
+  LOCAL_TEST_MODE?: string;
+  RUNS_WRITE_TOKEN?: string;
+  RUNS_READ_TOKEN?: string;
+  /** openrouter | openai | ollama. Unset: key-first resolution. */
+  LLM_PROVIDER?: string;
+  /** Model id for whichever provider is selected. */
+  LLM_MODEL?: string;
+  /** Ollama's OpenAI-compatible endpoint. Default http://localhost:11434/v1. */
+  OLLAMA_BASE_URL?: string;
+  OLLAMA_MODEL?: string;
+};
+
+const DEFAULT_OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
+const DEFAULT_OPENROUTER_MODEL = "openai/gpt-4o-mini";
+const DEFAULT_OPENAI_MODEL = "gpt-4o-mini";
+const DEFAULT_TIMEOUT_MS = 30_000;
+
+/**
+ * Reads from the explicitly threaded runtime env first, then falls back to
+ * process.env. The fallback is what makes the Worker's `env` and the Express
+ * server's `process.env` interchangeable.
+ */
+export function getEnvVar(env: RuntimeEnv, key: string): string | undefined {
+  const fromRuntime = env[key];
+  // An empty string set on the runtime env means "explicitly unset": the key
+  // takes its code default and process.env is not consulted. The router uses
+  // this for P keys a condition leaves out (shared/overrides.ts).
+  if (fromRuntime === "" && Object.prototype.hasOwnProperty.call(env, key)) return undefined;
+  if (typeof fromRuntime === "string" && fromRuntime.length > 0) return fromRuntime;
+  if (typeof process !== "undefined" && process?.env?.[key]) return process.env[key];
+  return undefined;
+}
+
+const str = (env: RuntimeEnv, key: string): string | undefined =>
+  getEnvVar(env, key)?.trim() || undefined;
+
+const bool = (env: RuntimeEnv, key: string, fallback: boolean): boolean => {
+  const raw = str(env, key)?.toLowerCase();
+  if (raw === undefined) return fallback;
+  return raw === "true" || raw === "1" || raw === "yes";
+};
+
+/** A number, or null when the key is unset or not numeric. */
+const optNum = (env: RuntimeEnv, key: string): number | null => {
+  const raw = str(env, key);
+  if (raw === undefined) return null;
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const num = (env: RuntimeEnv, key: string, fallback: number): number => {
+  const raw = str(env, key);
+  if (raw === undefined) return fallback;
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
+export function isLocalTestMode(env: RuntimeEnv): boolean {
+  return str(env, "LOCAL_TEST_MODE")?.toLowerCase() === "true";
+}
+
+export interface LLMConfig {
+  provider: LlmProvider;
+  model: string;
+  baseURL?: string;
+  apiKey: string;
+  defaultHeaders?: Record<string, string>;
+  /** Null means "not sent": the provider's default for the model applies. */
+  temperature: number | null;
+  topP: number | null;
+  timeoutMs: number;
+}
+
+const DEFAULT_OLLAMA_BASE_URL = "http://localhost:11434/v1";
+const DEFAULT_OLLAMA_MODEL = "llama3.1:8b";
+
+/**
+ * Provider resolution. LLM_PROVIDER picks one explicitly: openrouter, openai
+ * or ollama. Without it, resolution is key-first: an OpenRouter key selects
+ * OpenRouter, otherwise an OpenAI key selects direct OpenAI, otherwise there
+ * is no provider and the request fails. LLM_MODEL names the model for any
+ * provider and takes precedence over the provider-specific model keys.
+ *
+ * Temperature and top_p are sent only when set. Unset, the provider's own
+ * default for the model applies, and P records null.
+ */
+export function resolveLLMConfig(env: RuntimeEnv): LLMConfig {
+  const sampling = {
+    temperature: optNum(env, "LLM_TEMPERATURE"),
+    topP: optNum(env, "LLM_TOP_P"),
+    timeoutMs: num(env, "LLM_TIMEOUT_MS", DEFAULT_TIMEOUT_MS),
+  };
+  const explicit = str(env, "LLM_PROVIDER")?.toLowerCase();
+  const model = str(env, "LLM_MODEL");
+
+  if (explicit === "ollama") {
+    // Ollama serves an OpenAI-compatible API and ignores the key, which the
+    // SDK nonetheless requires. The base URL comes from the server's env only:
+    // a request can never point the server at another host.
+    return {
+      ...sampling,
+      provider: "ollama",
+      apiKey: str(env, "OLLAMA_API_KEY") || "ollama",
+      baseURL: str(env, "OLLAMA_BASE_URL") || DEFAULT_OLLAMA_BASE_URL,
+      model: model || str(env, "OLLAMA_MODEL") || DEFAULT_OLLAMA_MODEL,
+    };
+  }
+
+  const openRouterApiKey = str(env, "OPEN_ROUTER_API_KEY") || str(env, "OPENROUTER_API_KEY");
+  if (explicit === "openai" && !str(env, "OPENAI_API_KEY")) {
+    return { ...sampling, provider: "none", apiKey: "", model: model || str(env, "OPENAI_MODEL") || DEFAULT_OPENAI_MODEL };
+  }
+  if (explicit === "openrouter" && !openRouterApiKey) {
+    return { ...sampling, provider: "none", apiKey: "", model: model || str(env, "OPENROUTER_MODEL") || DEFAULT_OPENROUTER_MODEL };
+  }
+  if (openRouterApiKey && explicit !== "openai") {
+    return {
+      ...sampling,
+      provider: "openrouter",
+      apiKey: openRouterApiKey,
+      baseURL:
+        str(env, "OPENROUTER_BASE_URL") ||
+        str(env, "OPENAI_BASE_URL") ||
+        DEFAULT_OPENROUTER_BASE_URL,
+      model: model || str(env, "OPENROUTER_MODEL") || str(env, "OPENAI_MODEL") || DEFAULT_OPENROUTER_MODEL,
+      defaultHeaders: {
+        "HTTP-Referer": str(env, "OPENROUTER_SITE_URL") || "http://localhost:5173",
+        "X-Title": str(env, "OPENROUTER_APP_TITLE") || "LNGUI Ecommerce Case Study",
+      },
+    };
+  }
+
+  const openAIApiKey = str(env, "OPENAI_API_KEY");
+  const openAIBaseURL = str(env, "OPENAI_BASE_URL");
+  return {
+    ...sampling,
+    provider: openAIApiKey ? "openai" : "none",
+    apiKey: openAIApiKey ?? "",
+    ...(openAIBaseURL ? { baseURL: openAIBaseURL } : {}),
+    // OPENROUTER_MODEL is honoured as a last resort so that the reported model
+    // reflects what is configured rather than which key happens to be present.
+    // Without it, a LOCAL_TEST_MODE run with OPENROUTER_MODEL set would
+    // advertise the hardcoded OpenAI default in P and lead the UI dropdown with
+    // a model nobody configured.
+    model: model || str(env, "OPENAI_MODEL") || str(env, "OPENROUTER_MODEL") || DEFAULT_OPENAI_MODEL,
+  };
+}
+
+/** The Ollama server root (without /v1), for listing installed models. */
+export function ollamaRoot(env: RuntimeEnv): string {
+  return (str(env, "OLLAMA_BASE_URL") || DEFAULT_OLLAMA_BASE_URL).replace(/\/v1\/?$/, "");
+}
+
+// ── Model policy ────────────────────────────────────────────────────────────
+
+export interface ModelPolicy {
+  /** The env-configured default. Experiments repeat by leaving this alone. */
+  defaultModel: string;
+  /** Dropdown contents; always contains defaultModel first. */
+  models: string[];
+  allowAnyModel: boolean;
+}
+
+export function resolveModelPolicy(env: RuntimeEnv): ModelPolicy {
+  const defaultModel = resolveLLMConfig(env).model;
+  const listed = (str(env, "OPENROUTER_MODELS") ?? "")
+    .split(",")
+    .map((m) => m.trim())
+    .filter((m) => m.length > 0);
+
+  // Deduplicate with the default first, so the dropdown is never empty and
+  // never disagrees with the configured default.
+  const models = [defaultModel, ...listed.filter((m) => m !== defaultModel)];
+
+  return {
+    defaultModel,
+    models,
+    allowAnyModel: bool(env, "OPENROUTER_MODEL_ALLOW_ANY", false),
+  };
+}
+
+export type ModelSelection =
+  | { ok: true; model: string; source: "client" | "env-default" }
+  | { ok: false; reason: string };
+
+/**
+ * Picks the model for one request. The default comes from the environment so a
+ * sweep can be repeated without touching the UI; a client override is accepted
+ * only if it is in the allowlist or the allow-any flag is set.
+ */
+export function selectModel(env: RuntimeEnv, requested?: string): ModelSelection {
+  const policy = resolveModelPolicy(env);
+  const wanted = requested?.trim();
+
+  if (!wanted) return { ok: true, model: policy.defaultModel, source: "env-default" };
+  if (!MODEL_ID_RE.test(wanted)) {
+    return { ok: false, reason: `Model id "${wanted}" is not a valid identifier.` };
+  }
+  if (policy.models.includes(wanted)) return { ok: true, model: wanted, source: "client" };
+  if (policy.allowAnyModel) return { ok: true, model: wanted, source: "client" };
+
+  return {
+    ok: false,
+    reason:
+      `Model "${wanted}" is not allowed. Permitted: ${policy.models.join(", ")}. ` +
+      `Set OPENROUTER_MODEL_ALLOW_ANY=true to accept arbitrary ids.`,
+  };
+}
+
+// ── History policy (part of P) ──────────────────────────────────────────────
+
+/**
+ * How much of H reaches the mediator. This is the dial that induces Context
+ * Amnesia (§4.8): "none" is the display-only-history fault, "last-k" is the
+ * truncation mechanism described in §1.2, and "full" is the reference
+ * condition. Recording it in P is what later distinguishes "the model forgot"
+ * from "the model was never told".
+ */
+export function resolveHistoryConfig(env: RuntimeEnv): HistoryConfig {
+  const raw = str(env, "HISTORY_POLICY")?.toLowerCase();
+  const policy: HistoryPolicy =
+    raw === "none" ? "none" : raw === "last-k" ? "last-k" : "full";
+  if (policy !== "last-k") return { policy, maxTurns: null };
+
+  const k = Math.max(0, Math.floor(num(env, "HISTORY_MAX_TURNS", 3)));
+  return { policy, maxTurns: k };
+}
+
+/**
+ * Whether the command language Q accepts `clearFilters`. Off by default. It
+ * changes the schema the model must satisfy and nothing in the prompt text.
+ */
+export function clearActionEnabled(env: RuntimeEnv): boolean {
+  return bool(env, "CLEAR_ACTION_ENABLED", false);
+}
+
+/**
+ * The system prompt in force: the request's own text (SYSTEM_PROMPT), else the
+ * committed default, prompts/default.txt. There is no named variant.
+ */
+export function resolveSystemPrompt(env: RuntimeEnv): string {
+  const text = getEnvVar(env, "SYSTEM_PROMPT");
+  return text !== undefined && text.trim() !== "" ? normalizePrompt(text) : DEFAULT_SYSTEM_PROMPT;
+}
+
+export function langfuseEnabled(env: RuntimeEnv): boolean {
+  return Boolean(str(env, "LANGFUSE_PUBLIC_KEY") && str(env, "LANGFUSE_SECRET_KEY"));
+}

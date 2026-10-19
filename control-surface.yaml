@@ -1,0 +1,204 @@
+# Γ_app = ⟨C, Dom, V₀, C_rev, C_con, Templates, Gold_Syn⟩   (proposal §4.10.2)
+#
+# Single source of truth for the control surface. Consumed at build time by
+# scripts/gen-surface.ts, which emits shared/surface.generated.ts; nothing
+# parses YAML at runtime, so the Worker bundle stays parser-free.
+#
+# Control set C is fixed at |C| = 6, per Appendix A.1. `reset: null` encodes ⊥
+# (absent/disabled). A control at a non-⊥ default is *active* with that value.
+
+version: 1
+
+controls:
+  - id: category
+    label: Category
+    domain:
+      kind: enum
+      values:
+        - { value: electronics, phrases: [electronics] }
+        - { value: books, phrases: [books] }
+        - { value: clothing, phrases: [clothing] }
+        - { value: home, phrases: [home goods] }
+        - { value: sports, phrases: [sports gear] }
+    reset: null
+    constraining: true # ∈ C_con — narrows the result set
+    reversible: true # ∈ C_rev
+
+  - id: maxPrice
+    label: Max Price ($)
+    domain: { kind: number, min: 0, max: 500 }
+    reset: 500
+    constraining: true
+    reversible: true
+
+  - id: minRating
+    label: Minimum Rating
+    domain:
+      kind: enum
+      values:
+        - { value: 3, phrases: ["3 stars"] }
+        - { value: 3.5, phrases: ["3.5 stars"] }
+        - { value: 4, phrases: ["4 stars"] }
+        - { value: 4.5, phrases: ["4.5 stars"] }
+    reset: null
+    constraining: true
+    reversible: true
+
+  - id: inStockOnly
+    label: In stock only
+    domain: { kind: boolean }
+    reset: false
+    constraining: true
+    reversible: true
+
+  - id: sort
+    label: Sort
+    domain:
+      kind: enum
+      values:
+        - { value: price_asc, phrases: ["lowest price first", "price low to high"] }
+        - { value: price_desc, phrases: ["highest price first", "price high to low"] }
+        - { value: rating_desc, phrases: ["rating", "best rated first"] }
+        - { value: name_asc, phrases: ["name", "alphabetical order"] }
+    # Reorders the same result set; never narrows it, so NOT in C_con (§4.6).
+    reset: null
+    constraining: false
+    reversible: true
+
+  - id: clearFilters
+    label: Clear Filters
+    # Dom(c₆) = {⊥, "invoked"}: a sticky flag, returned to ⊥ only by ResetApp.
+    # Sticky rather than a counter so that clearing twice stays observationally
+    # equal to clearing once — a count would leak H into O = ⟨V,D⟩. Being
+    # value-bearing is what lets c₆ enter a footprint, which §A.7 requires when
+    # it says c₆ can be "never reached by language under this test set".
+    domain: { kind: action }
+    # Prior values are discarded and cannot be requested back in one utterance,
+    # so this is excluded from C_rev and generates no MR_REV case (§A.4). It is
+    # also what makes any trace containing a clear unable to return to σ₀.
+    reset: null
+    constraining: false
+    reversible: false
+
+# ── Templates ────────────────────────────────────────────────────────────────
+# Each records its value slot, intended write set W(u), the predicates it can
+# serve, and its paired inverse where one exists. Two templates sharing a target
+# satisfy Syn by construction (§4.10.1), needing no human review.
+templates:
+  - id: category.show
+    text: "show {value} items"
+    slot: category
+    writes: [category]
+    predicates: [syn, indep, refineBase]
+  - id: category.filter
+    text: "filter to {value} only"
+    slot: category
+    writes: [category]
+    predicates: [syn, indep, refineBase]
+
+  - id: maxPrice.show
+    text: "show items under ${value}"
+    slot: maxPrice
+    writes: [maxPrice]
+    predicates: [syn, indep, refineBase]
+  - id: maxPrice.cheaper
+    text: "show items cheaper than ${value}"
+    slot: maxPrice
+    writes: [maxPrice]
+    predicates: [syn, indep, refineBase]
+
+  - id: minRating.show
+    text: "show items rated {value} and up"
+    slot: minRating
+    writes: [minRating]
+    predicates: [syn, indep, refineBase]
+
+  - id: inStockOnly.hide
+    text: "hide out-of-stock items"
+    writes: [inStockOnly]
+    predicates: [syn, indep, refineBase, rev]
+    inverse: inStockOnly.show
+  - id: inStockOnly.show
+    text: "show out-of-stock items again"
+    writes: [inStockOnly]
+    predicates: [rev]
+
+  - id: sort.by
+    text: "sort by {value}"
+    slot: sort
+    writes: [sort]
+    predicates: [syn, indep]
+  - id: sort.order
+    text: "order the results by {value}"
+    slot: sort
+    writes: [sort]
+    predicates: [syn, indep]
+
+  # "Clear all filters" is constructed to write every control, so W is all of C.
+  # Without this, its footprint would look like command over-reach (§4.6).
+  - id: clearFilters.all
+    text: "clear all filters"
+    writes: [category, maxPrice, minRating, inStockOnly, sort, clearFilters]
+    predicates: [syn]
+  - id: clearFilters.reset
+    text: "reset every filter"
+    writes: [category, maxPrice, minRating, inStockOnly, sort, clearFilters]
+    predicates: [syn]
+
+# ── Refinement clauses δ ─────────────────────────────────────────────────────
+# Concatenated *within* a single utterance (u_r = u_b ⊕ δ, §4.6) — this is not
+# the context-append ⊕ of Eq. 4.9. Targets must be drawn from C_con.
+refinementClauses:
+  - id: maxPrice.clause
+    text: "under ${value}"
+    slot: maxPrice
+    target: maxPrice
+  - id: minRating.clause
+    text: "rated {value} and up"
+    slot: minRating
+    target: minRating
+  - id: inStockOnly.clause
+    text: "that are in stock"
+    target: inStockOnly
+    value: true
+  - id: category.clause
+    text: "in {value}"
+    slot: category
+    target: category
+
+# ── Surface-form transforms ──────────────────────────────────────────────────
+# Functions over an utterance that preserve its target, so Syn holds by
+# construction. These generate MR_CE instances without human review.
+surfaceTransforms:
+  - id: uppercase
+    kind: uppercase
+    note: >-
+      Figure 1.2 of the proposal: on this benchmark, uppercasing the utterance
+      induced a spurious minRating >= 4.0 that no utterance requested.
+  - id: synonymPrefix
+    kind: replacePrefix
+    from: "show "
+    to: "display "
+  - id: formatSuffix
+    kind: append
+    text: " in a table"
+    note: A presentation request that must not alter any control value.
+  - id: clauseReorder
+    kind: moveSortClauseFirst
+    note: Reorders clauses within one utterance; still MR_CE, not MR_CA.
+
+# ── Gold_Syn ─────────────────────────────────────────────────────────────────
+# Human-reviewed paraphrase pairs whose equivalence is NOT guaranteed by
+# construction. W is inherited from the source utterance's label (§4.6).
+goldSyn:
+  - source: "show electronics under $100 sorted by rating"
+    variant: "list the tech products below $100, best rated first"
+    writes: [category, maxPrice, sort]
+    note: Appendix A.4 — the mediator must map "tech" onto the electronics category.
+  - source: "hide out-of-stock items"
+    variant: "only show me things that are available right now"
+    writes: [inStockOnly]
+  - source: "show books"
+    variant: "I'm looking for something to read"
+    writes: [category]
+    note: Indirect phrasing; accepted on review because the target is unambiguous.

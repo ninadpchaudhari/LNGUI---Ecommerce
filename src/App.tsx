@@ -1,113 +1,207 @@
-import { useState, useMemo } from "react";
-import { products } from "./data/products.ts";
-import type { Category, SortOption } from "./data/products.ts";
-import { filterProducts, sortProducts, DEFAULT_FILTERS } from "./utils/filterSort.ts";
-import type { Command, ChatMessage } from "./utils/types.ts";
-import { sendCommand } from "./utils/api.ts";
-import { addLog } from "./utils/logging.ts";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { covNL, footprint, promptConfigFrom, unreachedControls } from "../shared/contract.ts";
+import type {
+  AppConfig,
+  ChatMessage,
+  Command,
+  ControlId,
+  PromptConfig,
+  SystemState,
+  TurnRecord,
+  Valuation,
+} from "./utils/types.ts";
+import { renderData, resetState, visibleProducts } from "../shared/transition.ts";
+import { fetchConfig, fetchTurns, saveTurn } from "./utils/api.ts";
+import { inferWriteSet } from "./utils/relations.ts";
+import { runTurn } from "./utils/mediator.ts";
 import { FilterPanel } from "./components/FilterPanel.tsx";
 import { ProductGrid } from "./components/ProductGrid.tsx";
 import { ChatPanel } from "./components/ChatPanel.tsx";
-import { MetamorphicPanel } from "./components/MetamorphicPanel.tsx";
+import { TracePanel } from "./components/TracePanel.tsx";
+import { ExperimentsPage } from "./components/ExperimentsPage.tsx";
+
+type View = "benchmark" | "experiments";
+const viewFromHash = (): View => (window.location.hash === "#experiments" ? "experiments" : "benchmark");
+
+/** P before /api/config answers. Replaced on mount and by each response. */
+const BOOTSTRAP_P: PromptConfig = {
+  requestedModel: "",
+  resolvedModel: null,
+  temperature: null,
+  topP: null,
+  systemPromptHash: "",
+  commandSchemaHash: "",
+  historyPolicy: "full",
+  historyMaxTurns: null,
+  clearActionEnabled: false,
+};
 
 export default function App() {
-  // Filter + sort state
-  const [category, setCategory] = useState<Category | null>(null);
-  const [maxPrice, setMaxPrice] = useState(500);
-  const [minRating, setMinRating] = useState<number | null>(null);
-  const [inStockOnly, setInStockOnly] = useState(false);
-  const [sort, setSort] = useState<SortOption | null>(null);
+  const [view, setView] = useState<View>(viewFromHash);
+  useEffect(() => {
+    const onHash = () => setView(viewFromHash());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+  // σ = ⟨V, H, P, D⟩ is the single source of truth. The filter sidebar and the
+  // product grid are both projections of it, so they cannot disagree.
+  const [state, setState] = useState<SystemState>(() => resetState(BOOTSTRAP_P));
+  const [sessionId, setSessionId] = useState(() => crypto.randomUUID());
 
-  // Chat state
+  const [config, setConfig] = useState<AppConfig | null>(null);
+  const [model, setModel] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [lastCommand, setLastCommand] = useState<Command | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const displayed = useMemo(() => {
-    const filtered = filterProducts(products, { category, maxPrice, minRating, inStockOnly });
-    return sortProducts(filtered, sort);
-  }, [category, maxPrice, minRating, inStockOnly, sort]);
+  const [turns, setTurns] = useState<TurnRecord[]>([]);
+  const [cursor, setCursor] = useState<string | null>(null);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [lastFootprint, setLastFootprint] = useState<readonly ControlId[]>([]);
 
-  const clearFilters = () => {
-    setCategory(DEFAULT_FILTERS.category);
-    setMaxPrice(DEFAULT_FILTERS.maxPrice);
-    setMinRating(DEFAULT_FILTERS.minRating);
-    setInStockOnly(DEFAULT_FILTERS.inStockOnly);
-    setSort(null);
-  };
+  const turnIndex = useRef(0);
 
-  const handleChatSend = async (text: string) => {
+  // On mount: read P from the server, then seed the panel from persisted
+  // records so the trace survives a reload.
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const c = await fetchConfig();
+        if (cancelled) return;
+        setConfig(c);
+        setModel(c.defaultModel);
+        setState((prev) => ({ ...prev, P: promptConfigFrom(c, c.defaultModel) }));
+      } catch {
+        // Leave the bootstrap P in place; the first response will correct it.
+      }
+      const page = await fetchTurns({ limit: 50 });
+      if (cancelled) return;
+      setTurns(page.items);
+      setCursor(page.nextCursor);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (config) setState((prev) => ({ ...prev, P: promptConfigFrom(config, model) }));
+  }, [config, model]);
+
+  const displayed = useMemo(() => visibleProducts(state.V), [state.V]);
+
+  const footprints = useMemo(() => turns.map((t) => t.fp), [turns]);
+  const coverage = useMemo(() => covNL(footprints), [footprints]);
+  const unreached = useMemo(() => unreachedControls(footprints), [footprints]);
+
+  const record = useCallback((r: TurnRecord) => {
+    setTurns((prev) => [r, ...prev.filter((t) => t.id !== r.id)]);
+    saveTurn(r);
+  }, []);
+
+  /**
+   * One chat turn. σ′ is computed by the pure reducer inside `runTurn` and
+   * applied wholesale — never read back out of React state, which would observe the
+   * previous render's values.
+   */
+  const handleSend = async (text: string) => {
     setMessages((prev) => [...prev, { role: "user", content: text }]);
     setLoading(true);
+    const before = state.V;
     try {
-      const cmd = await sendCommand(text);
-      setLastCommand(cmd);
-
-      // Apply returned command to existing UI state
-      if (cmd.filters.category !== undefined) {
-        setCategory(cmd.filters.category);
-      }
-      if (cmd.filters.maxPrice !== undefined && cmd.filters.maxPrice !== null) {
-        setMaxPrice(cmd.filters.maxPrice);
-      } else if (cmd.filters.maxPrice === null) {
-        setMaxPrice(DEFAULT_FILTERS.maxPrice);
-      }
-      if (cmd.filters.minRating !== undefined) {
-        setMinRating(cmd.filters.minRating);
-      }
-      if (cmd.filters.inStockOnly !== undefined && cmd.filters.inStockOnly !== null) {
-        setInStockOnly(cmd.filters.inStockOnly);
-      } else if (cmd.filters.inStockOnly === null) {
-        setInStockOnly(DEFAULT_FILTERS.inStockOnly);
-      }
-      if (cmd.sort !== undefined) {
-        setSort(cmd.sort);
-      }
-
-      setMessages((prev) => [...prev, { role: "assistant", content: cmd.explanation }]);
-
-      addLog({
-        timestamp: new Date().toISOString(),
-        basePrompt: text,
-        relationName: "CHAT",
-        variantPrompt: text,
-        returnedCommand: cmd,
-        uiSnapshot: null,
-        verdict: "COMMAND",
-        reason: cmd.explanation,
+      const { state: next, record: turn } = await runTurn(state, text, {
+        ...(model ? { model } : {}),
+        sessionId,
+        turnIndex: turnIndex.current++,
+        kind: "chat",
+        writeSet: inferWriteSet(text),
       });
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e);
-      setMessages((prev) => [...prev, { role: "assistant", content: `Error: ${msg}` }]);
+
+      setState(next);
+      setLastFootprint(footprint(before, next.V));
+      if (turn.q) setLastCommand(turn.q);
+      setMessages((prev) => [
+        ...prev,
+        turn.ok
+          ? { role: "assistant", content: turn.q?.explanation ?? "(no explanation)", turnId: turn.id }
+          : { role: "assistant", content: `Error: ${turn.error}`, turnId: turn.id, isError: true },
+      ]);
+      record(turn);
     } finally {
       setLoading(false);
     }
   };
 
+  /** Direct manipulation of a control, bypassing the mediator. */
+  const handleValuationChange = (V: Valuation) => {
+    setLastFootprint(footprint(state.V, V));
+    setState((prev) => ({ ...prev, V, D: renderData(V) }));
+  };
+
+  /** ResetApp — σ₀: V₀, empty H, fixed P, canonical D. */
+  const handleReset = () => {
+    setState(resetState(config ? promptConfigFrom(config, model) : BOOTSTRAP_P));
+    setSessionId(crypto.randomUUID());
+    setMessages([]);
+    setLastCommand(null);
+    setLastFootprint([]);
+    turnIndex.current = 0;
+  };
+
+  const handleClearFilters = () => {
+    const V: Valuation = { ...state.V };
+    for (const key of Object.keys(config?.v0 ?? {}) as ControlId[]) {
+      (V as Record<ControlId, unknown>)[key] = (config?.v0 ?? {})[key];
+    }
+    handleValuationChange(V);
+  };
+
+  const handleLoadMore = async () => {
+    if (!cursor) return;
+    setLoadingMore(true);
+    try {
+      const page = await fetchTurns({ limit: 50, cursor });
+      setTurns((prev) => [...prev, ...page.items]);
+      setCursor(page.nextCursor);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  const handleClearRecords = async () => {
+    await fetch("/api/runs", { method: "DELETE" }).catch(() => {});
+    setTurns([]);
+    setCursor(null);
+  };
+
+  const lastTurn = turns.length > 0 ? turns[0] : null;
+
   return (
     <div className="app">
-      <header className="header">
+      <header className="header header-nav">
         <h1>Chat-Assisted Ecommerce Case Study</h1>
+        <nav className="view-tabs" aria-label="View">
+          <a href="#benchmark" className={view === "benchmark" ? "on" : ""} aria-current={view === "benchmark" ? "page" : undefined}>Benchmark</a>
+          <a href="#experiments" className={view === "experiments" ? "on" : ""} aria-current={view === "experiments" ? "page" : undefined}>Experiments</a>
+        </nav>
       </header>
 
+      {view === "experiments" ? (
+        <ExperimentsPage config={config} />
+      ) : (
+      <>
       <div className="layout">
         <FilterPanel
-          category={category}
-          maxPrice={maxPrice}
-          minRating={minRating}
-          inStockOnly={inStockOnly}
-          sort={sort}
-          onCategoryChange={setCategory}
-          onMaxPriceChange={setMaxPrice}
-          onMinRatingChange={setMinRating}
-          onInStockOnlyChange={setInStockOnly}
-          onSortChange={setSort}
-          onClear={clearFilters}
+          V={state.V}
+          lastFootprint={lastFootprint}
+          onChange={handleValuationChange}
+          onClear={handleClearFilters}
         />
 
         <main className="main">
           <p className="count-line">
-            Showing {displayed.length} of {products.length} products
+            Showing {state.D.count} of {state.D.total} products
           </p>
           <ProductGrid products={displayed} />
         </main>
@@ -115,12 +209,28 @@ export default function App() {
         <ChatPanel
           messages={messages}
           lastCommand={lastCommand}
+          lastTurn={lastTurn}
+          config={config}
+          model={model}
           loading={loading}
-          onSend={handleChatSend}
+          onSend={handleSend}
+          onModelChange={setModel}
+          onReset={handleReset}
+          historyTurns={state.H.length}
         />
       </div>
 
-      <MetamorphicPanel />
+      <TracePanel
+        turns={turns}
+        covNL={coverage}
+        unreached={unreached}
+        loadingMore={loadingMore}
+        hasMore={cursor !== null}
+        onLoadMore={handleLoadMore}
+        onClear={handleClearRecords}
+      />
+      </>
+      )}
     </div>
   );
 }

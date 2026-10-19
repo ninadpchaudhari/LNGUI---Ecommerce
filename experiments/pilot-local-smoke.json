@@ -1,0 +1,23 @@
+{
+  "name": "pilot-local-smoke",
+  "cases": "cases/pilot.jsonl",
+  "casesSha256": "a3c32eae2d7edeaf753290944f231f5488d0d4e52fc09706c7ca43aab1331d67",
+  "n": 2,
+  "seed": 420361,
+  "concurrency": 8,
+  "maxInfraRetries": 0,
+  "conditions": [
+    {
+      "id": "local",
+      "prompt": {
+        "file": "prompts/default.txt",
+        "sha256": "8ab84361ddc42f58ab5bd1257e2ab484dabaca0b72a128b70a29d93be3e51ec3"
+      },
+      "env": {
+        "LOCAL_TEST_MODE": "true",
+        "HISTORY_POLICY": "full",
+        "CLEAR_ACTION_ENABLED": "false"
+      }
+    }
+  ]
+}

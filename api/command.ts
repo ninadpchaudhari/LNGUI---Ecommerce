@@ -1,77 +1,71 @@
 import OpenAI from "openai";
+import { LANGFUSE_HEADER } from "../shared/overrides.ts";
 import { Langfuse } from "langfuse";
-import { z } from "zod/v4";
 
-const CATEGORIES = ["electronics", "books", "clothing", "home", "sports"] as const;
-const SORTS = ["price_asc", "price_desc", "rating_desc", "name_asc"] as const;
+import {
+  SCHEMA_VERSION,
+  type AttemptName,
+  type AttemptOutcome,
+  type AttemptRecord,
+  type Command,
+  type CommandErrorCode,
+  type CommandMeta,
+  type History,
+  type HistoryTurn,
+  type ModelSource,
+  type PromptConfig,
+  type SortValue,
+  type TokenUsage,
+} from "../shared/contract.ts";
+import { CATEGORY_VALUES } from "../shared/surface.generated.ts";
+import { effectiveHistory, renderHistory, type ChatMessage } from "../shared/history.ts";
+import {
+  buildCommandSchema,
+  promptHashes,
+} from "./prompt.ts";
+import {
+  clearActionEnabled,
+  getEnvVar,
+  isLocalTestMode,
+  resolveHistoryConfig,
+  resolveLLMConfig,
+  resolveSystemPrompt,
+  selectModel,
+  type CommandRuntimeEnv,
+  type RuntimeEnv,
+} from "./config.ts";
 
-type RuntimeEnv = Record<string, string | undefined>;
+export type { CommandRuntimeEnv } from "./config.ts";
 
-export type CommandRuntimeEnv = {
-  OPENAI_API_KEY?: string;
-  OPEN_ROUTER_API_KEY?: string;
-  OPENAI_MODEL?: string;
-  OPENAI_BASE_URL?: string;
-  LITELLM_BASE_URL?: string;
-  LITELLM_MODEL?: string;
-  LITELLM_API_KEY?: string;
-  LITELLM_API_KEY_HEADER?: string;
-  LANGFUSE_PUBLIC_KEY?: string;
-  LANGFUSE_SECRET_KEY?: string;
-  LANGFUSE_BASE_URL?: string;
-  LOCAL_TEST_MODE?: string;
-};
+/** Hard cap on raw model text retained in a record. */
+const MAX_RAW_CHARS = 8000;
 
-const CommandSchema = z.object({
-  filters: z.object({
-    category: z.enum(CATEGORIES).nullable(),
-    maxPrice: z.number().nullable(),
-    minRating: z.number().nullable(),
-    inStockOnly: z.boolean().nullable(),
-  }),
-  sort: z.enum(SORTS).nullable(),
-  explanation: z.string(),
-});
+// ── Langfuse (structural types; the SDK surface is not imported) ────────────
 
-type CommandResult = z.infer<typeof CommandSchema>;
-
+type GenerationLike = { end?: (data: unknown) => void };
 type TraceLike = {
   update?: (data: unknown) => void;
   generation?: (data: unknown) => GenerationLike;
+  getTraceUrl?: () => string | undefined;
 };
-
-type GenerationLike = {
-  end?: (data: unknown) => void;
-};
-
 type LangfuseLike = {
   trace?: (data: unknown) => TraceLike;
   shutdownAsync?: () => Promise<void>;
 };
 
-function buildSystemPrompt(categories: readonly string[], sorts: readonly string[]): string {
-  return `You are a product filter assistant. Given a user's natural language request, output ONLY a JSON object matching this schema:
-
-{
-  "filters": {
-    "category": <one of ${JSON.stringify(categories)} or null>,
-    "maxPrice": <number or null>,
-    "minRating": <number or null>,
-    "inStockOnly": <boolean or null>
-  },
-  "sort": <one of ${JSON.stringify(sorts)} or null>,
-  "explanation": "<short summary of what you set>"
+function createLangfuseClient(env: RuntimeEnv): LangfuseLike | undefined {
+  const publicKey = getEnvVar(env, "LANGFUSE_PUBLIC_KEY")?.trim();
+  const secretKey = getEnvVar(env, "LANGFUSE_SECRET_KEY")?.trim();
+  const baseUrl = getEnvVar(env, "LANGFUSE_BASE_URL")?.trim();
+  if (!publicKey || !secretKey) return undefined;
+  return new Langfuse({
+    publicKey,
+    secretKey,
+    ...(baseUrl ? { baseUrl } : {}),
+  }) as unknown as LangfuseLike;
 }
 
-Rules:
-- If the user does NOT mention a field, return null for it. Do NOT invent constraints.
-- category must be exactly one of the known values or null.
-- sort must be exactly one of the known values or null.
-- "under $X" or "less than $X" means maxPrice = X.
-- "highly rated" / "top rated" means minRating >= 4.0 and/or sort "rating_desc".
-- "in stock" / "available" means inStockOnly = true.
-- Output ONLY the JSON object. No markdown fences, no extra text.`;
-}
+// ── Helpers ─────────────────────────────────────────────────────────────────
 
 function extractJSON(raw: string): string {
   const fenced = raw.match(/```(?:json)?\s*([\s\S]*?)```/);
@@ -81,154 +75,153 @@ function extractJSON(raw: string): string {
 function jsonResponse(body: unknown, init?: ResponseInit): Response {
   return new Response(JSON.stringify(body), {
     status: init?.status,
-    headers: {
-      "content-type": "application/json",
-      ...(init?.headers ?? {}),
-    },
+    headers: { "content-type": "application/json", ...(init?.headers ?? {}) },
   });
 }
 
-function getEnvVar(env: RuntimeEnv, key: string): string | undefined {
-  const fromRuntime = env[key];
-  if (typeof fromRuntime === "string" && fromRuntime.length > 0) {
-    return fromRuntime;
-  }
-
-  if (typeof process !== "undefined" && process?.env?.[key]) {
-    return process.env[key];
-  }
-
-  return undefined;
+function truncate(raw: string | null): { text: string | null; truncated: boolean } {
+  if (raw === null) return { text: null, truncated: false };
+  if (raw.length <= MAX_RAW_CHARS) return { text: raw, truncated: false };
+  return { text: raw.slice(0, MAX_RAW_CHARS), truncated: true };
 }
 
-function resolveLLMConfig(env: RuntimeEnv): {
-  model: string;
-  baseURL?: string;
-  apiKey: string;
-  defaultHeaders?: Record<string, string>;
-  usingLiteLLM: boolean;
-} {
-  const defaultOpenRouterBaseURL = "https://openrouter.ai/api/v1";
-  const defaultOpenRouterModel = "openai/gpt-4o-mini";
-  const liteBaseURL = getEnvVar(env, "LITELLM_BASE_URL")?.trim();
-  const openAIBaseURL = getEnvVar(env, "OPENAI_BASE_URL")?.trim();
-  const liteModel = getEnvVar(env, "LITELLM_MODEL")?.trim();
-  const openAIModel = getEnvVar(env, "OPENAI_MODEL")?.trim();
-  const openAIApiKey = getEnvVar(env, "OPENAI_API_KEY")?.trim();
-  const openRouterApiKey = getEnvVar(env, "OPEN_ROUTER_API_KEY")?.trim();
-  const liteApiKey = getEnvVar(env, "LITELLM_API_KEY")?.trim();
-  const customHeaderName = getEnvVar(env, "LITELLM_API_KEY_HEADER")?.trim();
-
-  const useLiteLLM = Boolean(liteBaseURL);
-  const apiKey = useLiteLLM ? liteApiKey || "local-litellm" : openRouterApiKey || openAIApiKey || "";
-  const model = useLiteLLM
-    ? liteModel || openAIModel || defaultOpenRouterModel
-    : openAIModel || defaultOpenRouterModel;
-  const baseURL = useLiteLLM ? liteBaseURL : openAIBaseURL || defaultOpenRouterBaseURL;
-
-  let defaultHeaders: Record<string, string> | undefined;
-  if (useLiteLLM && customHeaderName && apiKey) {
-    defaultHeaders = { [customHeaderName]: apiKey };
-  }
-
+function sumUsage(attempts: AttemptRecord[]): TokenUsage | null {
+  const present = attempts.filter((a) => a.usage !== null);
+  if (present.length === 0) return null;
+  const add = (pick: (u: TokenUsage) => number | null): number | null => {
+    let total: number | null = null;
+    for (const a of present) {
+      const v = pick(a.usage as TokenUsage);
+      if (v !== null) total = (total ?? 0) + v;
+    }
+    return total;
+  };
   return {
-    model,
-    baseURL,
-    apiKey,
-    defaultHeaders,
-    usingLiteLLM: useLiteLLM,
+    promptTokens: add((u) => u.promptTokens),
+    completionTokens: add((u) => u.completionTokens),
+    totalTokens: add((u) => u.totalTokens),
+    costUsd: add((u) => u.costUsd),
   };
 }
 
-function createLangfuseClient(env: RuntimeEnv): LangfuseLike | undefined {
-  const publicKey = getEnvVar(env, "LANGFUSE_PUBLIC_KEY")?.trim();
-  const secretKey = getEnvVar(env, "LANGFUSE_SECRET_KEY")?.trim();
-  const baseUrl = getEnvVar(env, "LANGFUSE_BASE_URL")?.trim();
+// ── M — the LLM call ────────────────────────────────────────────────────────
 
-  if (!publicKey || !secretKey) {
-    return undefined;
-  }
-
-  return new Langfuse({
-    publicKey,
-    secretKey,
-    ...(baseUrl ? { baseUrl } : {}),
-  }) as unknown as LangfuseLike;
+interface LLMCallResult {
+  raw: string;
+  resolvedModel: string | null;
+  responseId: string | null;
+  providerName: string | null;
+  finishReason: string | null;
+  usage: TokenUsage | null;
+  latencyMs: number;
 }
 
 async function callLLM(
   client: OpenAI,
   model: string,
-  system: string,
-  user: string,
-  generation?: GenerationLike,
-): Promise<string> {
-  console.log("[callLLM] using model:", JSON.stringify(model), "baseURL:", client.baseURL);
-  const res = await client.chat.completions.create({
-    model,
-    temperature: 0,
-    top_p: 1,
-    messages: [
-      { role: "system", content: system },
-      { role: "user", content: user },
-    ],
-  });
+  messages: ChatMessage[],
+  sampling: { temperature: number | null; topP: number | null; timeoutMs: number },
+): Promise<LLMCallResult> {
+  const started = Date.now();
+  const res = await client.chat.completions.create(
+    {
+      model,
+      // Unset sampling parameters are left out, so the provider's default for
+      // this model applies. P records them as null.
+      ...(sampling.temperature !== null ? { temperature: sampling.temperature } : {}),
+      ...(sampling.topP !== null ? { top_p: sampling.topP } : {}),
+      messages,
+    },
+    { timeout: sampling.timeoutMs },
+  );
+  const latencyMs = Date.now() - started;
 
-  const raw = res.choices[0]?.message?.content?.trim() ?? "";
-  generation?.end?.({
-    output: raw,
-    usageDetails: res.usage,
-    level: "DEFAULT",
-    statusMessage: "ok",
-  });
-  return raw;
+  // OpenRouter returns fields the OpenAI SDK does not type but does preserve.
+  const extra = res as unknown as { provider?: string; usage?: { cost?: number } };
+  const u = res.usage;
+
+  return {
+    raw: res.choices[0]?.message?.content?.trim() ?? "",
+    resolvedModel: res.model ?? null,
+    responseId: res.id ?? null,
+    providerName: extra.provider ?? null,
+    finishReason: res.choices[0]?.finish_reason ?? null,
+    usage: u
+      ? {
+          promptTokens: u.prompt_tokens ?? null,
+          completionTokens: u.completion_tokens ?? null,
+          totalTokens: u.total_tokens ?? null,
+          costUsd: extra.usage?.cost ?? null,
+        }
+      : null,
+    latencyMs,
+  };
 }
 
-async function parseRequestBody(request: Request): Promise<{
+// ── Request body ────────────────────────────────────────────────────────────
+
+interface ParsedBody {
   prompt: string;
-  availableCategories?: readonly string[];
-  availableSorts?: readonly string[];
-}> {
-  const body = (await request.json()) as {
-    prompt?: unknown;
-    availableCategories?: unknown;
-    availableSorts?: unknown;
-  };
+  model?: string;
+  history: History;
+  historyDisplayedCount: number;
+  sessionId?: string;
+}
+
+function parseHistory(value: unknown): History {
+  if (!Array.isArray(value)) return [];
+  const out: History = [];
+  for (const raw of value) {
+    if (!raw || typeof raw !== "object") continue;
+    const turn = raw as Partial<HistoryTurn>;
+    if (typeof turn.u !== "string") continue;
+    out.push({
+      u: turn.u,
+      q: (turn.q ?? null) as Command | null,
+      V: turn.V as HistoryTurn["V"],
+      D: turn.D as HistoryTurn["D"],
+    });
+  }
+  return out;
+}
+
+async function parseRequestBody(request: Request): Promise<ParsedBody> {
+  const body = (await request.json()) as Record<string, unknown>;
 
   if (!body?.prompt || typeof body.prompt !== "string") {
     throw new Error("Missing 'prompt' string in request body");
   }
 
-  const categories = Array.isArray(body.availableCategories)
-    ? body.availableCategories.filter((value): value is string => typeof value === "string")
-    : undefined;
-
-  const sorts = Array.isArray(body.availableSorts)
-    ? body.availableSorts.filter((value): value is string => typeof value === "string")
-    : undefined;
+  const history = parseHistory(body.history);
+  const displayed =
+    typeof body.historyDisplayedCount === "number" && body.historyDisplayedCount >= 0
+      ? body.historyDisplayedCount
+      : history.length;
 
   return {
     prompt: body.prompt,
-    availableCategories: categories,
-    availableSorts: sorts,
+    ...(typeof body.model === "string" ? { model: body.model } : {}),
+    history,
+    historyDisplayedCount: displayed,
+    ...(typeof body.sessionId === "string" ? { sessionId: body.sessionId } : {}),
   };
 }
 
-function okResult(result: CommandResult): Response {
-  return jsonResponse(result, { status: 200 });
-}
+// ── Local test mode ─────────────────────────────────────────────────────────
 
-function buildLocalTestCommand(
-  prompt: string,
-  categories: readonly string[],
-  sorts: readonly string[],
-): CommandResult {
+/**
+ * Deterministic stand-in for the mediator: no network call, no sampling.
+ *
+ * It is *stateless by construction* — it parses the current utterance alone and
+ * ignores H entirely. So local mode behaves like HISTORY_POLICY=none no matter
+ * what the policy is set to, and the amnesia and MR_AC/MR_CA/MR_REV relations
+ * must be exercised against a real mediator. Local mode is for UI and plumbing
+ * work, and for checking that a relation *runs*, not for measuring a mediator.
+ */
+function buildLocalTestCommand(prompt: string, clearEnabled: boolean): Command {
   const text = prompt.toLowerCase();
 
-  const schemaSafeCategories = CATEGORIES.filter((value) => categories.includes(value));
-
-  const category =
-    schemaSafeCategories.find((candidate) => text.includes(candidate.toLowerCase())) ?? null;
+  const category = CATEGORY_VALUES.find((c) => text.includes(c)) ?? null;
 
   const maxPriceMatch =
     text.match(/(?:under|less\s+than|below|max(?:imum)?\s+of?)\s*\$?\s*(\d+(?:\.\d+)?)/i) ??
@@ -236,68 +229,234 @@ function buildLocalTestCommand(
   const maxPrice = maxPriceMatch ? Number(maxPriceMatch[1]) : null;
 
   const ratingMatch = text.match(/(\d(?:\.\d)?)\s*(?:\+|and\s+up)?\s*stars?/i);
-  const hasHighlyRatedLanguage = /highly\s+rated|top\s+rated|best\s+rated/.test(text);
-  const minRating = ratingMatch ? Number(ratingMatch[1]) : hasHighlyRatedLanguage ? 4 : null;
+  const highlyRated = /highly\s+rated|top\s+rated|best\s+rated/.test(text);
+  const minRating = ratingMatch ? Number(ratingMatch[1]) : highlyRated ? 4 : null;
 
-  const inStockOnly = /in\s+stock|available/.test(text) ? true : null;
+  // Negative phrasings first: "show out-of-stock items again" is the inverse of
+  // "hide out-of-stock items", and a substring match would otherwise read the
+  // "stock" in both as a request to filter.
+  const inStockOnly = /\b(show|include|also)\b[^.]*out.of.stock/.test(text)
+    ? false
+    : /hide[^.]*out.of.stock|\bin\s+stock\b|\bavailable\b|\bexclude[^.]*out.of.stock/.test(text)
+      ? true
+      : null;
 
-  let sort: CommandResult["sort"] = null;
-  if (/(cheapest|lowest\s+price|budget|low\s+to\s+high)/.test(text) && sorts.includes("price_asc")) {
-    sort = "price_asc";
-  } else if (
-    /(most\s+expensive|highest\s+price|premium|high\s+to\s+low)/.test(text) &&
-    sorts.includes("price_desc")
-  ) {
-    sort = "price_desc";
-  } else if (/(top\s+rated|rating|best\s+rated)/.test(text) && sorts.includes("rating_desc")) {
-    sort = "rating_desc";
-  } else if (/(alphabetical|name|a\s+to\s+z)/.test(text) && sorts.includes("name_asc")) {
-    sort = "name_asc";
-  }
+  let sort: SortValue | null = null;
+  if (/(cheapest|lowest\s+price|budget|low\s+to\s+high)/.test(text)) sort = "price_asc";
+  else if (/(most\s+expensive|highest\s+price|premium|high\s+to\s+low)/.test(text)) sort = "price_desc";
+  else if (/(top\s+rated|rating|best\s+rated)/.test(text)) sort = "rating_desc";
+  else if (/(alphabetical|name|a\s+to\s+z)/.test(text)) sort = "name_asc";
+
+  const wantsClear = /\b(clear|reset)\b.*\b(filter|filters|everything|all)\b/.test(text);
 
   return {
-    filters: {
-      category: category as CommandResult["filters"]["category"],
-      maxPrice,
-      minRating,
-      inStockOnly,
-    },
+    filters: { category, maxPrice, minRating, inStockOnly },
     sort,
+    ...(clearEnabled && wantsClear ? { clearFilters: true } : {}),
     explanation: "Local test mode parsed request without external LLM call.",
   };
 }
 
+// ── The handler ─────────────────────────────────────────────────────────────
+
+export interface CommandDeps {
+  /** Schedules background work; ctx.waitUntil in the Worker, a collector in Express. */
+  waitUntil: (p: Promise<unknown>) => void;
+}
+
 export async function handleCommandRequest(
   request: Request,
-  runtimeEnv: CommandRuntimeEnv = {},
+  /**
+   * Accepts either the documented key set or a bare env record, so the Worker's
+   * typed `env` and the Express server's `process.env` are interchangeable.
+   */
+  runtimeEnv: CommandRuntimeEnv | RuntimeEnv = {},
+  deps?: Partial<CommandDeps>,
 ): Promise<Response> {
+  const waitUntil = deps?.waitUntil ?? ((p: Promise<unknown>) => void p.catch(() => {}));
+
   if (request.method !== "POST") {
     return jsonResponse({ error: "Method not allowed" }, { status: 405 });
   }
 
-  let parsedBody: Awaited<ReturnType<typeof parseRequestBody>>;
+  const env = runtimeEnv as RuntimeEnv;
+  const clearEnabled = clearActionEnabled(env);
+  const historyConfig = resolveHistoryConfig(env);
+  const schema = buildCommandSchema(clearEnabled);
+  const system = resolveSystemPrompt(env);
+  const hashes = promptHashes(system, clearEnabled);
+  const requestId = crypto.randomUUID();
+  const startedAtMs = Date.now();
+  const timestamp = new Date().toISOString();
+  const attempts: AttemptRecord[] = [];
+
+  let parsedBody: ParsedBody;
   try {
     parsedBody = await parseRequestBody(request);
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : "Invalid JSON body";
-    return jsonResponse({ error: message }, { status: 400 });
-  }
-
-  const categoryValues = parsedBody.availableCategories ?? [...CATEGORIES];
-  const sortValues = parsedBody.availableSorts ?? [...SORTS];
-
-  if (getEnvVar(runtimeEnv as RuntimeEnv, "LOCAL_TEST_MODE") === "true") {
-    const localResult = buildLocalTestCommand(parsedBody.prompt, categoryValues, sortValues);
-    return okResult(localResult);
-  }
-
-  const llm = resolveLLMConfig(runtimeEnv as RuntimeEnv);
-  if (!llm.usingLiteLLM && !llm.apiKey) {
+    const llm = resolveLLMConfig(env);
     return jsonResponse(
       {
-        error: "Missing API key. Set OPEN_ROUTER_API_KEY (for OpenRouter) or OPENAI_API_KEY, or use LITELLM_BASE_URL with LITELLM_API_KEY.",
+        error: message,
+        meta: {
+          schemaVersion: SCHEMA_VERSION,
+          requestId,
+          timestamp,
+          mode: isLocalTestMode(env) ? "local-test" : "llm",
+          provider: isLocalTestMode(env) ? "local-test" : llm.provider,
+          baseURL: llm.baseURL ?? null,
+          modelSource: "env-default",
+          P: {
+            requestedModel: llm.model,
+            resolvedModel: null,
+            temperature: llm.temperature,
+            topP: llm.topP,
+            systemPromptHash: hashes.systemPromptHash,
+            commandSchemaHash: hashes.commandSchemaHash,
+            historyPolicy: historyConfig.policy,
+            historyMaxTurns: historyConfig.maxTurns,
+            clearActionEnabled: clearEnabled,
+          },
+          attempts: [],
+          repaired: false,
+          totalLatencyMs: Date.now() - startedAtMs,
+          usageTotal: null,
+          historyTurnsEffective: 0,
+          historyTurnsDisplayed: 0,
+          langfuse: { enabled: false, traceId: null, url: null },
+          error: { code: "bad_request", message },
+        } satisfies CommandMeta,
       },
-      { status: 500 },
+      { status: 400 },
+    );
+  }
+
+  const selection = selectModel(env, parsedBody.model);
+  const llm = resolveLLMConfig(env);
+  const localMode = isLocalTestMode(env);
+  const chosenModel = selection.ok ? selection.model : llm.model;
+  const modelSource: ModelSource = selection.ok ? selection.source : "env-default";
+
+  const sentTurns = effectiveHistory(parsedBody.history, historyConfig);
+
+  const basePromptConfig = (resolvedModel: string | null): PromptConfig => ({
+    requestedModel: chosenModel,
+    resolvedModel,
+    temperature: llm.temperature,
+    topP: llm.topP,
+    systemPromptHash: hashes.systemPromptHash,
+    commandSchemaHash: hashes.commandSchemaHash,
+    historyPolicy: historyConfig.policy,
+    historyMaxTurns: historyConfig.maxTurns,
+    clearActionEnabled: clearEnabled,
+  });
+
+  // Sweeps send `x-lngui-langfuse: off` unless the experimenter opts in.
+  const tracingOff = request.headers.get(LANGFUSE_HEADER)?.toLowerCase() === "off";
+  const langfuse = localMode || tracingOff ? undefined : createLangfuseClient(env);
+  const trace = langfuse?.trace?.({
+    // Reusing requestId as the trace id means the D1 record and the Langfuse
+    // trace join on a single key.
+    id: requestId,
+    name: "command-api-request",
+    input: { prompt: parsedBody.prompt, historyTurns: sentTurns.length },
+    metadata: {
+      provider: llm.provider,
+      model: chosenModel,
+      baseURL: llm.baseURL,
+      historyPolicy: historyConfig.policy,
+      clearActionEnabled: clearEnabled,
+    },
+    ...(parsedBody.sessionId ? { sessionId: parsedBody.sessionId } : {}),
+  });
+
+  const buildMeta = (
+    errorCode: CommandErrorCode | null,
+    errorMessage?: string,
+    detail?: string,
+  ): CommandMeta => {
+    const last = attempts[attempts.length - 1];
+    return {
+      schemaVersion: SCHEMA_VERSION,
+      requestId,
+      timestamp,
+      mode: localMode ? "local-test" : "llm",
+      provider: localMode ? "local-test" : llm.provider,
+      baseURL: localMode ? null : (llm.baseURL ?? null),
+      modelSource,
+      P: basePromptConfig(last?.resolvedModel ?? null),
+      attempts,
+      repaired: attempts.some((a) => a.name === "repair" && a.outcome === "parsed"),
+      totalLatencyMs: Date.now() - startedAtMs,
+      usageTotal: sumUsage(attempts),
+      historyTurnsEffective: sentTurns.length,
+      historyTurnsDisplayed: parsedBody.historyDisplayedCount,
+      langfuse: {
+        enabled: Boolean(langfuse),
+        traceId: langfuse ? requestId : null,
+        url: trace?.getTraceUrl?.() ?? null,
+      },
+      error:
+        errorCode === null
+          ? null
+          : {
+              code: errorCode,
+              message: errorMessage ?? "",
+              ...(detail === undefined ? {} : { detail }),
+            },
+    };
+  };
+
+  /** Single exit point: attaches meta, closes the trace, flushes off the hot path. */
+  const finish = (
+    body: Record<string, unknown>,
+    status: number,
+    errorCode: CommandErrorCode | null,
+    traceStatus: string,
+  ): Response => {
+    const meta = buildMeta(errorCode, typeof body.error === "string" ? body.error : undefined,
+      typeof body.detail === "string" ? body.detail : undefined);
+    trace?.update?.({
+      output: errorCode === null ? body : { error: body.error, detail: body.detail },
+      level: errorCode === null ? "DEFAULT" : "ERROR",
+      statusMessage: traceStatus,
+    });
+    // Langfuse delivery must not sit on the user-visible latency path, and a
+    // Langfuse outage must never fail the request.
+    if (langfuse?.shutdownAsync) {
+      waitUntil(langfuse.shutdownAsync().catch(() => {}));
+    }
+    return jsonResponse({ ...body, meta }, { status });
+  };
+
+  if (!selection.ok) {
+    return finish(
+      { error: "Model not allowed", detail: selection.reason },
+      400,
+      "model_not_allowed",
+      "model-not-allowed",
+    );
+  }
+
+  if (localMode) {
+    return finish(
+      buildLocalTestCommand(parsedBody.prompt, clearEnabled) as unknown as Record<string, unknown>,
+      200,
+      null,
+      "ok-local-test",
+    );
+  }
+
+  if (llm.provider === "none") {
+    return finish(
+      {
+        error:
+          "Missing API key. Set OPEN_ROUTER_API_KEY (OpenRouter) or OPENAI_API_KEY (direct OpenAI).",
+      },
+      500,
+      "missing_api_key",
+      "missing-api-key",
     );
   }
 
@@ -307,113 +466,140 @@ export async function handleCommandRequest(
     ...(llm.defaultHeaders ? { defaultHeaders: llm.defaultHeaders } : {}),
   });
 
-  const langfuse = createLangfuseClient(runtimeEnv as RuntimeEnv);
-  const trace = langfuse?.trace?.({
-    name: "command-api-request",
-    input: {
-      prompt: parsedBody.prompt,
-      availableCategories: parsedBody.availableCategories,
-      availableSorts: parsedBody.availableSorts,
-    },
-    metadata: {
-      model: llm.model,
-      baseURL: llm.baseURL,
-      liteLLMEnabled: Boolean(getEnvVar(runtimeEnv as RuntimeEnv, "LITELLM_BASE_URL")),
-    },
-  });
+  const historyMessages = renderHistory(sentTurns);
+  let userMessage = parsedBody.prompt;
 
-  const system = buildSystemPrompt(categoryValues, sortValues);
+  // Two attempts: the initial call and one JSON repair. Collapsed into a loop so
+  // that every exit path runs through `finish` and therefore carries meta.
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    const name: AttemptName = attempt === 1 ? "initial" : "repair";
+    const messages: ChatMessage[] = [
+      { role: "system", content: system },
+      ...(attempt === 1 ? historyMessages : []),
+      { role: "user", content: userMessage },
+    ];
 
-  let raw: string;
-  try {
     const generation = trace?.generation?.({
-      name: "command-llm-initial",
-      model: llm.model,
-      input: { system, user: parsedBody.prompt },
-      metadata: { attempt: 1 },
+      name: `command-llm-${name}`,
+      model: chosenModel,
+      input: { messages },
+      metadata: { attempt, historyTurns: attempt === 1 ? sentTurns.length : 0 },
     });
-    raw = await callLLM(client, llm.model, system, parsedBody.prompt, generation);
-  } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : String(e);
-    trace?.update?.({ output: { error: msg }, level: "ERROR", statusMessage: "LLM call failed" });
-    await langfuse?.shutdownAsync?.();
-    return jsonResponse({ error: "LLM call failed", detail: msg }, { status: 502 });
-  }
 
-  console.log("[command] prompt:", JSON.stringify(parsedBody.prompt));
-  console.log("[command] raw:", raw);
-
-  let json1: string;
-  try {
-    json1 = extractJSON(raw);
-    const first = CommandSchema.safeParse(JSON.parse(json1));
-    if (first.success) {
-      trace?.update?.({ output: first.data, level: "DEFAULT", statusMessage: "ok-first-pass" });
-      await langfuse?.shutdownAsync?.();
-      return okResult(first.data);
-    }
-  } catch {
-    json1 = raw;
-  }
-
-  console.log("[command] first parse failed, retrying");
-  const repairPrompt = `The following was supposed to be valid JSON matching the schema but failed:\n\n${json1}\n\nFix it and output ONLY valid JSON. No other text.`;
-
-  let raw2: string;
-  try {
-    const generation = trace?.generation?.({
-      name: "command-llm-repair",
-      model: llm.model,
-      input: { system, user: repairPrompt },
-      metadata: { attempt: 2, reason: "json-repair" },
-    });
-    raw2 = await callLLM(client, llm.model, system, repairPrompt, generation);
-  } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : String(e);
-    trace?.update?.({ output: { error: msg }, level: "ERROR", statusMessage: "LLM retry failed" });
-    await langfuse?.shutdownAsync?.();
-    return jsonResponse({ error: "LLM retry failed", detail: msg }, { status: 502 });
-  }
-
-  console.log("[command] retry raw:", raw2);
-  try {
-    const json2 = extractJSON(raw2);
-    const second = CommandSchema.safeParse(JSON.parse(json2));
-    if (second.success) {
-      trace?.update?.({ output: second.data, level: "DEFAULT", statusMessage: "ok-repair" });
-      await langfuse?.shutdownAsync?.();
-      return okResult(second.data);
+    const attemptStartedAt = new Date().toISOString();
+    let call: LLMCallResult;
+    try {
+      call = await callLLM(client, chosenModel, messages, llm);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      attempts.push({
+        attempt,
+        name,
+        startedAt: attemptStartedAt,
+        latencyMs: Date.now() - startedAtMs,
+        requestedModel: chosenModel,
+        resolvedModel: null,
+        responseId: null,
+        providerName: null,
+        finishReason: null,
+        userPrompt: userMessage,
+        rawText: null,
+        rawTruncated: false,
+        usage: null,
+        outcome: "llm-error",
+        errorMessage: msg,
+      });
+      generation?.end?.({ level: "ERROR", statusMessage: msg });
+      return finish(
+        { error: attempt === 1 ? "LLM call failed" : "LLM retry failed", detail: msg },
+        502,
+        "llm_error",
+        attempt === 1 ? "llm-call-failed" : "llm-retry-failed",
+      );
     }
 
-    trace?.update?.({
-      output: {
-        error: "Invalid command after retry",
-        firstResponse: json1,
-        secondResponse: json2,
-        validationError: second.error.message,
-      },
-      level: "ERROR",
-      statusMessage: "validation-failed",
+    let extracted: string;
+    let outcome: AttemptOutcome;
+    let parsed: Command | null = null;
+    let validationError: string | undefined;
+    try {
+      extracted = extractJSON(call.raw);
+      const result = schema.safeParse(JSON.parse(extracted));
+      if (result.success) {
+        outcome = "parsed";
+        parsed = result.data as Command;
+      } else {
+        outcome = "schema-invalid";
+        validationError = result.error.message;
+      }
+    } catch {
+      extracted = call.raw;
+      outcome = "json-invalid";
+    }
+
+    const raw = truncate(call.raw);
+    attempts.push({
+      attempt,
+      name,
+      startedAt: attemptStartedAt,
+      latencyMs: call.latencyMs,
+      requestedModel: chosenModel,
+      resolvedModel: call.resolvedModel,
+      responseId: call.responseId,
+      providerName: call.providerName,
+      finishReason: call.finishReason,
+      userPrompt: userMessage,
+      rawText: raw.text,
+      rawTruncated: raw.truncated,
+      usage: call.usage,
+      outcome,
+      errorMessage: validationError ?? null,
     });
-    await langfuse?.shutdownAsync?.();
-    return jsonResponse(
-      {
-        error: "Invalid command after retry",
-        firstResponse: json1,
-        secondResponse: json2,
-        validationError: second.error.message,
-      },
-      { status: 422 },
-    );
-  } catch {
-    trace?.update?.({
-      output: { error: "Could not parse LLM response as JSON", raw: raw2 },
-      level: "ERROR",
-      statusMessage: "json-parse-failed",
+    generation?.end?.({
+      output: call.raw,
+      usageDetails: call.usage,
+      level: outcome === "parsed" ? "DEFAULT" : "WARNING",
+      statusMessage: outcome,
     });
-    await langfuse?.shutdownAsync?.();
-    return jsonResponse({ error: "Could not parse LLM response as JSON", raw: raw2 }, { status: 422 });
+
+    if (parsed !== null) {
+      return finish(
+        parsed as unknown as Record<string, unknown>,
+        200,
+        null,
+        attempt === 1 ? "ok-first-pass" : "ok-repair",
+      );
+    }
+
+    if (attempt === 2) {
+      const first = attempts[0]?.rawText ?? null;
+      return outcome === "schema-invalid"
+        ? finish(
+            {
+              error: "Invalid command after retry",
+              firstResponse: first,
+              secondResponse: extracted,
+              validationError,
+            },
+            422,
+            "schema_invalid",
+            "validation-failed",
+          )
+        : finish(
+            { error: "Could not parse LLM response as JSON", raw: raw.text },
+            422,
+            "invalid_json",
+            "json-parse-failed",
+          );
+    }
+
+    userMessage =
+      `The following was supposed to be valid JSON matching the schema but failed:\n\n` +
+      `${extracted}\n\nFix it and output ONLY valid JSON. No other text.`;
   }
+
+  // Unreachable: the loop returns on every path.
+  return finish({ error: "Internal error" }, 500, "internal", "internal");
 }
 
 export default handleCommandRequest;

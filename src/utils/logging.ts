@@ -1,54 +1,112 @@
-import type { LogEntry } from "./types.ts";
+/**
+ * In-session export of the two research artifacts.
+ *
+ * The server-side records in D1/JSONL are authoritative and survive reloads;
+ * these exports are for pulling a session straight into a spreadsheet or an
+ * analysis script.
+ */
+import type { ControlId, MrCaseRecord, TurnRecord } from "../../shared/contract.ts";
 
-const logs: LogEntry[] = [];
-
-export function addLog(entry: LogEntry) {
-  logs.push(entry);
+function esc(value: unknown): string {
+  const s =
+    value === null || value === undefined
+      ? ""
+      : typeof value === "string"
+        ? value
+        : typeof value === "object"
+          ? JSON.stringify(value)
+          : String(value);
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
-export function getLogs(): readonly LogEntry[] {
-  return logs;
+function toCsv(headers: readonly string[], rows: unknown[][]): string {
+  return [headers.join(","), ...rows.map((r) => r.map(esc).join(","))].join("\n");
 }
 
-export function clearLogs() {
-  logs.length = 0;
-}
+const ids = (list: readonly ControlId[] | null): string =>
+  list === null ? "" : list.join(" ");
 
-export function exportJSON(): string {
-  return JSON.stringify(logs, null, 2);
-}
+/**
+ * One flat row per transition. This is the replay log as a spreadsheet, and the
+ * table the §4.15 metrics are computed from.
+ */
+export const TURN_CSV_HEADERS = [
+  "id", "sessionId", "createdAt", "turnIndex", "kind", "relation", "role", "trial",
+  "utterance", "ok", "error",
+  "mode", "provider", "requestedModel", "resolvedModel", "temperature", "topP",
+  "systemPromptHash", "historyPolicy", "historyMaxTurns", "clearActionEnabled",
+  "historyEffective", "historyDisplayed",
+  "attempts", "repaired", "totalLatencyMs", "promptTokens", "completionTokens",
+  "totalTokens", "costUsd", "errorCode",
+  "countBefore", "countAfter", "countDelta",
+  "fp", "writeSet", "applied", "rejected",
+  "overReach", "overReachControls", "contextIntact",
+  "langfuseTraceId", "q", "vBefore", "vAfter",
+] as const;
 
-export function exportCSV(): string {
-  if (logs.length === 0) return "";
-  const headers = [
-    "timestamp", "basePrompt", "relationName", "variantPrompt",
-    "returnedCommand", "uiSnapshot", "verdict", "reason",
-  ];
-  const rows = logs.map((l) =>
-    [
-      l.timestamp,
-      esc(l.basePrompt),
-      l.relationName,
-      esc(l.variantPrompt),
-      esc(JSON.stringify(l.returnedCommand)),
-      esc(JSON.stringify(l.uiSnapshot)),
-      l.verdict,
-      esc(l.reason),
-    ].join(",")
+export function exportTurnsCsv(turns: readonly TurnRecord[]): string {
+  return toCsv(
+    TURN_CSV_HEADERS,
+    turns.map((t) => {
+      const m = t.meta;
+      const u = m?.usageTotal;
+      return [
+        t.id, t.sessionId, t.createdAt, t.turnIndex, t.kind, t.relation, t.role, t.trial,
+        t.u, t.ok ? 1 : 0, t.error,
+        m?.mode, m?.provider, m?.P.requestedModel, m?.P.resolvedModel,
+        m?.P.temperature, m?.P.topP, m?.P.systemPromptHash,
+        m?.P.historyPolicy, m?.P.historyMaxTurns,
+        m?.P.clearActionEnabled === undefined ? "" : m.P.clearActionEnabled ? 1 : 0,
+        m?.historyTurnsEffective, m?.historyTurnsDisplayed,
+        m?.attempts.length, m?.repaired ? 1 : 0, m?.totalLatencyMs,
+        u?.promptTokens, u?.completionTokens, u?.totalTokens, u?.costUsd, m?.error?.code,
+        t.dBefore.count, t.dAfter.count, t.dAfter.count - t.dBefore.count,
+        ids(t.fp), ids(t.writeSet), ids(t.applied),
+        t.rejected.map((r) => `${r.control}=${JSON.stringify(r.value)}:${r.reason}`).join(" "),
+        t.flags.commandOverReach ? 1 : 0, ids(t.flags.overReachControls),
+        t.flags.contextIntact ? 1 : 0,
+        m?.langfuse.traceId, t.q, t.vBefore, t.vAfter,
+      ];
+    }),
   );
-  return [headers.join(","), ...rows].join("\n");
 }
 
-function esc(s: string): string {
-  if (s.includes(",") || s.includes('"') || s.includes("\n")) {
-    return '"' + s.replace(/"/g, '""') + '"';
-  }
-  return s;
+/** One row per MR test case: the report T of Algorithm 1. */
+export const CASE_CSV_HEADERS = [
+  "id", "sessionId", "createdAt", "relation", "predicate", "legacyName",
+  "sourceTrace", "followupTrace", "n", "epsilon", "fails", "failureRate", "verdict",
+  "skipReason", "covNL", "covMR", "firstFailureMs", "mediatorInvocations", "totalTokens",
+  "evidenceTurnIds",
+] as const;
+
+export function exportCasesCsv(cases: readonly MrCaseRecord[]): string {
+  return toCsv(
+    CASE_CSV_HEADERS,
+    cases.map((c) => [
+      c.id, c.sessionId, c.createdAt, c.relation, c.predicate, c.legacyName,
+      c.sourceTrace.join(" | "), c.followupTrace.join(" | "),
+      c.n, c.epsilon, c.fails, c.failureRate.toFixed(4), c.verdict,
+      c.skipReason, c.covNL.toFixed(4), c.covMR.toFixed(4),
+      c.firstFailureMs, c.mediatorInvocations, c.totalTokens,
+      c.evidenceTurnIds.join(" "),
+    ]),
+  );
 }
 
-export function downloadFile(content: string, filename: string, mime: string) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
+export function exportSessionJson(payload: {
+  sessionId: string;
+  turns: readonly TurnRecord[];
+  cases: readonly MrCaseRecord[];
+}): string {
+  return JSON.stringify(
+    { schemaVersion: 1, exportedAt: new Date().toISOString(), ...payload },
+    null,
+    2,
+  );
+}
+
+export function downloadFile(content: string, filename: string, mime: string): void {
+  const url = URL.createObjectURL(new Blob([content], { type: mime }));
   const a = document.createElement("a");
   a.href = url;
   a.download = filename;

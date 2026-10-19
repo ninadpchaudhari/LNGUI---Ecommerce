@@ -1,0 +1,51 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "lngui-ecommerce",
+  "main": "api/worker.ts",
+  "compatibility_date": "2026-09-01",
+  // The OpenAI SDK and the Langfuse SDK both expect some Node built-ins.
+  "compatibility_flags": ["nodejs_compat"],
+
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // Without this, the SPA fallback would swallow /api/* before the Worker
+    // ever ran. Note this key nests inside "assets".
+    "run_worker_first": ["/api/*"]
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "lngui-turns",
+      "database_id": "9a4c852e-9650-4182-88db-6e110fe70aba",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  // Non-secret runtime configuration. P is server-authoritative, so changing
+  // these changes the experiment; secrets go through `wrangler secret put`.
+  "vars": {
+    "OPENROUTER_MODEL": "openai/gpt-4o-mini",
+    "OPENROUTER_MODELS": "openai/gpt-4o-mini,anthropic/claude-3.5-haiku,google/gemini-2.0-flash-001",
+    // Deliberately false on the deployed instance: the URL is cited publicly in
+    // the dissertation, and allow-any would let a stranger invoke an arbitrarily
+    // expensive model on the account key. Local dev can still set it true.
+    "OPENROUTER_MODEL_ALLOW_ANY": "false",
+    "OPENROUTER_APP_TITLE": "LNGUI Ecommerce Case Study",
+    "LLM_TEMPERATURE": "0",
+    "LLM_TOP_P": "1",
+    "HISTORY_POLICY": "full",
+    // baseline is the prompt as recorded with Figure 1.2, so the deployed
+    // instance keeps the motivating fault. Switching to "extended" makes
+    // multi-turn refinement work but loses the case-invariance violation —
+    // see api/prompt.ts. Under baseline the clear action below is inert.
+    "PROMPT_VARIANT": "baseline",
+    "CLEAR_ACTION_ENABLED": "true",
+    "LANGFUSE_BASE_URL": "https://us.cloud.langfuse.com",
+    "LOCAL_TEST_MODE": "false"
+  },
+
+  "observability": { "enabled": true }
+}
