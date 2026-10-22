@@ -7,8 +7,7 @@
  * "every reported result will be paired with the model identifier and
  * parameters" — and what §5.7 needs in order to hold P fixed across mediators.
  */
-import { FULL_STATE_PROMPT } from "../shared/full-state-prompt.ts";
-import { DEFAULT_SYSTEM_PROMPT } from "../shared/default-prompt.ts";
+import { DEFAULT_IMPLEMENTATION, DEFAULT_SYSTEM_PROMPT } from "../shared/default-prompt.ts";
 import { normalizePrompt } from "../shared/prompt-text.ts";
 import {
   MODEL_ID_RE,
@@ -278,20 +277,28 @@ export function resolveHistoryConfig(env: RuntimeEnv): HistoryConfig {
   return { policy, maxTurns: k };
 }
 
-/** How Q states an update: "diff" (partial updates) or "full" (the complete state). Defaults to diff. */
+/**
+ * How Q states an update: "diff" (partial updates) or "full" (the complete
+ * state). The implementation belongs to the prompt (shared/prompt-text.ts), so
+ * runners send the one their prompt file declares. Unset, it is the default
+ * prompt's own implementation when the default prompt is in force, else diff.
+ */
 export function resolveCommandMode(env: RuntimeEnv): "diff" | "full" {
   const mode = str(env, "LNGUI_COMMAND_MODE");
   if (mode && mode !== "diff" && mode !== "full") throw new Error("LNGUI_COMMAND_MODE must be diff or full");
-  return mode === "full" ? "full" : "diff";
+  if (mode === "diff" || mode === "full") return mode;
+  const text = getEnvVar(env, "SYSTEM_PROMPT");
+  return text === undefined || text.trim() === "" ? DEFAULT_IMPLEMENTATION : "diff";
 }
 
 /**
- * The system prompt in force: the request's own text (SYSTEM_PROMPT), else the
- * committed prompt for the command mode (prompts/default.txt for diff).
+ * The system prompt in force: the request's own text (SYSTEM_PROMPT), else
+ * prompts/default.txt. The command mode never picks the prompt; the two are
+ * separate settings of P.
  */
 export function resolveSystemPrompt(env: RuntimeEnv): string {
   const text = getEnvVar(env, "SYSTEM_PROMPT");
-  return text !== undefined && text.trim() !== "" ? normalizePrompt(text) : resolveCommandMode(env) === "full" ? FULL_STATE_PROMPT : DEFAULT_SYSTEM_PROMPT;
+  return text !== undefined && text.trim() !== "" ? normalizePrompt(text) : DEFAULT_SYSTEM_PROMPT;
 }
 
 export function langfuseEnabled(env: RuntimeEnv): boolean {

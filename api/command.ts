@@ -219,8 +219,8 @@ async function parseRequestBody(request: Request): Promise<ParsedBody> {
  * work, and for checking that a relation *runs*, not for measuring a mediator.
  *
  * It is the reference reading of the bundled cases: "highly rated" is
- * minRating 4, while "best rated" or "top rated" only sorts. The prompt
- * deliberately does not spell these readings out, so a model's own reading is
+ * minRating 4, while "best rated" or "top rated" only sorts. The enhanced
+ * prompts deliberately do not spell these readings out, so a model's own reading is
  * what the relations measure. A dry-run failure should point at the harness or
  * the case, not at the parser.
  */

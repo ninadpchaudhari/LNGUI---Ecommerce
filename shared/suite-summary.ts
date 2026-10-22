@@ -12,6 +12,7 @@ export interface OperatorRow {
   label: string;
   help: string;
   cases: number;
+  caseIds: string[];
   example: Pick<MrCase, "id" | "sourceTrace" | "followupTrace">;
 }
 
@@ -19,6 +20,7 @@ export interface SuiteRow {
   group: string;
   checks: string;
   cases: number;
+  caseIds: string[];
   groups: number;
   utterances: number;
   operators: OperatorRow[];
@@ -84,6 +86,7 @@ export function summarizeSuite(cases: readonly MrCase[]): SuiteRow[] {
       group,
       checks: spec?.checks ?? "",
       cases: members.length,
+      caseIds: members.map((c) => c.id),
       groups: new Set(members.map((c) => c.semanticGroup)).size,
       utterances: members.reduce((s, c) => s + c.sourceTrace.length + c.followupTrace.length, 0),
       operators: [...ops.entries()]
@@ -91,7 +94,7 @@ export function summarizeSuite(cases: readonly MrCase[]): SuiteRow[] {
         .map(([key, examples]) => {
           const [label, help] = describe(key);
           const { id, sourceTrace, followupTrace } = examples[0];
-          return { key, label, help, cases: examples.length, example: { id, sourceTrace, followupTrace } };
+          return { key, label, help, cases: examples.length, caseIds: examples.map((c) => c.id), example: { id, sourceTrace, followupTrace } };
         }),
     });
   }

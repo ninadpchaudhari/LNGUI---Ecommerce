@@ -36,7 +36,8 @@ export function buildCommandSchema(mode: "diff" | "full" = "diff") {
     sort: mode === "full" ? z.enum(SORT_VALUES).nullable() : z.enum(SORT_VALUES).nullable().optional(),
     explanation: z.string(),
   };
-  return z.object({ ...base, clearFilters: z.boolean().optional() }).strict();
+  // null means "do not clear", as earlier prompts (prompts/default-clear.txt) ask for.
+  return z.object({ ...base, clearFilters: z.boolean().nullable().optional() }).strict();
 }
 
 // `clearFilters: true` stays in the shape so the hash matches earlier runs that had it on.

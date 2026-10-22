@@ -15,14 +15,14 @@
  */
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import type { AppConfig, TurnRecord } from "../../shared/contract.ts";
+import type { AppConfig, CommandMode, TurnRecord } from "../../shared/contract.ts";
 import { parseCasesJsonl, toJsonl, type MrCase } from "../../shared/cases.ts";
 import { experimentSchema, type CasesManifest } from "../../shared/experiment.ts";
 import { caseTable, render, reportGroup, reportTitle, runModeLabel, summaryTable, type Format, type Table } from "../../shared/report.ts";
 import { parseTrialsJsonl, type TrialRow } from "../../shared/trials.ts";
 import { summarizeSuite, type SuiteRow } from "../../shared/suite-summary.ts";
 import { LANGFUSE_HEADER, type Overrides } from "../../shared/overrides.ts";
-import { PROMPT_NAME_RE, normalizePrompt, promptHash, promptSha256 } from "../../shared/prompt-text.ts";
+import { PROMPT_NAME_RE, formatPromptFile, normalizePrompt, parsePromptFile, promptHash, promptSha256 } from "../../shared/prompt-text.ts";
 import { adhocCases } from "../utils/relations.ts";
 import { saveTurn } from "../utils/api.ts";
 import { downloadFile } from "../utils/logging.ts";
@@ -160,8 +160,35 @@ function TableView({ table, selected, onRow }: {
   );
 }
 
-/** The test set by report row, each row expandable into the operators behind it. */
-function SuiteTable({ rows }: { rows: SuiteRow[] }) {
+/** A checkbox that shows "some" as the indeterminate state. */
+function TriCheck({ ids, excluded, onSet, label }: {
+  ids: readonly string[];
+  excluded: ReadonlySet<string>;
+  onSet: (ids: readonly string[], include: boolean) => void;
+  label: string;
+}) {
+  const on = ids.filter((id) => !excluded.has(id)).length;
+  const ref = useRef<HTMLInputElement>(null);
+  useLayoutEffect(() => {
+    if (ref.current) ref.current.indeterminate = on > 0 && on < ids.length;
+  }, [on, ids.length]);
+  return (
+    <input ref={ref} type="checkbox" aria-label={label} checked={on === ids.length && ids.length > 0} onChange={() => onSet(ids, on < ids.length)} />
+  );
+}
+
+/**
+ * The test set by report row, each row expandable into the operators behind
+ * it. Every row and operator has a checkbox that includes or excludes all of
+ * its cases, so one relation or one transform can be run on its own.
+ */
+function SuiteTable({ rows, utterancesOf, excluded, onSet }: {
+  /** Summarized from every case, so an excluded relation stays listed. */
+  rows: SuiteRow[];
+  utterancesOf: ReadonlyMap<string, number>;
+  excluded: ReadonlySet<string>;
+  onSet: (ids: readonly string[], include: boolean) => void;
+}) {
   const [open, setOpen] = useState<Set<string>>(new Set());
   const flip = (g: string) =>
     setOpen((prev) => {
@@ -170,42 +197,52 @@ function SuiteTable({ rows }: { rows: SuiteRow[] }) {
       else next.add(g);
       return next;
     });
-  const total = (k: "cases" | "utterances") => rows.reduce((s, r) => s + r[k], 0);
+  const used = (ids: readonly string[]) => ids.filter((id) => !excluded.has(id)).length;
+  const count = (ids: readonly string[]) => {
+    const n = used(ids);
+    return n === ids.length ? String(n) : `${n} of ${ids.length}`;
+  };
+  const allIds = rows.flatMap((r) => r.caseIds);
+  const utterances = (r: SuiteRow) =>
+    r.caseIds.filter((id) => !excluded.has(id)).reduce((s, id) => s + (utterancesOf.get(id) ?? 0), 0);
   return (
     <div className="xp-scroll">
       <table className="xp-table xp-suite">
         <thead>
           <tr>
+            <th className="xp-use"><TriCheck ids={allIds} excluded={excluded} onSet={onSet} label="Include every relation" /></th>
             <th>Metamorphic relation</th>
             <th>Relation name / examples</th>
             <th className="num">Test cases <Help>Each metamorphic test case fixes an initial state, a source trace and a follow-up trace.</Help></th>
-            <th className="num">Utterances (N = 1) <Help>Total utterances across the source and follow-up traces, executing each test case in this row once under one condition. Each test case is repeated N times.</Help></th>
+            <th className="num">Utterances (N = 1) <Help>Total utterances across the source and follow-up traces, executing each included test case in this row once under one condition. Each test case is repeated N times.</Help></th>
           </tr>
         </thead>
         <tbody>
           {rows.map((r) => {
             const isOpen = open.has(r.group);
             return [
-              <tr key={r.group} className="xp-suite-row">
+              <tr key={r.group} className={used(r.caseIds) === 0 ? "xp-suite-row off" : "xp-suite-row"}>
+                <td className="xp-use"><TriCheck ids={r.caseIds} excluded={excluded} onSet={onSet} label={`Include ${r.group}`} /></td>
                 <td>
                   <button type="button" className="xp-expand" aria-expanded={isOpen} onClick={() => flip(r.group)}>
                     <span aria-hidden="true">{isOpen ? "▾" : "▸"}</span> {r.group}
                   </button>
                 </td>
                 <td className="xp-dim">{r.checks}</td>
-                <td className="num">{r.cases}</td>
-                <td className="num">{r.utterances}</td>
+                <td className="num">{count(r.caseIds)}</td>
+                <td className="num">{utterances(r)}</td>
               </tr>,
               ...(isOpen
                 ? r.operators.map((o) => (
-                    <tr key={`${r.group}/${o.key}`} className="xp-op-row">
+                    <tr key={`${r.group}/${o.key}`} className={used(o.caseIds) === 0 ? "xp-op-row off" : "xp-op-row"}>
+                      <td className="xp-use"><TriCheck ids={o.caseIds} excluded={excluded} onSet={onSet} label={`Include ${r.group} ${o.label}`} /></td>
                       <td className="xp-op-name">{o.label}</td>
                       <td className="xp-dim">
                         <div>{o.help}</div>
                         <div className="xp-trace-example"><b>Source trace:</b> {o.example.sourceTrace.map((u) => `“${u}”`).join(" → ") || "Initial state (σ₀)"}</div>
                         <div className="xp-trace-example"><b>Follow-up trace:</b> {o.example.followupTrace.map((u) => `“${u}”`).join(" → ") || "Initial state (σ₀)"}</div>
                       </td>
-                      <td className="num">{o.cases}</td>
+                      <td className="num">{count(o.caseIds)}</td>
                       <td></td>
                     </tr>
                   ))
@@ -213,10 +250,11 @@ function SuiteTable({ rows }: { rows: SuiteRow[] }) {
             ];
           })}
           <tr className="xp-total">
+            <td></td>
             <td>Total</td>
             <td></td>
-            <td className="num">{total("cases")}</td>
-            <td className="num">{total("utterances")}</td>
+            <td className="num">{count(allIds)}</td>
+            <td className="num">{rows.reduce((s, r) => s + utterances(r), 0)}</td>
           </tr>
         </tbody>
       </table>
@@ -227,12 +265,17 @@ function SuiteTable({ rows }: { rows: SuiteRow[] }) {
 /**
  * Every prompts/*.txt in the repo, bundled when the page is built. These are
  * the prompts an experiment can reference by file, so they are read-only here.
- * The default comes first.
+ * Each declares its implementation in a header (shared/prompt-text.ts). The
+ * default comes first.
  */
 const COMMITTED_PROMPTS: PromptEntry[] = Object.entries(
   import.meta.glob("../../prompts/*.txt", { query: "?raw", import: "default", eager: true }) as Record<string, string>,
 )
-  .map(([path, text]) => ({ name: path.split("/").pop()!.replace(/\.txt$/, ""), text: normalizePrompt(text) }))
+  .map(([path, raw]) => {
+    const { text, implementation } = parsePromptFile(raw);
+    // api/prompt.test.ts fails if a committed prompt has no header.
+    return { name: path.split("/").pop()!.replace(/\.txt$/, ""), text, implementation: implementation ?? "diff" };
+  })
   .sort((a, b) => (a.name === "default" ? -1 : b.name === "default" ? 1 : a.name.localeCompare(b.name)));
 const COMMITTED_NAMES = new Set(COMMITTED_PROMPTS.map((p) => p.name));
 const DEFAULT_TEXT = COMMITTED_PROMPTS.find((p) => p.name === "default")!.text;
@@ -241,7 +284,14 @@ const DEFAULT_TEXT = COMMITTED_PROMPTS.find((p) => p.name === "default")!.text;
 interface PromptEntry {
   name: string;
   text: string;
+  /** The reply format the prompt asks for, which sets LNGUI_COMMAND_MODE. */
+  implementation: CommandMode;
 }
+
+const IMPLEMENTATION_LABEL: Record<CommandMode, string> = {
+  diff: "Application merges changes",
+  full: "LLM rebuilds state",
+};
 
 /** A condition as the page holds it: settings plus the prompt it runs under. */
 interface PageCondition {
@@ -335,7 +385,20 @@ export function ExperimentsPage({ config }: Props) {
   useEffect(() => setCasesPath(suite.path), [suite.path]);
 
   const groupCounts = countByGroup(included);
-  const suiteRows = useMemo(() => summarizeSuite(included), [included]);
+  const suiteRows = useMemo(() => summarizeSuite(suite.cases), [suite]);
+  const utterancesOf = useMemo(
+    () => new Map(suite.cases.map((c) => [c.id, c.sourceTrace.length + c.followupTrace.length])),
+    [suite],
+  );
+  const setIncluded = (ids: readonly string[], include: boolean) =>
+    setExcluded((prev) => {
+      const next = new Set(prev);
+      for (const id of ids) {
+        if (include) next.delete(id);
+        else next.add(id);
+      }
+      return next;
+    });
   const groupNames = Object.keys(countByGroup(suite.cases));
   const visibleCases = suite.cases.filter((c) => groupFilter === "all" || reportGroup(c) === groupFilter);
 
@@ -390,14 +453,12 @@ export function ExperimentsPage({ config }: Props) {
   }, [prompts]);
   const editingPrompt = prompts.find((p) => p.name === editing) ?? prompts[0];
   const isCommitted = COMMITTED_NAMES.has(editingPrompt.name);
-  const addPrompt = (want: string, text: string) => {
+  const addPrompt = (want: string, text: string, implementation: CommandMode) => {
     const name = uniqueName(prompts.map((p) => p.name), want);
-    setPrompts((ps) => [...ps, { name, text }]);
+    setPrompts((ps) => [...ps, { name, text, implementation }]);
     setPromptsOn((on) => [...on, name]);
     setEditing(name);
   };
-  const [commandMode, setCommandMode] = useState<"diff" | "full">("diff");
-  const [strategyNotice, setStrategyNotice] = useState("");
   const [temps, setTemps] = useState("default");
   const [history, setHistory] = useState<string[]>(["full"]);
   const [maxTurns, setMaxTurns] = useState(3);
@@ -415,6 +476,7 @@ export function ExperimentsPage({ config }: Props) {
       for (const pr of chosenPrompts)
         for (const t of ts)
           for (const h of history) {
+            const impl = pr.implementation;
             const env: Overrides = {};
             if (local) env.LOCAL_TEST_MODE = "true";
             else {
@@ -425,8 +487,8 @@ export function ExperimentsPage({ config }: Props) {
             if (!local && topP.trim()) env.LLM_TOP_P = topP.trim();
             env.HISTORY_POLICY = h;
             if (h === "last-k") env.HISTORY_MAX_TURNS = String(maxTurns);
-            env.LNGUI_COMMAND_MODE = commandMode;
-            const parts: string[] = [commandMode];
+            env.LNGUI_COMMAND_MODE = impl;
+            const parts: string[] = [impl];
             if (local) parts.push("local");
             else if (ms.length > 1) parts.push(`${m!.provider === "ollama" ? "ollama-" : ""}${shortModel(m!.model)}`);
             if (chosenPrompts.length > 1 || pr.name !== "default") parts.push(pr.name);
@@ -436,7 +498,7 @@ export function ExperimentsPage({ config }: Props) {
           }
     return out;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [local, modelsOn, models, temps, prompts, promptsOn, history, maxTurns, topP, commandMode]);
+  }, [local, modelsOn, models, temps, prompts, promptsOn, history, maxTurns, topP]);
   const conditions = allConditions.filter((c) => !condOff.has(c.id));
 
   const toggle = (list: string[], set: (v: string[]) => void, v: string) =>
@@ -501,9 +563,7 @@ export function ExperimentsPage({ config }: Props) {
     : check.error.issues.map((i) => ["bad", `${i.path.join(".") || "experiment"}: ${i.message}`]);
   if (suite.problems.length) issues.push(["bad", `Cases file has ${suite.problems.length} problem(s): ${suite.problems[0]}`]);
   if (included.length === 0) issues.push(["bad", "The test set has no cases."]);
-  if (chosenPrompts.some((p) => p.name === (commandMode === "full" ? "default" : "full-state"))) {
-    issues.push(["bad", "The selected built-in prompt does not match the update strategy. Select its matching prompt."]);
-  }
+
   if (chosenPrompts.length === 0) issues.push(["bad", "Tick at least one prompt."]);
   for (const pr of chosenPrompts) {
     if (!PROMPT_NAME_RE.test(pr.name)) issues.push(["bad", `Prompt name "${pr.name}" may use only letters, digits, dot, dash and underscore.`]);
@@ -714,7 +774,7 @@ export function ExperimentsPage({ config }: Props) {
                 )}
               </>
             )}
-            <SuiteTable rows={suiteRows} />
+            <SuiteTable rows={suiteRows} utterancesOf={utterancesOf} excluded={excluded} onSet={setIncluded} />
             {suite.problems.length > 0 && <div className="xp-issue bad">{suite.problems.slice(0, 3).join(" · ")}</div>}
 
             {derived && (
@@ -776,7 +836,7 @@ export function ExperimentsPage({ config }: Props) {
               {prompts.map((p) => (
                 <label key={p.name} className={`xp-chip ${promptsOn.includes(p.name) ? "on" : ""}`}>
                   <input type="checkbox" checked={promptsOn.includes(p.name)} onChange={() => toggle(promptsOn, setPromptsOn, p.name)} />
-                  {p.name} <ShortHash value={shas[p.name]} />
+                  {p.name} <span className="xp-impl">{p.implementation}</span> <ShortHash value={shas[p.name]} />
                 </label>
               ))}
             </div>
@@ -786,16 +846,25 @@ export function ExperimentsPage({ config }: Props) {
                   {prompts.map((p) => <option key={p.name} value={p.name}>{p.name}</option>)}
                 </select>
               </Field>
-              <button type="button" onClick={() => addPrompt(`${editingPrompt.name}-edit`, editingPrompt.text)}>Duplicate to edit</button>
+              <button type="button" onClick={() => addPrompt(`${editingPrompt.name}-edit`, editingPrompt.text, editingPrompt.implementation)}>Duplicate to edit</button>
               <label className="xp-file-btn">
                 Load .txt
                 <input id="prompt-file" type="file" accept=".txt,text/plain" onChange={(e) => {
                   const f = e.target.files?.[0];
                   e.target.value = "";
-                  if (f) void f.text().then((t) => addPrompt(f.name.replace(/\.txt$/, ""), t));
+                  if (f) void f.text().then((t) => {
+                    let parsed;
+                    try {
+                      parsed = parsePromptFile(t);
+                    } catch (err) {
+                      return say(`${f.name}: ${(err as Error).message}`);
+                    }
+                    // No header: diff until you choose, shown under the prompt.
+                    addPrompt(f.name.replace(/\.txt$/, ""), parsed.text, parsed.implementation ?? "diff");
+                  });
                 }} />
               </label>
-              <button type="button" onClick={() => downloadFile(normalizePrompt(editingPrompt.text) + "\n", `${editingPrompt.name}.txt`, "text/plain")}>Download .txt</button>
+              <button type="button" onClick={() => downloadFile(formatPromptFile(editingPrompt), `${editingPrompt.name}.txt`, "text/plain")}>Download .txt</button>
               {!isCommitted && (
                 <button type="button" onClick={() => {
                   setPrompts((ps) => ps.filter((p) => p.name !== editingPrompt.name));
@@ -815,6 +884,19 @@ export function ExperimentsPage({ config }: Props) {
                 }} />
               </Field>
             )}
+            <Field label="Implementation" help="The reply format this prompt asks the model for. It is part of the prompt, saved in the header of its .txt file, and sets LNGUI_COMMAND_MODE for every condition that uses it. Application merges changes: the model sends only what changed and the app keeps the rest. LLM rebuilds state: the model sends every setting on every turn.">
+              <select
+                id="prompt-implementation"
+                disabled={isCommitted || running}
+                value={editingPrompt.implementation}
+                onChange={(e) => {
+                  const implementation = e.target.value as CommandMode;
+                  setPrompts((ps) => ps.map((p) => (p.name === editingPrompt.name ? { ...p, implementation } : p)));
+                }}
+              >
+                {(["diff", "full"] as const).map((m) => <option key={m} value={m}>{IMPLEMENTATION_LABEL[m]} ({m})</option>)}
+              </select>
+            </Field>
             <textarea
               id="prompt-text"
               className="xp-prompt"
@@ -909,24 +991,6 @@ export function ExperimentsPage({ config }: Props) {
                 </Field>
               )}
             </div>
-            <details className="xp-advanced">
-              <summary>Advanced settings</summary>
-              <Field label="Implementation">
-                <select id="update-strategy" disabled={running} value={commandMode} onChange={(e) => {
-                  const mode = e.target.value as "diff" | "full";
-                  const name = mode === "full" ? "full-state" : "default";
-                  setCommandMode(mode);
-                  setPromptsOn([name]);
-                  setEditing(name);
-                  setStrategyNotice("Selected the matching built-in prompt. Your custom prompts are still saved; select one explicitly to use it instead.");
-                }}>
-                  <option value="diff">Application merges changes</option>
-                  <option value="full">LLM rebuilds state</option>
-                </select>
-              </Field>
-              <p className="xp-note">{commandMode === "diff" ? "The LLM returns only updates; the application preserves other settings." : "The LLM returns all settings each turn, carrying forward unchanged values."} The matching prompt is selected automatically when you switch.</p>
-              {strategyNotice && <p className="xp-note" role="status">{strategyNotice}</p>}
-            </details>
             <div className="xp-scroll">
               <table className="xp-table">
                 <thead><tr><th>Use</th><th>Condition</th><th>P, as the server resolves it</th></tr></thead>

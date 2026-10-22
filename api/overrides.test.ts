@@ -207,7 +207,7 @@ describe("local partial-update commands", () => {
     const response = await handleApiRequest(new Request("http://x/api/command", {
       method: "POST",
       headers: { "content-type": "application/json", "x-lngui-langfuse": "off" },
-      body: JSON.stringify({ prompt, history: [], overrides: { LOCAL_TEST_MODE: "true" } }),
+      body: JSON.stringify({ prompt, history: [], overrides: { LOCAL_TEST_MODE: "true", LNGUI_COMMAND_MODE: "diff" } }),
     }), {}, deps);
     assert.equal(response!.status, 200);
     return await response!.json() as { filters: Record<string, unknown>; sort?: unknown; clearFilters?: boolean };

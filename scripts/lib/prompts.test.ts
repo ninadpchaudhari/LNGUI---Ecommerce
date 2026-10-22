@@ -65,6 +65,27 @@ describe("loadConditions", () => {
     });
   });
 
+  test("the header sets the implementation and never reaches the model", async () => {
+    await inTempDir(async () => {
+      await writeFile("prompts/a.txt", "---\nimplementation: full\n---\nSend every field.\n");
+      const sha256 = await promptSha256("Send every field.");
+      const parsed = experimentSchema.parse(base([{ id: "c", prompt: { file: "prompts/a.txt", sha256 }, env: {} }]));
+      const { conditions, prompts } = await loadConditions(parsed.conditions);
+      assert.equal(conditions[0].env.SYSTEM_PROMPT, "Send every field.");
+      assert.equal(conditions[0].env.LNGUI_COMMAND_MODE, "full");
+      assert.equal(prompts[0].implementation, "full");
+    });
+  });
+
+  test("refuses a condition whose mode contradicts its prompt's header", async () => {
+    await inTempDir(async () => {
+      await writeFile("prompts/a.txt", "---\nimplementation: diff\n---\nSend only changes.");
+      const sha256 = await promptSha256("Send only changes.");
+      const parsed = experimentSchema.parse(base([{ id: "c", prompt: { file: "prompts/a.txt", sha256 }, env: { LNGUI_COMMAND_MODE: "full" } }]));
+      await assert.rejects(loadConditions(parsed.conditions), /declares implementation diff/);
+    });
+  });
+
   test("reports a missing file by condition", async () => {
     await inTempDir(async () => {
       const parsed = experimentSchema.parse(base([{ id: "c1", prompt: { file: "prompts/none.txt", sha256: SHA }, env: {} }]));

@@ -875,6 +875,9 @@ body {
 .xp-expand { border: 0 !important; background: none !important; padding: 2px 0 !important; font: 600 0.82rem ui-monospace, Menlo, monospace !important; cursor: pointer; white-space: nowrap; }
 .xp-expand span { display: inline-block; width: 1em; color: #777; }
 .xp-op-row td { background: #fafbfc; font-size: 0.78rem; }
+.xp-impl { font: 0.7rem ui-monospace, Menlo, monospace; color: #555; background: #eef0f3; padding: 0 4px; border-radius: 3px; }
+.xp-suite .xp-use { width: 28px; padding-right: 0; }
+.xp-suite tr.off td { text-decoration: none; }
 .xp-op-name { padding-left: 26px !important; white-space: nowrap; }
 .xp-total td { font-weight: 600; border-top: 1.5px solid #ccc; border-bottom: 0; }
 .xp-suite-row:hover td { background: #f8f9fb; }

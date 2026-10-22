@@ -126,7 +126,7 @@ export interface CommandFilters {
 export interface Command {
   filters: CommandFilters;
   sort?: SortValue | null;
-  /** Explicit clear-all operation; applied before individual updates. */
+  /** Explicit clear-all operation; applied before individual updates. Only true clears. */
   clearFilters?: boolean | null;
   explanation: string;
 }

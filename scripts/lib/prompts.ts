@@ -1,16 +1,19 @@
 /**
  * Loads the prompt files an experiment names, verifies each against its pinned
  * hash, and turns experiment conditions into engine conditions that carry the
- * prompt text.
+ * prompt text and the implementation the prompt file declares.
  */
 import { readFile } from "node:fs/promises";
 import type { ExperimentCondition } from "../../shared/experiment.ts";
-import { normalizePrompt, promptHash, promptSha256 } from "../../shared/prompt-text.ts";
+import type { CommandMode } from "../../shared/contract.ts";
+import { parsePromptFile, promptHash, promptSha256 } from "../../shared/prompt-text.ts";
 import type { Condition } from "../../src/utils/sweep.ts";
 
 export interface LoadedPrompt {
   file: string;
+  /** The text the model receives, without the file's header. */
   text: string;
+  implementation: CommandMode | null;
   sha256: string;
   /** The hash recorded in P as systemPromptHash. */
   hash: string;
@@ -34,8 +37,14 @@ export async function loadConditions(experimentConditions: readonly ExperimentCo
       } catch {
         throw new Error(`condition ${c.id}: cannot read ${c.prompt.file}`);
       }
-      const text = normalizePrompt(raw);
-      p = { file: c.prompt.file, text, sha256: await promptSha256(text), hash: promptHash(text) };
+      let parsed;
+      try {
+        parsed = parsePromptFile(raw);
+      } catch (e) {
+        throw new Error(`condition ${c.id}: ${c.prompt.file}: ${(e as Error).message}`);
+      }
+      const { text, implementation } = parsed;
+      p = { file: c.prompt.file, text, implementation, sha256: await promptSha256(text), hash: promptHash(text) };
       byFile.set(c.prompt.file, p);
     }
     if (p.sha256 !== c.prompt.sha256) {
@@ -44,7 +53,17 @@ export async function loadConditions(experimentConditions: readonly ExperimentCo
           `(expected ${c.prompt.sha256.slice(0, 12)}…, found ${p.sha256.slice(0, 12)}…)`,
       );
     }
-    conditions.push({ id: c.id, env: { ...c.env, SYSTEM_PROMPT: p.text } });
+    const declared = p.implementation;
+    if (declared && c.env.LNGUI_COMMAND_MODE && c.env.LNGUI_COMMAND_MODE !== declared) {
+      throw new Error(
+        `condition ${c.id}: ${c.prompt.file} declares implementation ${declared}, ` +
+          `but the condition sets LNGUI_COMMAND_MODE=${c.env.LNGUI_COMMAND_MODE}`,
+      );
+    }
+    conditions.push({
+      id: c.id,
+      env: { ...c.env, ...(declared ? { LNGUI_COMMAND_MODE: declared } : {}), SYSTEM_PROMPT: p.text },
+    });
   }
   return { conditions, prompts: [...byFile.values()] };
 }

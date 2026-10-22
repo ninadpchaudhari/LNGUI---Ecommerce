@@ -146,19 +146,40 @@ For example, after Books under $50, `{"filters":{"inStockOnly":true},
 only price to 500. Unknown command fields are rejected rather than silently
 ignored. Out-of-domain numeric assignments remain visible to Apply for rejection.
 
-`prompts/default.txt` documents these semantics and matches
-`shared/default-prompt.ts`. It states the command language only. It does not
-say how to read phrases such as "highly rated" or "sort by rating", because
-those readings are what the relations measure; a prompt that spells them out
-hides the faults the benchmark exists to find (Figure 1.2 is one). The local
-parser holds the reference readings instead. `prompts/full-state.txt` follows
-the same rule. Prompts are experiment inputs, pinned by hash.
-The command-schema hash now includes `partial-update-v1`, omission and null
-semantics, so these runs are distinguishable from historical full-state runs.
-The old prompt is retained in `docs/legacy-full-state-prompt.txt` for reference;
-using it alone cannot reproduce the old application semantics. Earlier experiment
-prompt pins intentionally fail until an experiment is explicitly migrated.
-`experiments/pilot-local-smoke.json` is migrated to the new default.
+### Prompts
+
+Prompts are experiment inputs, pinned by hash. Each prompt file declares its
+implementation, the reply format it asks the model for, in a header the model
+never sees:
+
+```
+---
+implementation: full
+---
+You are a product filter assistant. …
+```
+
+The implementation is part of the prompt, not a separate setting, because the
+prompt is what tells the model to send every field or only the changed ones.
+Hashes cover only the text after the header. The committed prompts come in two
+families:
+
+| Prompt | Implementation | What it is |
+|---|---|---|
+| `default.txt` | full | The app's original prompt, byte for byte the one Figure 1.2 was recorded with (`fnv1a32:5a348657`). The server uses it when a request carries no prompt, so the chat app and deployed instance run it. Kept identical to `shared/default-prompt.ts`. |
+| `default-clear.txt` | full | The default plus the two `clearFilters` lines the app added later (`fnv1a32:be4d6b37`). |
+| `enhanced-diff.txt` | diff | Tightened: states the partial-update command language (omission preserves, null resets, `clearFilters`) and nothing else. |
+| `enhanced-full.txt` | full | Tightened: every field on every turn. |
+| `minimal.txt` | diff | `enhanced-diff` stripped to the format and the null rule. |
+
+The default prompts ask for every field and spell out phrase readings ("top
+rated means minRating >= 4.0 and/or sort"). The enhanced prompts state the
+command language only and leave phrase readings to the model, because those
+readings are what the relations measure; a prompt that spells them out can
+hide or move faults (Figure 1.2 is one). The local parser holds the reference
+readings instead. The schema is never sent to the model, so only the prompt
+text matters. The command-schema hash includes `partial-update-v1` or
+`full-state-v1`, so runs under each implementation stay distinguishable.
 
 `CLEAR_ACTION_ENABLED` has been removed; `clearFilters` is always available.
 The schema fingerprint still records it as on, so hashes match earlier runs
@@ -411,12 +432,14 @@ Home Assistant, WebArena, and the Appendix B probes.
 
 ### Update strategy
 
-Under Experiments → Advanced settings, **Application merges changes** selects
-`LNGUI_COMMAND_MODE=diff` and `prompts/default.txt`. **LLM rebuilds state** selects
-`LNGUI_COMMAND_MODE=full` and `prompts/full-state.txt`. Switching selects only the
-matching built-in prompt; custom prompt text remains saved and can be explicitly
-selected again. A mismatched built-in prompt blocks a run. Custom prompts must
-follow the selected command contract.
+**Application merges changes** (`diff`) and **LLM rebuilds state** (`full`)
+come from each prompt's header, which sets `LNGUI_COMMAND_MODE` for every
+condition that uses it. The workbench shows each prompt's implementation and
+lets you choose it for a custom prompt; the CLI reads it from the file and
+refuses a condition whose `LNGUI_COMMAND_MODE` contradicts it. With no prompt
+and no mode in the request, the server uses the default prompt's
+implementation (`full`). To run the same text under the other implementation,
+save it as a separate prompt with the other header.
 
 Full mode requires every filter field and sort; omitted fields are schema
 errors and use the existing repair path. Diff mode permits omission. Both use

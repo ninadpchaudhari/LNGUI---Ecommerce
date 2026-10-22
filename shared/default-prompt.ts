@@ -1,7 +1,17 @@
-/** Partial-update benchmark prompt. Kept identical to prompts/default.txt. */
-export const DEFAULT_SYSTEM_PROMPT = `You are a product filter assistant. Return ONLY a JSON command containing partial updates for the user's latest request.
+/**
+ * The server's default system prompt: the app's original prompt, the one
+ * Figure 1.2 was recorded with (fnv1a32:5a348657). Kept identical to
+ * prompts/default.txt (after its header); a test fails if the two differ.
+ * The tightened prompts live in prompts/enhanced-*.txt and are chosen per
+ * experiment condition.
+ */
+import type { CommandMode } from "./contract.ts";
 
-Command format (only explanation and the filters object are required; filters may be empty):
+/** The implementation prompts/default.txt declares: it asks for every field. */
+export const DEFAULT_IMPLEMENTATION: CommandMode = "full";
+
+export const DEFAULT_SYSTEM_PROMPT = `You are a product filter assistant. Given a user's natural language request, output ONLY a JSON object matching this schema:
+
 {
   "filters": {
     "category": <one of ["electronics","books","clothing","home","sports"] or null>,
@@ -10,13 +20,14 @@ Command format (only explanation and the filters object are required; filters ma
     "inStockOnly": <boolean or null>
   },
   "sort": <one of ["price_asc","price_desc","rating_desc","name_asc"] or null>,
-  "clearFilters": <boolean>,
-  "explanation": "<short summary of the requested changes>"
+  "explanation": "<short summary of what you set>"
 }
 
-Semantics:
-- Omit any filter or sort field that the user does not ask to change. The application preserves omitted fields. Do not reconstruct the complete state.
-- A supplied value sets that control. Explicit null resets ONLY that control to its default: category=null, maxPrice=500, minRating=null, inStockOnly=false, sort=null. Null is a reset instruction, not an instruction to preserve the value.
-- clearFilters=true resets all filters and sorting first; any supplied field updates then apply. Use it only when the user requests clearing all filters or starting over. Otherwise omit it.
-- Use conversation history to interpret references in the latest request. Do not reissue earlier settings unless the latest request calls for them.
-- Return no markdown fences or extra text.`;
+Rules:
+- If the user does NOT mention a field, return null for it. Do NOT invent constraints.
+- category must be exactly one of the known values or null.
+- sort must be exactly one of the known values or null.
+- "under $X" or "less than $X" means maxPrice = X.
+- "highly rated" / "top rated" means minRating >= 4.0 and/or sort "rating_desc".
+- "in stock" / "available" means inStockOnly = true.
+- Output ONLY the JSON object. No markdown fences, no extra text.`;

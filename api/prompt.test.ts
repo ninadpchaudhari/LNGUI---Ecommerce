@@ -1,22 +1,63 @@
-/** Tests for the versioned partial-update command interface and prompt. */
+/** Tests for the command interface and the committed prompts. */
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-import { DEFAULT_SYSTEM_PROMPT } from "../shared/default-prompt.ts";
-import { normalizePrompt, promptHash, promptSha256 } from "../shared/prompt-text.ts";
+import { DEFAULT_IMPLEMENTATION, DEFAULT_SYSTEM_PROMPT } from "../shared/default-prompt.ts";
+import { formatPromptFile, normalizePrompt, parsePromptFile, promptHash, promptSha256 } from "../shared/prompt-text.ts";
+import { readdirSync } from "node:fs";
 import { CATEGORY_VALUES, SORT_VALUES } from "../shared/surface.generated.ts";
-import { resolveSystemPrompt } from "./config.ts";
+import { resolveCommandMode, resolveSystemPrompt } from "./config.ts";
 import { buildCommandSchema, commandSchemaShape, promptHashes } from "./prompt.ts";
 
 const DEFAULT = DEFAULT_SYSTEM_PROMPT;
 
-describe("partial-update prompt", () => {
-  test("the server and experiment prompt agree", () => {
-    assert.equal(DEFAULT, normalizePrompt(readFileSync("prompts/default.txt", "utf8")));
+const parsed = (name: string) => parsePromptFile(readFileSync(`prompts/${name}.txt`, "utf8"));
+const file = (name: string) => parsed(name).text;
+
+describe("prompt files declare their implementation", () => {
+  test("every committed prompt has a header, and the default's matches the server", () => {
+    for (const f of readdirSync("prompts").filter((n) => n.endsWith(".txt"))) {
+      assert.ok(parsed(f.replace(/\.txt$/, "")).implementation, `${f} declares no implementation`);
+    }
+    assert.equal(parsed("default").implementation, DEFAULT_IMPLEMENTATION);
+    assert.equal(parsed("enhanced-diff").implementation, "diff");
+    assert.equal(parsed("enhanced-full").implementation, "full");
+  });
+
+  test("the header is not part of the text, so hashes cover only what the model receives", () => {
+    const p = parsePromptFile("---\r\nimplementation: full\r\n---\r\nHello\r\n");
+    assert.deepEqual(p, { implementation: "full", text: "Hello" });
+    assert.deepEqual(parsePromptFile(formatPromptFile(p)), p);
+    assert.deepEqual(parsePromptFile("No header\n"), { implementation: null, text: "No header" });
+  });
+
+  test("an unreadable header is an error, not silently prompt text", () => {
+    assert.throws(() => parsePromptFile("---\nimplementation: partial\n---\nx"), /diff or full/);
+    assert.throws(() => parsePromptFile("---\nmodel: x\n---\nx"), /unknown key/);
+  });
+
+  test("with no prompt or mode in the request, the server uses the default prompt's implementation", () => {
+    assert.equal(resolveCommandMode({}), DEFAULT_IMPLEMENTATION);
+    assert.equal(resolveCommandMode({ SYSTEM_PROMPT: "custom" }), "diff");
+    assert.equal(resolveCommandMode({ LNGUI_COMMAND_MODE: "diff" }), "diff");
+  });
+});
+
+describe("committed prompts", () => {
+  test("the server default is the original prompt, the one Figure 1.2 was recorded with", () => {
+    assert.equal(DEFAULT, file("default"));
+    assert.equal(promptHash(DEFAULT), "fnv1a32:5a348657");
     assert.ok(DEFAULT.includes(JSON.stringify(CATEGORY_VALUES)));
     assert.ok(DEFAULT.includes(JSON.stringify(SORT_VALUES)));
   });
+
+  test("default-clear is the default plus exactly the two clearFilters lines", () => {
+    const extra = file("default-clear").split("\n").filter((l) => !DEFAULT.split("\n").includes(l));
+    assert.equal(extra.length, 2);
+    assert.ok(extra.every((l) => l.includes("clearFilters")));
+  });
+
   test("schema preserves omitted fields and accepts explicit resets", () => {
     const schema = buildCommandSchema();
     assert.deepEqual(schema.parse({ filters: { maxPrice: 50 }, explanation: "price" }),
@@ -46,10 +87,12 @@ describe("prompt text", () => {
 });
 
 describe("clearFilters is always part of the command language", () => {
-  test("both modes accept it, and both prompts offer it", () => {
+  test("both modes accept it, and both enhanced prompts offer it", () => {
     for (const mode of ["diff", "full"] as const) assert.ok("clearFilters" in buildCommandSchema(mode).shape);
-    assert.ok(DEFAULT.includes("clearFilters"));
-    assert.ok(resolveSystemPrompt({ LNGUI_COMMAND_MODE: "full" }).includes("clearFilters"));
+    // default-clear asks for null when not clearing; that must not be a schema failure.
+    assert.ok(buildCommandSchema().safeParse({ filters: {}, clearFilters: null, explanation: "x" }).success);
+    assert.ok(file("enhanced-diff").includes("clearFilters"));
+    assert.ok(file("enhanced-full").includes("clearFilters"));
   });
 
   test("the schema fingerprint still records it as on, so hashes match earlier runs that had it on", () => {
@@ -67,10 +110,8 @@ describe("paired update strategies", () => {
       sort: null, explanation: "books",
     }).success);
   });
-  test("mode selects the matching prompt and changes the schema fingerprint", () => {
-    const full = resolveSystemPrompt({ LNGUI_COMMAND_MODE: "full" });
-    assert.equal(full, normalizePrompt(readFileSync("prompts/full-state.txt", "utf8")));
-    assert.notEqual(full, DEFAULT);
+  test("mode never picks the prompt, but does change the schema fingerprint", () => {
+    assert.equal(resolveSystemPrompt({ LNGUI_COMMAND_MODE: "full" }), DEFAULT);
     assert.notEqual(promptHashes(DEFAULT, "diff").commandSchemaHash,
       promptHashes(DEFAULT, "full").commandSchemaHash);
     assert.equal(resolveSystemPrompt({ LNGUI_COMMAND_MODE: "full", SYSTEM_PROMPT: "custom" }), "custom");

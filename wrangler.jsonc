@@ -36,8 +36,8 @@
     "OPENROUTER_APP_TITLE": "LNGUI Ecommerce Case Study",
     // Temperature, top_p, history policy and command mode are left unset on
     // purpose: the chat app shows default behaviour (provider defaults, full
-    // history, prompts/default.txt with partial updates). Experiments set
-    // them per condition instead.
+    // history, and prompts/default.txt, the app's original prompt, with the
+    // implementation its header declares). Experiments set them per condition.
     "LANGFUSE_BASE_URL": "https://us.cloud.langfuse.com",
     "LOCAL_TEST_MODE": "false"
   },
