@@ -48,6 +48,23 @@ const groupRank = (g: string): number => {
   return i === -1 ? GROUP_ORDER.length : i;
 };
 
+/**
+ * What produced the rows, for labelling a report: the local parser, a model,
+ * or both. Null when no row records its mode (trials from before it was saved).
+ */
+export function runModeLabel(rows: readonly Pick<TrialRow, "mode">[]): string | null {
+  const modes = new Set(rows.map((r) => r.mode).filter((m) => m !== undefined));
+  if (modes.size === 0) return null;
+  if (modes.size > 1) return "mixed: dry run and LLM";
+  return modes.has("local-test") ? "dry run — local parser" : "LLM";
+}
+
+/** The default report title, with the run mode so a dry run cannot pass for a model run. */
+export function reportTitle(runId: string, rows: readonly Pick<TrialRow, "mode">[]): string {
+  const label = runModeLabel(rows);
+  return `MR results, ${runId}${label ? ` (${label})` : ""}`;
+}
+
 export interface CaseStat {
   conditionId: string;
   caseId: string;

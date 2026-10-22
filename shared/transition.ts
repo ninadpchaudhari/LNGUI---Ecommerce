@@ -39,7 +39,7 @@ import {
  * The assignments a command requests, as a partial valuation. Flattens the
  * wire shape (`filters.*` plus `sort`) onto control ids.
  */
-function requestedAssignments(q: Command): Array<[ControlId, ControlValue]> {
+function requestedAssignments(q: Command): Array<[ControlId, ControlValue | undefined]> {
   return [
     ["category", q.filters.category],
     ["maxPrice", q.filters.maxPrice],
@@ -62,41 +62,26 @@ function requestedAssignments(q: Command): Array<[ControlId, ControlValue]> {
  * sets its own sticky flag, so any subsequent assignments in the same command
  * still apply on top of the cleared state.
  */
-export function applyCommand(
-  V: Valuation,
-  q: Command,
-  options: { clearActionEnabled: boolean },
-): ApplyResult {
+export function applyCommand(V: Valuation, q: Command): ApplyResult {
   const applied: ControlId[] = [];
   const rejected: RejectedAssignment[] = [];
   let next: Valuation = { ...V };
 
   if (q.clearFilters === true) {
-    if (options.clearActionEnabled) {
-      next = { ...V0, clearFilters: "invoked" } as Valuation;
-      for (const c of CONTROL_IDS) {
-        if (next[c] !== V[c]) applied.push(c);
-      }
-    } else {
-      rejected.push({ control: "clearFilters", value: true, reason: "action-disabled" });
+    next = { ...V0, clearFilters: "invoked" } as Valuation;
+    for (const c of CONTROL_IDS) {
+      if (next[c] !== V[c]) applied.push(c);
     }
   }
 
   for (const [control, requested] of requestedAssignments(q)) {
+    if (requested === undefined) continue;
     if (requested !== null && !inDomain(control, requested)) {
       rejected.push({ control, value: requested, reason: "out-of-domain" });
       continue;
     }
 
-    // The mediator is instructed to return null for any field the user did not
-    // mention, which means "no constraint from this field" — that is V₀(c), not
-    // necessarily ⊥. For category, minRating and sort V₀ is ⊥ so the two
-    // coincide; for maxPrice it is 500 and for inStockOnly it is false. This
-    // reproduces the reducer that previously lived inline in App.tsx.
-    //
-    // A consequence worth knowing: because every command carries every field,
-    // every command fully determines V. There is no partial command on this
-    // wire format.
+    // Omission preserves the value. Explicit null requests a reset to V₀.
     const value = requested === null ? V0[control] : requested;
 
     if (next[control] !== value) {
@@ -175,12 +160,11 @@ export function step(
   state: SystemState,
   u: string,
   q: Command | null,
-  options: { clearActionEnabled: boolean },
 ): StepResult {
   const apply: ApplyResult =
     q === null
       ? { V: state.V, applied: [], rejected: [] }
-      : applyCommand(state.V, q, options);
+      : applyCommand(state.V, q);
 
   const D = renderData(apply.V);
   const turn: HistoryTurn = { u, q, V: apply.V, D };

@@ -63,10 +63,9 @@ enter a footprint, which §A.7 requires when it speaks of `c₆` being "never
 reached by language under this test set".
 
 Because clearing cannot be undone in one utterance, `c₆ ∉ C_rev` and it generates
-no `MR_REV` case. `CLEAR_ACTION_ENABLED` (off by default) controls whether `Q`
-accepts it. The prompt text is separate, so `c₆` is reachable only when the
-switch is on and the prompt tells the model how to use it. `Cov_NL` then
-depends on both, and `P` records both.
+no `MR_REV` case. `clearFilters` is always part of `Q`: it is one of the
+application's finite commands, so the mediator can always reach it, and both
+committed prompts describe it.
 
 ---
 
@@ -130,86 +129,43 @@ bubble.
 
 ---
 
-## The system prompt is an input to the experiment
+## Command language: partial updates (v1)
 
-The prompt is plain text, never a named variant. Two prompts are committed in
-`prompts/`:
+The current benchmark emits partial updates, not complete filter states.
+`filters` and `explanation` are required; `filters` may be empty. Each filter
+and `sort` is optional. Omitted fields preserve their current values. A supplied
+value sets that control; explicit JSON `null` resets only that control to its
+specified default. This command-level reset is distinct from the formal state
+symbol bottom. `clearFilters: true` resets all filters and sorting first, then
+individual updates apply. All these operations are available in the default
+benchmark. The checker does not constrain commands to the intended write set.
 
-- [`default.txt`](prompts/default.txt), the prompt the app has always used and
-  the one Figure 1.2 was recorded with. It is pinned character for character by
-  [`api/prompt.test.ts`](api/prompt.test.ts), and its hash is `fnv1a32:5a348657`.
-  The server uses it when a request carries no prompt. Its text also lives in
-  [`shared/default-prompt.ts`](shared/default-prompt.ts) so the Worker, the
-  browser and Node can import it with no build step. A test fails if the two
-  differ, so edit both together.
-- [`minimal.txt`](prompts/minimal.txt), the default with exactly one line
-  removed: "If the user does NOT mention a field, return null for it. Do NOT
-  invent constraints." A test guarantees that is the only difference.
+For example, after Books under $50, `{"filters":{"inStockOnly":true},
+"explanation":"In-stock only"}` preserves Books and the price limit.
+`{"filters":{"maxPrice":null},"explanation":"Remove price limit"}` resets
+only price to 500. Unknown command fields are rejected rather than silently
+ignored. Out-of-domain numeric assignments remain visible to Apply for rejection.
 
-Every record carries the hash of the exact text the model received
-(`systemPromptHash`).
+`prompts/default.txt` documents these semantics and matches
+`shared/default-prompt.ts`. It states the command language only. It does not
+say how to read phrases such as "highly rated" or "sort by rating", because
+those readings are what the relations measure; a prompt that spells them out
+hides the faults the benchmark exists to find (Figure 1.2 is one). The local
+parser holds the reference readings instead. `prompts/full-state.txt` follows
+the same rule. Prompts are experiment inputs, pinned by hash.
+The command-schema hash now includes `partial-update-v1`, omission and null
+semantics, so these runs are distinguishable from historical full-state runs.
+The old prompt is retained in `docs/legacy-full-state-prompt.txt` for reference;
+using it alone cannot reproduce the old application semantics. Earlier experiment
+prompt pins intentionally fail until an experiment is explicitly migrated.
+`experiments/pilot-local-smoke.json` is migrated to the new default.
 
-Any other prompt is another text file in `prompts/`. An experiment condition
-names its prompt file and pins it with a SHA-256, the same way it pins a cases
-file, and the sweep refuses to run if the file changed. The Experiments page
-shows the full text, lets you duplicate and edit it, and turns each ticked
-prompt into its own set of conditions, so two prompts can be compared in one
-run. A run manifest stores the exact prompt texts used.
-
-`CLEAR_ACTION_ENABLED` is a separate switch. It decides whether the model's
-JSON may contain `clearFilters` (the schema `Q`) and nothing in the prompt
-text. It is off by default. A prompt that should make the model clear filters
-has to say so itself, and the default prompt does not, so `c₆` is unreachable
-through language unless a prompt asks for it.
-
-> **What the default prompt does on the Figure 1.2 utterance.** Measured by
-> hand, not by a sweep: 5 calls per cell, `gpt-4o-mini` through OpenRouter,
-> "show electronics under $100 sorted by rating". Lowercase got
-> `minRating: null` in 4 of 5 calls and `4` in 1. UPPERCASE got `4` in 5 of 5.
-> Removing the line "If the user does NOT mention a field, return null for it.
-> Do NOT invent constraints." changed nothing (same split), so that line is not
-> the cause. Adding these two lines made lowercase `minRating: 4` in 20 of 20
-> calls, at temperature 0 and at the provider default:
->
-> ```
-> - Earlier turns of the conversation are provided for context. Preserve constraints
->   the user established earlier unless the current request changes them.
-> ```
->
-> With full history, "show books" then "only the ones under $50" kept both
-> constraints in 5 of 5 calls with the default prompt, and "show electronics"
-> then the same follow-up kept both in 4 of 5. The older claim of a
-> deterministic leak (results widening from 4 to 13) did not reproduce at the
-> provider-default temperature and has not been retested at 0. Treat all of
-> this as a pointer for the pilot, not as a result.
-
-If `api/prompt.test.ts` fails, Figure 1.2 must be re-recorded or the change
-reverted. Do not update the pin casually.
-
---- | --- | --- | --- |
-| `baseline` *(default)* | **violated** — lower `null`, UPPER `4` | leaks — category dropped, D 4 → 13 | 5/6 |
-| `extended` | passes — both `4` | works — category kept, D 4 → 2 | 6/6 |
-
-`baseline` is the prompt in force when Figure 1.2 was recorded, pinned character
-for character by [`api/prompt.test.ts`](api/prompt.test.ts). Adding **either**
-the preserve-context rule **or** the `clearFilters` field is individually enough
-to make the lowercase utterance set `minRating = 4`, which destroys the
-case-invariance violation. `CLEAR_ACTION_ENABLED` is therefore inert under
-`baseline`, and `c₆` is unreachable through language there.
-
-The instruction that makes the mediator carry context forward is the same one
-that makes it over-apply `minRating`: fixing constraint leakage *introduces*
-synonym blindness. That tension is why this is a declared condition rather than
-a choice buried in a prompt string, and `systemPromptHash` separates the two in
-every record. §2.3.2 is the reason:
-
-> Each model swap, prompt revision, or schema change silently alters that
-> mapping without producing a code diff that anyone can review.
-
-If `api/prompt.test.ts` fails, Figure 1.2 must be re-recorded or the change
-reverted. Do not update that fixture casually.
-
----
+`CLEAR_ACTION_ENABLED` has been removed; `clearFilters` is always available.
+The schema fingerprint still records it as on, so hashes match earlier runs
+that had it on. Older experiment files that set it are rejected with a message
+saying so, and turn records from runs with it off still show "clear action off".
+Historical motivating-failure observations in `docs/dissertation-findings.md`
+are not results for this new benchmark and must be remeasured.
 
 ## Context policy — inducing amnesia
 
@@ -228,23 +184,16 @@ Amnesia at `k = 0`. What distinguishes it from ordinary summarization-induced
 amnesia is *cause*, recoverable only from `P.historyPolicy` — which is why the
 oracle detects it but only the instrumentation localizes it.
 
-Sweeping the dial gives a dose-response curve for §5.4. Measured on
-`gpt-4o-mini`, "show electronics" then "only the ones under $50":
+With partial updates, omitted fields survive even without history. A standalone
+request such as "under $50" no longer needs the model to repeat the earlier
+category. To evaluate conversational interpretation, include references that
+actually require history. Removing history is not guaranteed to cause an MR
+failure. Historical full-state history-policy measurements are not applicable
+to the new baseline without remeasurement.
 
-```
-full:  q keeps category=electronics, adds maxPrice=50
-       fp=[maxPrice],            D 4 -> 2    correct refinement
-none:  q emits category=null
-       fp=[category,maxPrice],   D 4 -> 13   three signatures at once
-       - MR_AC:          D_ur ⊆ D_ub violated — the result set widened
-       - Context amnesia: category ∈ fp(u1) changed while W(u2)={maxPrice}
-       - Over-reach:      fp ⊄ W
-```
-
-> **`LOCAL_TEST_MODE` is stateless by construction.** It parses the current
-> utterance alone and ignores `H`, so it behaves like `HISTORY_POLICY=none`
-> whatever the policy says. Use it for UI and plumbing work and to check that a
-> relation *runs* — never to measure a mediator.
+`LOCAL_TEST_MODE` parses the current utterance alone, emits partial updates,
+and ignores history. Use it for plumbing checks, never as evidence of LLM
+performance or conversational understanding.
 
 ---
 
@@ -353,9 +302,6 @@ One Worker serves both the SPA (from `dist/` via the assets binding) and the API
 `run_worker_first: ["/api/*"]` nests inside `assets`; without it the SPA fallback
 would swallow `/api/*`.
 
-> ⚠️ Set `RUNS_WRITE_TOKEN` before sharing a deployed URL, or `POST /api/runs` is
-> a public write.
-
 > ⚠️ Appendix A and Appendix B cite `chat-assisted-ecommerce.vercel.app` as the
 > live instance. Update the proposal after deploying, or keep that host aliased.
 
@@ -378,10 +324,8 @@ would swallow `/api/*`.
 | `HISTORY_POLICY` | `full` | `full` \| `last-k` \| `none` |
 | `HISTORY_MAX_TURNS` | `3` | with `last-k` |
 | `SYSTEM_PROMPT` | — | the prompt text. Unset: `prompts/default.txt`. Experiment conditions set it per request |
-| `CLEAR_ACTION_ENABLED` | `false` | `true` lets `Q` accept `clearFilters`. Changes the schema, not the prompt text |
 | `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY` | — | tracing needs both |
 | `LOCAL_TEST_MODE` | `false` | deterministic parser, no network |
-| `RUNS_WRITE_TOKEN` / `RUNS_READ_TOKEN` | — | shared-secret gates for stored runs, off by default |
 | `TURNS_FILE` | `.data/turns.jsonl` | Express dev store |
 
 With `LLM_PROVIDER` set, that provider is used. Otherwise resolution is key-first: OpenRouter key → OpenRouter; else OpenAI key →
@@ -464,3 +408,26 @@ API: `POST /api/command`, `GET /api/config`, `POST|GET|DELETE /api/runs`,
 LLM paraphrase and translation generation for `Para` (§4.10.1), mutation
 analysis (§4.19), the LLM-as-judge baseline (§5.3), and the external subjects —
 Home Assistant, WebArena, and the Appendix B probes.
+
+### Update strategy
+
+Under Experiments → Advanced settings, **Application merges changes** selects
+`LNGUI_COMMAND_MODE=diff` and `prompts/default.txt`. **LLM rebuilds state** selects
+`LNGUI_COMMAND_MODE=full` and `prompts/full-state.txt`. Switching selects only the
+matching built-in prompt; custom prompt text remains saved and can be explicitly
+selected again. A mismatched built-in prompt blocks a run. Custom prompts must
+follow the selected command contract.
+
+Full mode requires every filter field and sort; omitted fields are schema
+errors and use the existing repair path. Diff mode permits omission. Both use
+the same Apply function and explicit reset/clear semantics. Both receive the
+same history policy, not an additional current-state snapshot. Full dry runs
+reconstruct values from the effective command history; they are deterministic
+plumbing checks, not a measure of LLM performance. Diff dry runs parse only the
+latest utterance.
+
+The mode is included in condition names, resolved configuration, turn metadata,
+trial JSONL, turn CSV, and schema fingerprints. Historical records without a
+mode remain unspecified. The default remains diff. Changing the experiment
+strategy does not change an existing run or ordinary chat's server configuration.
+For server/CLI configuration use `LNGUI_COMMAND_MODE=diff` or `LNGUI_COMMAND_MODE=full`.

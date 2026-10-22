@@ -3,9 +3,8 @@
  *
  * Used by server.ts (Express) and by the parity test, so the test exercises
  * the exact adapter the dev server runs. Every request header is forwarded
- * except hop-by-hop ones: the router depends on x-lngui-langfuse and
- * x-runs-token, and an adapter that dropped one would
- * run a request under a P the caller did not ask for.
+ * except hop-by-hop ones: the router depends on x-lngui-langfuse, and an
+ * adapter that dropped it would run a request under a P the caller did not ask for.
  */
 import type { IncomingHttpHeaders } from "node:http";
 

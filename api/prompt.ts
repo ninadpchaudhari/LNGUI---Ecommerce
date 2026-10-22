@@ -11,9 +11,8 @@
  * schema change silently alters that mapping without producing a code diff
  * that anyone can review."
  *
- * Whether Q accepts `clearFilters` is a separate switch (CLEAR_ACTION_ENABLED).
- * It does not change the prompt text. A prompt that wants the model to clear
- * filters has to say so itself.
+ * `clearFilters` is always part of Q: it is one of the application's finite
+ * commands, so the mediator can always reach it.
  */
 import { z } from "zod/v4";
 import { hashString } from "../shared/contract.ts";
@@ -25,32 +24,32 @@ import { CATEGORY_VALUES, SORT_VALUES } from "../shared/surface.generated.ts";
  * the trace can attribute the fault to the mediator. Rejecting it here would
  * instead trigger the repair loop and hide the mediator's actual output.
  */
-export function buildCommandSchema(clearEnabled: boolean) {
+export function buildCommandSchema(mode: "diff" | "full" = "diff") {
+  const fields = z.object({
+    category: z.enum(CATEGORY_VALUES).nullable(),
+    maxPrice: z.number().nullable(),
+    minRating: z.number().nullable(),
+    inStockOnly: z.boolean().nullable(),
+  }).strict();
   const base = {
-    filters: z.object({
-      category: z.enum(CATEGORY_VALUES).nullable(),
-      maxPrice: z.number().nullable(),
-      minRating: z.number().nullable(),
-      inStockOnly: z.boolean().nullable(),
-    }),
-    sort: z.enum(SORT_VALUES).nullable(),
+    filters: mode === "full" ? fields : fields.partial(),
+    sort: mode === "full" ? z.enum(SORT_VALUES).nullable() : z.enum(SORT_VALUES).nullable().optional(),
     explanation: z.string(),
   };
-  return clearEnabled
-    ? z.object({ ...base, clearFilters: z.boolean().nullable().optional() })
-    : z.object(base);
+  return z.object({ ...base, clearFilters: z.boolean().optional() }).strict();
 }
 
-export function commandSchemaShape(clearEnabled: boolean): unknown {
-  return { categories: CATEGORY_VALUES, sorts: SORT_VALUES, clearFilters: clearEnabled };
+// `clearFilters: true` stays in the shape so the hash matches earlier runs that had it on.
+export function commandSchemaShape(mode: "diff" | "full" = "diff"): unknown {
+  return { semantics: mode === "full" ? "full-state-v1" : "partial-update-v1", omitted: mode === "full" ? "invalid" : "preserve", null: "reset-to-default", categories: CATEGORY_VALUES, sorts: SORT_VALUES, clearFilters: true };
 }
 
 export function promptHashes(
   systemPrompt: string,
-  clearEnabled: boolean,
+  mode: "diff" | "full" = "diff",
 ): { systemPromptHash: string; commandSchemaHash: string } {
   return {
     systemPromptHash: hashString(systemPrompt),
-    commandSchemaHash: hashString(JSON.stringify(commandSchemaShape(clearEnabled))),
+    commandSchemaHash: hashString(JSON.stringify(commandSchemaShape(mode))),
   };
 }

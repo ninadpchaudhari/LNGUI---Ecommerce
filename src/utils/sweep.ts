@@ -36,7 +36,7 @@ export interface Condition {
 export interface Transport {
   /** Defaults to the global fetch with relative URLs. */
   fetchImpl?: FetchLike;
-  /** Extra headers on every request, e.g. x-runs-token. */
+  /** Extra headers on every request. */
   headers?: Record<string, string>;
   /** Awaited after each round: background work the handler scheduled. */
   drain?: () => Promise<void>;
@@ -129,6 +129,9 @@ async function runOne(c: MrCase, rt: ConditionRuntime, trial: number, opts: Swee
       schemaVersion: 1,
       runId: opts.runId,
       conditionId: rt.condition.id,
+      commandMode: rt.config.commandMode,
+      mode: rt.config.mode,
+      provider: rt.config.provider,
       caseId: c.id,
       relation: c.relation,
       semanticGroup: c.semanticGroup,

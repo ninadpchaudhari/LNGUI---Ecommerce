@@ -13,12 +13,12 @@
  * the provider's default for the model applies. The server's .env never
  * fills a gap (shared/overrides.ts).
  */
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import type { AppConfig } from "../../shared/contract.ts";
+import type { AppConfig, TurnRecord } from "../../shared/contract.ts";
 import { parseCasesJsonl, toJsonl, type MrCase } from "../../shared/cases.ts";
 import { experimentSchema, type CasesManifest } from "../../shared/experiment.ts";
-import { caseTable, render, reportGroup, summaryTable, type Format, type Table } from "../../shared/report.ts";
+import { caseTable, render, reportGroup, reportTitle, runModeLabel, summaryTable, type Format, type Table } from "../../shared/report.ts";
 import { parseTrialsJsonl, type TrialRow } from "../../shared/trials.ts";
 import { summarizeSuite, type SuiteRow } from "../../shared/suite-summary.ts";
 import { LANGFUSE_HEADER, type Overrides } from "../../shared/overrides.ts";
@@ -35,6 +35,7 @@ import {
   type ConditionRuntime,
   type Transport,
 } from "../utils/sweep.ts";
+import { CaseInspector, type InspectorSelection } from "./CaseInspector.tsx";
 import pilotText from "../../cases/pilot.jsonl?raw";
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -120,16 +121,38 @@ function Field({ label, help, children }: { label: ReactNode; help?: ReactNode; 
   );
 }
 
-function TableView({ table }: { table: Table }) {
+function TableView({ table, selected, onRow }: {
+  table: Table;
+  /** Index of the highlighted row. */
+  selected?: number | null;
+  /** Makes rows clickable. */
+  onRow?: (row: Record<string, string>, index: number) => void;
+}) {
   return (
     <div className="xp-scroll">
-      <table className="xp-table">
+      <table className={onRow ? "xp-table xp-clickable" : "xp-table"}>
         <thead>
           <tr>{table.columns.map((c) => <th key={c.key} className={c.numeric ? "num" : ""}>{c.label}</th>)}</tr>
         </thead>
         <tbody>
           {table.rows.map((r, i) => (
-            <tr key={i}>{table.columns.map((c) => <td key={c.key} className={c.numeric ? "num" : ""}>{r[c.key]}</td>)}</tr>
+            <tr
+              key={i}
+              className={selected === i ? "on" : undefined}
+              {...(onRow && {
+                tabIndex: 0,
+                "aria-selected": selected === i,
+                onClick: () => onRow(r, i),
+                onKeyDown: (e: KeyboardEvent) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    onRow(r, i);
+                  }
+                },
+              })}
+            >
+              {table.columns.map((c) => <td key={c.key} className={c.numeric ? "num" : ""}>{r[c.key]}</td>)}
+            </tr>
           ))}
         </tbody>
       </table>
@@ -373,10 +396,11 @@ export function ExperimentsPage({ config }: Props) {
     setPromptsOn((on) => [...on, name]);
     setEditing(name);
   };
+  const [commandMode, setCommandMode] = useState<"diff" | "full">("diff");
+  const [strategyNotice, setStrategyNotice] = useState("");
   const [temps, setTemps] = useState("default");
   const [history, setHistory] = useState<string[]>(["full"]);
   const [maxTurns, setMaxTurns] = useState(3);
-  const [clear, setClear] = useState("false");
   const [topP, setTopP] = useState("");
   const [local, setLocal] = useState(false);
   const [condOff, setCondOff] = useState<Set<string>>(new Set());
@@ -401,19 +425,18 @@ export function ExperimentsPage({ config }: Props) {
             if (!local && topP.trim()) env.LLM_TOP_P = topP.trim();
             env.HISTORY_POLICY = h;
             if (h === "last-k") env.HISTORY_MAX_TURNS = String(maxTurns);
-            env.CLEAR_ACTION_ENABLED = clear;
-            const parts: string[] = [];
+            env.LNGUI_COMMAND_MODE = commandMode;
+            const parts: string[] = [commandMode];
             if (local) parts.push("local");
             else if (ms.length > 1) parts.push(`${m!.provider === "ollama" ? "ollama-" : ""}${shortModel(m!.model)}`);
             if (chosenPrompts.length > 1 || pr.name !== "default") parts.push(pr.name);
-            if (clear === "true") parts.push("clear");
             if (!local) parts.push(t === "default" ? "tdefault" : `t${t}`);
             if (history.length > 1 || h !== "full") parts.push(h === "last-k" ? `last${maxTurns}` : h);
             out.push({ id: parts.join("-"), env, prompt: { name: pr.name, text: normalizePrompt(pr.text) } });
           }
     return out;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [local, modelsOn, models, temps, prompts, promptsOn, history, maxTurns, clear, topP]);
+  }, [local, modelsOn, models, temps, prompts, promptsOn, history, maxTurns, topP, commandMode]);
   const conditions = allConditions.filter((c) => !condOff.has(c.id));
 
   const toggle = (list: string[], set: (v: string[]) => void, v: string) =>
@@ -478,6 +501,9 @@ export function ExperimentsPage({ config }: Props) {
     : check.error.issues.map((i) => ["bad", `${i.path.join(".") || "experiment"}: ${i.message}`]);
   if (suite.problems.length) issues.push(["bad", `Cases file has ${suite.problems.length} problem(s): ${suite.problems[0]}`]);
   if (included.length === 0) issues.push(["bad", "The test set has no cases."]);
+  if (chosenPrompts.some((p) => p.name === (commandMode === "full" ? "default" : "full-state"))) {
+    issues.push(["bad", "The selected built-in prompt does not match the update strategy. Select its matching prompt."]);
+  }
   if (chosenPrompts.length === 0) issues.push(["bad", "Tick at least one prompt."]);
   for (const pr of chosenPrompts) {
     if (!PROMPT_NAME_RE.test(pr.name)) issues.push(["bad", `Prompt name "${pr.name}" may use only letters, digits, dot, dash and underscore.`]);
@@ -511,7 +537,7 @@ export function ExperimentsPage({ config }: Props) {
   const [progress, setProgress] = useState({ done: 0, total: 0, round: 0, fails: 0, infra: 0 });
   const [runRows, setRunRows] = useState<TrialRow[]>([]);
   const [runError, setRunError] = useState("");
-  const runData = useRef<{ manifest: Record<string, unknown>; turns: unknown[] } | null>(null);
+  const runData = useRef<{ manifest: Record<string, unknown>; turns: TurnRecord[] } | null>(null);
   const abort = useRef<AbortController | null>(null);
 
   const start = async () => {
@@ -595,13 +621,37 @@ export function ExperimentsPage({ config }: Props) {
 
   // ── 5. Report ─────────────────────────────────────────────────────────────
   const [loaded, setLoaded] = useState<{ name: string; rows: TrialRow[] } | null>(null);
+  const [loadedTurns, setLoadedTurns] = useState<TurnRecord[] | null>(null);
+  const [inspect, setInspect] = useState<(InspectorSelection & { index: number }) | null>(null);
   const [reportFrom, setReportFrom] = useState<"run" | "file">("run");
   const [by, setBy] = useState<"mr" | "case">("mr");
   const [format, setFormat] = useState<Format>("md");
-  const reportRows = reportFrom === "file" && loaded ? loaded.rows : runRows;
+  const [detailedMetrics, setDetailedMetrics] = useState(false);
+  const reportRows = reportFrom === "file" ? loaded?.rows ?? [] : runRows;
   const reportTable = reportRows.length
-    ? (by === "case" ? caseTable : summaryTable)(reportRows, [1, 3, 5], `MR results, ${reportRows[0].runId}`)
+    ? (by === "case" ? caseTable : summaryTable)(reportRows, [1, 3, 5], reportTitle(reportRows[0].runId, reportRows))
     : null;
+  const reportMode = runModeLabel(reportRows);
+  const reportTurns = useMemo(() => {
+    const list = reportFrom === "file" ? loadedTurns : runData.current?.turns ?? null;
+    return list ? new Map(list.map((t) => [t.id, t])) : null;
+    // runRows changes whenever the run appends turns.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportFrom, loadedTurns, runRows]);
+  const casesById = useMemo(() => new Map(suite.cases.map((c) => [c.id, c])), [suite.cases]);
+  // A different table means the selected row index no longer points at the same row.
+  useEffect(() => setInspect(null), [reportFrom, by, loaded]);
+  const visibleReportTable = reportTable ? {
+    ...reportTable,
+    columns: reportTable.columns.filter((column) => {
+      if (detailedMetrics) return true;
+      if (column.key === "condition") return new Set(reportRows.map((row) => row.conditionId)).size > 1;
+      return (by === "mr" ? ["mr", "cases", "rate", "overreach"] : ["case", "mr", "cn", "reason"]).includes(column.key);
+    }).map((column) => ({
+      ...column,
+      label: column.key === "cn" ? "Failed / trials" : column.label,
+    })),
+  } : null;
   const tokensPerCall = (() => {
     const rows = loaded?.rows ?? [];
     const inv = rows.reduce((s, r) => s + r.invocations, 0);
@@ -614,14 +664,14 @@ export function ExperimentsPage({ config }: Props) {
     if (!r) return "resolving…";
     if (r.error) return `⚠ ${r.error}`;
     const P = r.P!;
-    if (P.mode === "local-test") return `local parser · prompt ${c.prompt.name} · history ${P.historyPolicy}`;
+    if (P.mode === "local-test") return `local parser · ${P.commandMode ?? "diff"} · prompt ${c.prompt.name} · history ${P.historyPolicy}`;
     return [
       `${P.provider} ${P.defaultModel}`,
       `prompt ${c.prompt.name} · SHA-256 ${shas[c.prompt.name]?.slice(0, 7) ?? "pending"}`,
       `T ${P.temperature ?? "provider default"}`,
       `top_p ${P.topP ?? "provider default"}`,
       `history ${P.historyPolicy}${P.historyMaxTurns !== null ? ` k=${P.historyMaxTurns}` : ""}`,
-      `clear ${P.clearActionEnabled ? "on" : "off"}`,
+      `update ${P.commandMode ?? "diff"}`,
     ].join(" · ");
   };
 
@@ -852,17 +902,31 @@ export function ExperimentsPage({ config }: Props) {
               {history.includes("last-k") && (
                 <Field label="Turns kept (last-k)"><input id="max-turns" type="number" min={1} value={maxTurns} onChange={(e) => setMaxTurns(Math.max(1, Number(e.target.value)))} /></Field>
               )}
-              <Field label="Clear-filters in the command language" help="Whether the model's JSON may include clearFilters. This changes the schema only. It does not change the prompt text, so a prompt that should make the model clear filters has to say so itself.">
-                <select id="clear" value={clear} onChange={(e) => setClear(e.target.value)}>
-                  <option value="false">Off</option><option value="true">On</option>
-                </select>
-              </Field>
+
               {!local && (
                 <Field label="top_p" help="Leave empty to send no top_p, so the provider's default applies.">
                   <input id="top-p" type="text" placeholder="provider default" value={topP} onChange={(e) => setTopP(e.target.value)} />
                 </Field>
               )}
             </div>
+            <details className="xp-advanced">
+              <summary>Advanced settings</summary>
+              <Field label="Implementation">
+                <select id="update-strategy" disabled={running} value={commandMode} onChange={(e) => {
+                  const mode = e.target.value as "diff" | "full";
+                  const name = mode === "full" ? "full-state" : "default";
+                  setCommandMode(mode);
+                  setPromptsOn([name]);
+                  setEditing(name);
+                  setStrategyNotice("Selected the matching built-in prompt. Your custom prompts are still saved; select one explicitly to use it instead.");
+                }}>
+                  <option value="diff">Application merges changes</option>
+                  <option value="full">LLM rebuilds state</option>
+                </select>
+              </Field>
+              <p className="xp-note">{commandMode === "diff" ? "The LLM returns only updates; the application preserves other settings." : "The LLM returns all settings each turn, carrying forward unchanged values."} The matching prompt is selected automatically when you switch.</p>
+              {strategyNotice && <p className="xp-note" role="status">{strategyNotice}</p>}
+            </details>
             <div className="xp-scroll">
               <table className="xp-table">
                 <thead><tr><th>Use</th><th>Condition</th><th>P, as the server resolves it</th></tr></thead>
@@ -960,27 +1024,79 @@ export function ExperimentsPage({ config }: Props) {
                 <button type="button" className={reportFrom === "file" ? "on" : ""} onClick={() => setReportFrom("file")}>trials.jsonl file</button>
               </div>
               {reportFrom === "file" && (
-                <input id="trials-file" type="file" accept=".jsonl,.txt" onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) void f.text().then((t) => setLoaded({ name: f.name, rows: parseTrialsJsonl(t) }));
-                }} />
+                <>
+                  <label className="xp-file">
+                    trials.jsonl
+                    <input id="trials-file" type="file" accept=".jsonl,.txt" onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (f) void f.text().then((t) => setLoaded({ name: f.name, rows: parseTrialsJsonl(t) }));
+                    }} />
+                  </label>
+                  <label className="xp-file">
+                    turns.jsonl (optional, for commands)
+                    <input id="turns-file" type="file" accept=".jsonl,.txt" onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (f) void f.text().then((t) => setLoadedTurns(
+                        t.split("\n").filter((l) => l.trim() !== "").map((l) => JSON.parse(l) as TurnRecord),
+                      ));
+                    }} />
+                  </label>
+                </>
               )}
               <select id="report-by" value={by} onChange={(e) => setBy(e.target.value as "mr" | "case")}>
                 <option value="mr">By MR row</option><option value="case">By case</option>
               </select>
+              <label className="xp-report-details">
+                <input type="checkbox" checked={detailedMetrics} onChange={(e) => setDetailedMetrics(e.target.checked)} />
+                Detailed metrics
+              </label>
             </div>
-            {reportTable ? (
+            {reportTable && visibleReportTable ? (
               <>
-                <TableView table={reportTable} />
+                {reportMode === null ? (
+                  <div className="xp-issue warn">Run mode not recorded: these trials predate it. Check the run's manifest before reporting them.</div>
+                ) : reportMode === "LLM" ? (
+                  <div className="xp-mode">LLM run · {[...new Set(reportRows.flatMap((r) => r.resolvedModels))].join(", ") || "model not reported"}</div>
+                ) : reportMode.startsWith("mixed") ? (
+                  <div className="xp-issue bad">This table mixes dry-run (local parser) and LLM trials. Load them separately before reporting.</div>
+                ) : (
+                  <div className="xp-issue warn">
+                    <b>Dry run — local parser.</b> These verdicts come from the rule-based parser, not a language model. They test the harness, not the mediator.
+                  </div>
+                )}
+                <div className="xp-report-table">
+                  <TableView
+                    table={visibleReportTable}
+                    selected={inspect?.index ?? null}
+                    onRow={(r, index) => {
+                      if (inspect?.index === index) return setInspect(null);
+                      const conditionId = r.condition;
+                      setInspect(by === "case"
+                        ? { index, conditionId, group: null, caseId: r.case, label: `${r.case} · ${conditionId}` }
+                        : { index, conditionId, group: r.mr, caseId: null, label: `${r.mr} · ${conditionId}` });
+                    }}
+                  />
+                </div>
+                {inspect ? (
+                  <CaseInspector
+                    key={`${inspect.conditionId}|${inspect.group}|${inspect.caseId}`}
+                    rows={reportRows}
+                    turns={reportTurns}
+                    cases={casesById}
+                    selection={inspect}
+                    onClose={() => setInspect(null)}
+                  />
+                ) : (
+                  <p className="xp-note">Click a row to see its cases: the requests, the commands returned, the changes made and why each trial passed or failed.</p>
+                )}
                 <p className="xp-note">
-                  Over-reach is the share of trials where some turn changed a control outside that utterance's declared write set W.
-                  It is a standing check reported apart from the MR verdict. For frozen cases W comes from the generation template.
+                  Over-reach: trials where the system changed a control outside the request’s allowed changes. Checked separately from pass/fail.
                 </p>
                 <div className="xp-row">
                   <select id="report-format" value={format} onChange={(e) => setFormat(e.target.value as Format)}>
                     <option value="md">Markdown</option><option value="latex">LaTeX</option><option value="csv">CSV</option>
                   </select>
-                  <button type="button" onClick={() => void copyText(render(reportTable, format), say)}>Copy table</button>
+                  <button type="button" onClick={() => void copyText(render(reportTable, format), say)}>Copy full table</button>
                 </div>
               </>
             ) : (

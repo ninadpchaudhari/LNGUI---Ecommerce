@@ -40,23 +40,14 @@ import { applyCommand, renderData, resetState, step, visibleProducts } from "./t
 import { effectiveHistory, renderHistory } from "./history.ts";
 import { inferWriteSet } from "../src/utils/relations.ts";
 
-const APPLY_OPTS = { clearActionEnabled: true };
 
 function cmd(
   partial: Partial<Command["filters"]> & { sort?: SortValue | null; clearFilters?: boolean },
 ): Command {
-  const { sort = null, clearFilters, ...filters } = partial;
-  return {
-    filters: {
-      category: filters.category ?? null,
-      maxPrice: filters.maxPrice ?? null,
-      minRating: filters.minRating ?? null,
-      inStockOnly: filters.inStockOnly ?? null,
-    },
-    sort,
-    ...(clearFilters === undefined ? {} : { clearFilters }),
-    explanation: "test",
-  };
+  const { sort, clearFilters, ...filters } = partial;
+  return { filters, ...(sort === undefined ? {} : { sort }),
+    ...(clearFilters === undefined ? {} : { clearFilters }), explanation: "test" };
+
 }
 
 describe("control surface", () => {
@@ -145,8 +136,19 @@ describe("overReach — the fp ⊆ W standing check (§4.6)", () => {
 });
 
 describe("Apply — q → V′", () => {
+  test("partial updates preserve unrelated controls and expose over-reach", () => {
+    const dirty = { ...resetValuation(), category: "books", maxPrice: 50 } as Valuation;
+    const result = applyCommand(dirty, cmd({ inStockOnly: true }));
+    assert.equal(result.V.category, "books");
+    assert.equal(result.V.maxPrice, 50);
+    assert.deepEqual(footprint(dirty, result.V), ["inStockOnly"]);
+    assert.deepEqual(applyCommand(dirty, cmd({})).V, dirty);
+    const wrong = applyCommand(dirty, cmd({ inStockOnly: true, category: null }));
+    assert.deepEqual(overReach(footprint(dirty, wrong.V), ["inStockOnly"]), ["category"]);
+  });
+
   test("applies in-domain assignments and reports them", () => {
-    const r = applyCommand(resetValuation(), cmd({ category: "books", maxPrice: 50 }), APPLY_OPTS);
+    const r = applyCommand(resetValuation(), cmd({ category: "books", maxPrice: 50 }));
     assert.equal(r.V.category, "books");
     assert.equal(r.V.maxPrice, 50);
     assert.deepEqual(r.rejected, []);
@@ -154,10 +156,9 @@ describe("Apply — q → V′", () => {
   });
 
   test("a null field resolves to V₀(c), not to bottom", () => {
-    // The mediator returns null for anything the user did not mention. That is
-    // "no constraint", which for maxPrice is 500 and for inStockOnly is false.
+    // Explicit null resets only the named controls to their defaults.
     const dirty = { ...resetValuation(), maxPrice: 50, inStockOnly: true } as Valuation;
-    const r = applyCommand(dirty, cmd({ category: "books" }), APPLY_OPTS);
+    const r = applyCommand(dirty, cmd({ category: "books", maxPrice: null, inStockOnly: null }));
     assert.equal(r.V.maxPrice, V0.maxPrice);
     assert.equal(r.V.inStockOnly, V0.inStockOnly);
     assert.equal(r.V.category, "books");
@@ -165,7 +166,7 @@ describe("Apply — q → V′", () => {
 
   test("drops an out-of-domain value instead of coercing it", () => {
     // A mediator emitting minRating 4.2 is a mediator fault; clamping hides it.
-    const r = applyCommand(resetValuation(), cmd({ minRating: 4.2 }), APPLY_OPTS);
+    const r = applyCommand(resetValuation(), cmd({ minRating: 4.2 }));
     assert.equal(r.V.minRating, null, "off-domain value must not be applied");
     assert.equal(r.rejected.length, 1);
     assert.equal(r.rejected[0].control, "minRating");
@@ -176,7 +177,6 @@ describe("Apply — q → V′", () => {
     const r = applyCommand(
       resetValuation(),
       cmd({ category: "books", minRating: 4.2 }),
-      APPLY_OPTS,
     );
     assert.equal(r.V.category, "books", "valid assignment should still land");
     assert.equal(r.V.minRating, null, "rejected assignment must not land");
@@ -186,7 +186,7 @@ describe("Apply — q → V′", () => {
 
   test("a null category does reach bottom, since V₀(category) is bottom", () => {
     const start = pointUpdate(resetValuation(), "category", "books");
-    const r = applyCommand(start, cmd({ category: null }), APPLY_OPTS);
+    const r = applyCommand(start, cmd({ category: null }));
     assert.equal(r.V.category, null);
     assert.deepEqual(r.applied, ["category"]);
   });
@@ -195,7 +195,7 @@ describe("Apply — q → V′", () => {
 describe("Apply — clearFilters (c₆)", () => {
   test("resets C to V₀ and sets its own sticky flag", () => {
     const dirty = { ...resetValuation(), category: "books", maxPrice: 50, minRating: 4 } as Valuation;
-    const r = applyCommand(dirty, cmd({ clearFilters: true }), APPLY_OPTS);
+    const r = applyCommand(dirty, cmd({ clearFilters: true }));
     assert.equal(r.V.category, null);
     assert.equal(r.V.maxPrice, V0.maxPrice);
     assert.equal(r.V.minRating, null);
@@ -203,35 +203,20 @@ describe("Apply — clearFilters (c₆)", () => {
   });
 
   test("puts c₆ in the footprint, which is what lets Cov_NL reach 6/6", () => {
-    const r = applyCommand(resetValuation(), cmd({ clearFilters: true }), APPLY_OPTS);
+    const r = applyCommand(resetValuation(), cmd({ clearFilters: true }));
     assert.ok(footprint(resetValuation(), r.V).includes("clearFilters"));
   });
 
   test("is idempotent, so clearing twice stays observationally equal to once", () => {
     // A counter here would leak H into O = ⟨V,D⟩.
-    const once = applyCommand(resetValuation(), cmd({ clearFilters: true }), APPLY_OPTS).V;
-    const twice = applyCommand(once, cmd({ clearFilters: true }), APPLY_OPTS).V;
+    const once = applyCommand(resetValuation(), cmd({ clearFilters: true })).V;
+    const twice = applyCommand(once, cmd({ clearFilters: true })).V;
     assert.ok(valuationEqual(once, twice));
   });
 
   test("cannot return to σ₀, which is why c₆ ∉ C_rev", () => {
-    const cleared = applyCommand(resetValuation(), cmd({ clearFilters: true }), APPLY_OPTS).V;
+    const cleared = applyCommand(resetValuation(), cmd({ clearFilters: true })).V;
     assert.ok(!valuationEqual(cleared, resetValuation()));
-  });
-
-  test("is rejected when the action is disabled, and c₆ stays at bottom", () => {
-    // The command's own category field still applies — every command carries
-    // every field — so the check is that c₆ itself never moves.
-    const dirty = pointUpdate(resetValuation(), "category", "books");
-    const r = applyCommand(
-      dirty,
-      cmd({ category: "books", clearFilters: true }),
-      { clearActionEnabled: false },
-    );
-    assert.equal(r.V.category, "books", "the command's own fields still apply");
-    assert.equal(r.V.clearFilters, null, "c₆ must not move when disabled");
-    assert.equal(r.rejected[0]?.reason, "action-disabled");
-    assert.ok(!footprint(dirty, r.V).includes("clearFilters"));
   });
 });
 
@@ -240,7 +225,6 @@ describe("A — the canonical Appendix A.1 example", () => {
     const r = applyCommand(
       resetValuation(),
       cmd({ category: "electronics", maxPrice: 100, sort: "rating_desc" }),
-      APPLY_OPTS,
     );
     const D = renderData(r.V);
     // Headphones 4.5, Speaker 4.0, USB-C Hub 3.5. The $149.99 Mechanical
@@ -297,11 +281,11 @@ describe("observationallyEqual — Eq. 4.6", () => {
     const P = {
       requestedModel: "m", resolvedModel: "m", temperature: 0, topP: 1,
       systemPromptHash: "h", commandSchemaHash: "h",
-      historyPolicy: "full" as const, historyMaxTurns: null, clearActionEnabled: true,
+      historyPolicy: "full" as const, historyMaxTurns: null,
     };
     const a = resetState(P);
     // Reach the same V by a different route: one step that changes nothing.
-    const b = step(a, "no-op", cmd({}), APPLY_OPTS).state;
+    const b = step(a, "no-op", cmd({})).state;
     assert.notEqual(a.H.length, b.H.length, "histories should differ");
     assert.ok(observationallyEqual({ V: a.V, D: a.D }, { V: b.V, D: b.D }));
   });
@@ -320,13 +304,13 @@ describe("step — Eq. 4.9", () => {
   const P = {
     requestedModel: "m", resolvedModel: "m", temperature: 0, topP: 1,
     systemPromptHash: "h", commandSchemaHash: "h",
-    historyPolicy: "full" as const, historyMaxTurns: null, clearActionEnabled: true,
+    historyPolicy: "full" as const, historyMaxTurns: null,
   };
 
   test("appends ⟨u,q,V′,D′⟩ to H and keeps P fixed", () => {
     const s0 = resetState(P);
     const q = cmd({ category: "books" });
-    const { state } = step(s0, "show books", q, APPLY_OPTS);
+    const { state } = step(s0, "show books", q);
     assert.equal(state.H.length, 1);
     assert.equal(state.H[0].u, "show books");
     assert.deepEqual(state.H[0].q, q);
@@ -337,7 +321,7 @@ describe("step — Eq. 4.9", () => {
 
   test("a failed mediation still appends a turn but leaves V and D alone", () => {
     const s0 = resetState(P);
-    const { state, fp } = step(s0, "???", null, APPLY_OPTS);
+    const { state, fp } = step(s0, "???", null);
     assert.equal(state.H.length, 1);
     assert.deepEqual(fp, []);
     assert.ok(valuationEqual(state.V, s0.V));

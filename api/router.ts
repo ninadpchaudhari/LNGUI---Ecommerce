@@ -9,8 +9,6 @@ import { SCHEMA_VERSION, type AppConfig } from "../shared/contract.ts";
 import { CONTROLS, V0 } from "../shared/surface.generated.ts";
 import { handleCommandRequest, type CommandDeps } from "./command.ts";
 import {
-  clearActionEnabled,
-  getEnvVar,
   isLocalTestMode,
   langfuseEnabled,
   ollamaRoot,
@@ -18,6 +16,7 @@ import {
   resolveLLMConfig,
   resolveModelPolicy,
   resolveSystemPrompt,
+  resolveCommandMode,
   type CommandRuntimeEnv,
   type RuntimeEnv,
 } from "./config.ts";
@@ -47,8 +46,8 @@ function buildConfig(env: RuntimeEnv, persistence: AppConfig["persistence"]): Ap
   const llm = resolveLLMConfig(env);
   const policy = resolveModelPolicy(env);
   const history = resolveHistoryConfig(env);
-  const clearEnabled = clearActionEnabled(env);
-  const hashes = promptHashes(resolveSystemPrompt(env), clearEnabled);
+  const commandMode = resolveCommandMode(env);
+  const hashes = promptHashes(resolveSystemPrompt(env), commandMode);
 
   return {
     schemaVersion: SCHEMA_VERSION,
@@ -64,23 +63,12 @@ function buildConfig(env: RuntimeEnv, persistence: AppConfig["persistence"]): Ap
     commandSchemaHash: hashes.commandSchemaHash,
     historyPolicy: history.policy,
     historyMaxTurns: history.maxTurns,
-    clearActionEnabled: clearEnabled,
+    commandMode,
     langfuseEnabled: langfuseEnabled(env),
     persistence,
     controls: CONTROLS,
     v0: { ...V0 },
   };
-}
-
-/**
- * Optional shared-secret gates. Both default to off so local development needs
- * no setup; setting RUNS_WRITE_TOKEN before exposing a deployed URL is what
- * stops POST /api/runs being a public write.
- */
-function authorized(request: Request, env: RuntimeEnv, which: "read" | "write"): boolean {
-  const expected = getEnvVar(env, which === "read" ? "RUNS_READ_TOKEN" : "RUNS_WRITE_TOKEN")?.trim();
-  if (!expected) return true;
-  return request.headers.get("x-runs-token") === expected;
 }
 
 function listQuery(url: URL): TurnListQuery {
@@ -169,7 +157,6 @@ export async function handleApiRequest(
 
   if (path === "/api/runs") {
     if (request.method === "POST") {
-      if (!authorized(request, env, "write")) return json({ error: "Forbidden" }, 403);
       if (!store) return json({ error: "No persistence configured" }, 503);
       try {
         const record = normalizeTurnRecord(await request.json());
@@ -181,12 +168,10 @@ export async function handleApiRequest(
       }
     }
     if (request.method === "GET") {
-      if (!authorized(request, env, "read")) return json({ error: "Forbidden" }, 403);
       if (!store) return json({ items: [], nextCursor: null });
       return json(await store.listTurns(listQuery(url)));
     }
     if (request.method === "DELETE") {
-      if (!authorized(request, env, "write")) return json({ error: "Forbidden" }, 403);
       if (!store) return json({ error: "No persistence configured" }, 503);
       const sessionId = url.searchParams.get("sessionId");
       await store.clear(sessionId ?? undefined);
@@ -196,7 +181,6 @@ export async function handleApiRequest(
   }
 
   if (path.startsWith("/api/runs/") && request.method === "GET") {
-    if (!authorized(request, env, "read")) return json({ error: "Forbidden" }, 403);
     if (!store) return json({ error: "Not found" }, 404);
     const id = decodeURIComponent(path.slice("/api/runs/".length));
     const record = await store.getTurn(id);
@@ -207,7 +191,6 @@ export async function handleApiRequest(
 
   if (path === "/api/mr-cases") {
     if (request.method === "POST") {
-      if (!authorized(request, env, "write")) return json({ error: "Forbidden" }, 403);
       if (!store) return json({ error: "No persistence configured" }, 503);
       try {
         const record = normalizeMrCaseRecord(await request.json());
@@ -219,7 +202,6 @@ export async function handleApiRequest(
       }
     }
     if (request.method === "GET") {
-      if (!authorized(request, env, "read")) return json({ error: "Forbidden" }, 403);
       if (!store) return json({ items: [], nextCursor: null });
       return json(await store.listMrCases(listQuery(url)));
     }

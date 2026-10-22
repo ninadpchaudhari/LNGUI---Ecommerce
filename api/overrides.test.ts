@@ -25,11 +25,6 @@ describe("applyOverrides", () => {
     assert.ok("env" in r && r.env.HISTORY_POLICY === "none");
   });
 
-  test("a runs write token does not gate condition settings", async () => {
-    const r = await applyOverrides(req({ HISTORY_POLICY: "none" }), { RUNS_WRITE_TOKEN: "s3cret" }, "/api/config");
-    assert.ok("env" in r && r.env.HISTORY_POLICY === "none");
-  });
-
   test("rejects keys outside the whitelist, such as API keys", async () => {
     const r = await applyOverrides(req({ OPENAI_API_KEY: "x" }), {}, "/api/config");
     assert.ok("error" in r && r.status === 400);
@@ -52,12 +47,11 @@ describe("explicit P: a condition never inherits the server's .env", () => {
   test("a P key the overrides leave out is unset, not taken from the environment", async () => {
     const res = await handleApiRequest(
       req({ LOCAL_TEST_MODE: "true" }),
-      { LLM_TEMPERATURE: "0.5", CLEAR_ACTION_ENABLED: "true", HISTORY_POLICY: "none" },
+      { LLM_TEMPERATURE: "0.5", HISTORY_POLICY: "none" },
       deps,
     );
     const config = (await res!.json()) as AppConfig;
     assert.equal(config.temperature, null, "unset temperature means the provider default");
-    assert.equal(config.clearActionEnabled, false, "code default, not the env's true");
     assert.equal(config.historyPolicy, "full");
   });
 
@@ -205,5 +199,70 @@ describe("the system prompt travels as text", () => {
     } finally {
       server.close();
     }
+  });
+});
+
+describe("local partial-update commands", () => {
+  async function parse(prompt: string) {
+    const response = await handleApiRequest(new Request("http://x/api/command", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-lngui-langfuse": "off" },
+      body: JSON.stringify({ prompt, history: [], overrides: { LOCAL_TEST_MODE: "true" } }),
+    }), {}, deps);
+    assert.equal(response!.status, 200);
+    return await response!.json() as { filters: Record<string, unknown>; sort?: unknown; clearFilters?: boolean };
+  }
+  test("only emits requested fields, with explicit individual and global resets", async () => {
+    const stock = await parse("only in stock");
+    assert.deepEqual(stock.filters, { inStockOnly: true });
+    assert.equal(stock.sort, undefined);
+    const price = await parse("clear price filter");
+    assert.deepEqual(price.filters, { maxPrice: null });
+    assert.equal(price.clearFilters, undefined);
+    const clear = await parse("clear all filters");
+    assert.deepEqual(clear.filters, {});
+    assert.equal(clear.clearFilters, true);
+    assert.equal((await parse("reset every filter")).clearFilters, true);
+  });
+
+  test("is the reference reading: a rating sort sets no minimum, 'highly rated' does", async () => {
+    for (const u of ["sort by best rated first", "top rated first"]) {
+      const c = await parse(u);
+      assert.deepEqual([c.filters, c.sort], [{}, "rating_desc"], u);
+    }
+    assert.deepEqual((await parse("highly rated items")).filters, { minRating: 4 });
+  });
+
+  test("reads the bundled paraphrases the same way as their sources", async () => {
+    const pairs = [
+      ["show items under $25", "show items cheaper than $25"],
+      ["show electronics under $100 sorted by rating", "list the tech products below $100, best rated first"],
+    ];
+    for (const [a, b] of pairs) {
+      const [x, y] = [await parse(a), await parse(b)];
+      assert.deepEqual([y.filters, y.sort], [x.filters, x.sort], `${a} ≡ ${b}`);
+    }
+  });
+});
+
+describe("update strategy through the API", () => {
+  test("rejects invalid modes", async () => {
+    const response = await handleApiRequest(req({ LNGUI_COMMAND_MODE: "other" }), {}, deps);
+    assert.equal(response!.status, 400);
+  });
+  test("full dry runs reconstruct history and return all fields", async () => {
+    const response = await handleApiRequest(new Request("http://x/api/command", {
+      method: "POST", headers: { "content-type": "application/json", "x-lngui-langfuse": "off" },
+      body: JSON.stringify({ prompt: "only in stock", history: [{ u: "books under $50", q: {
+        filters: { category: "books", maxPrice: 50 }, explanation: "books",
+      } }], overrides: { LOCAL_TEST_MODE: "true", LNGUI_COMMAND_MODE: "full" } }),
+    }), {}, deps);
+    assert.equal(response!.status, 200);
+    const body = await response!.json() as { filters: unknown; sort: unknown; meta: { P: { commandMode: string } } };
+    assert.deepEqual(body.filters, { category: "books", maxPrice: 50, minRating: null, inStockOnly: true });
+    assert.equal(body.sort, null);
+    assert.equal(body.meta.P.commandMode, "full");
+    const config = await handleApiRequest(req({ LNGUI_COMMAND_MODE: "full" }), {}, deps);
+    assert.equal(((await config!.json()) as AppConfig).commandMode, "full");
   });
 });

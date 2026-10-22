@@ -111,8 +111,7 @@ export async function runTurn(
     sessionId: options.sessionId,
   });
 
-  const clearActionEnabled = state.P.clearActionEnabled;
-  const result = step(state, u, q, { clearActionEnabled });
+  const result = step(state, u, q);
   const fp = footprint(before.V, result.state.V);
   const writeSet = options.writeSet ?? null;
 

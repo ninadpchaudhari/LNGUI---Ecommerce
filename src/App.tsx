@@ -33,7 +33,6 @@ const BOOTSTRAP_P: PromptConfig = {
   commandSchemaHash: "",
   historyPolicy: "full",
   historyMaxTurns: null,
-  clearActionEnabled: false,
 };
 
 export default function App() {

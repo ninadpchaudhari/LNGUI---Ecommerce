@@ -1,12 +1,4 @@
-/**
- * The default system prompt, prompts/default.txt, is pinned character for
- * character. It is the app's first-commit prompt with exactly one line
- * removed, and this file says so, which keeps its provenance explicit. There
- * are no named variants: any other prompt is a separate text file with its own
- * hash, and an experiment pins each one by SHA-256.
- *
- * If the pin fails, the default prompt changed. Re-measure before accepting it.
- */
+/** Tests for the versioned partial-update command interface and prompt. */
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -17,55 +9,20 @@ import { CATEGORY_VALUES, SORT_VALUES } from "../shared/surface.generated.ts";
 import { resolveSystemPrompt } from "./config.ts";
 import { buildCommandSchema, commandSchemaShape, promptHashes } from "./prompt.ts";
 
-/** Verbatim from the app's first commit (21 Feb 2026). Do not reformat. */
-const FIRST_COMMIT_PROMPT = `You are a product filter assistant. Given a user's natural language request, output ONLY a JSON object matching this schema:
+const DEFAULT = DEFAULT_SYSTEM_PROMPT;
 
-{
-  "filters": {
-    "category": <one of ["electronics","books","clothing","home","sports"] or null>,
-    "maxPrice": <number or null>,
-    "minRating": <number or null>,
-    "inStockOnly": <boolean or null>
-  },
-  "sort": <one of ["price_asc","price_desc","rating_desc","name_asc"] or null>,
-  "explanation": "<short summary of what you set>"
-}
-
-Rules:
-- If the user does NOT mention a field, return null for it. Do NOT invent constraints.
-- category must be exactly one of the known values or null.
-- sort must be exactly one of the known values or null.
-- "under $X" or "less than $X" means maxPrice = X.
-- "highly rated" / "top rated" means minRating >= 4.0 and/or sort "rating_desc".
-- "in stock" / "available" means inStockOnly = true.
-- Output ONLY the JSON object. No markdown fences, no extra text.`;
-
-/** The one line the default prompt does not have. It looked like a patch added after a failure. */
-const REMOVED_LINE = "- If the user does NOT mention a field, return null for it. Do NOT invent constraints.\n";
-const DEFAULT = FIRST_COMMIT_PROMPT.replace(REMOVED_LINE, "");
-
-describe("the default prompt is pinned", () => {
-  test("it is the first-commit prompt minus exactly one line", () => {
-    assert.ok(FIRST_COMMIT_PROMPT.includes(REMOVED_LINE));
-    assert.equal(DEFAULT_SYSTEM_PROMPT, DEFAULT);
-    assert.equal(FIRST_COMMIT_PROMPT.length - DEFAULT.length, REMOVED_LINE.length);
-  });
-
-  test("prompts/default.txt matches character for character", () => {
-    assert.equal(normalizePrompt(readFileSync("prompts/default.txt", "utf8")), DEFAULT);
-  });
-
-  test("shared/default-prompt.ts holds the same text as the file", () => {
-    assert.equal(DEFAULT_SYSTEM_PROMPT, normalizePrompt(readFileSync("prompts/default.txt", "utf8")));
-  });
-
-  test("its hash is pinned", () => {
-    assert.equal(promptHash(DEFAULT), "fnv1a32:a48649b3");
-  });
-
-  test("it lists exactly the categories and sorts of the control surface", () => {
+describe("partial-update prompt", () => {
+  test("the server and experiment prompt agree", () => {
+    assert.equal(DEFAULT, normalizePrompt(readFileSync("prompts/default.txt", "utf8")));
     assert.ok(DEFAULT.includes(JSON.stringify(CATEGORY_VALUES)));
     assert.ok(DEFAULT.includes(JSON.stringify(SORT_VALUES)));
+  });
+  test("schema preserves omitted fields and accepts explicit resets", () => {
+    const schema = buildCommandSchema();
+    assert.deepEqual(schema.parse({ filters: { maxPrice: 50 }, explanation: "price" }),
+      { filters: { maxPrice: 50 }, explanation: "price" });
+    assert.ok(schema.safeParse({ filters: { category: null }, clearFilters: true, explanation: "reset" }).success);
+    assert.ok(!schema.safeParse({ filters: { unknown: 1 }, explanation: "bad" }).success);
   });
 });
 
@@ -88,17 +45,34 @@ describe("prompt text", () => {
   });
 });
 
-describe("the command language is independent of the prompt text", () => {
-  test("clearFilters is in the schema only when switched on", () => {
-    assert.ok(!("clearFilters" in buildCommandSchema(false).shape));
-    assert.ok("clearFilters" in buildCommandSchema(true).shape);
-    assert.deepEqual((commandSchemaShape(true) as { clearFilters: boolean }).clearFilters, true);
+describe("clearFilters is always part of the command language", () => {
+  test("both modes accept it, and both prompts offer it", () => {
+    for (const mode of ["diff", "full"] as const) assert.ok("clearFilters" in buildCommandSchema(mode).shape);
+    assert.ok(DEFAULT.includes("clearFilters"));
+    assert.ok(resolveSystemPrompt({ LNGUI_COMMAND_MODE: "full" }).includes("clearFilters"));
   });
 
-  test("the schema hash follows the switch and the prompt hash does not", () => {
-    const off = promptHashes(DEFAULT, false);
-    const on = promptHashes(DEFAULT, true);
-    assert.equal(off.systemPromptHash, on.systemPromptHash);
-    assert.notEqual(off.commandSchemaHash, on.commandSchemaHash);
+  test("the schema fingerprint still records it as on, so hashes match earlier runs that had it on", () => {
+    assert.equal((commandSchemaShape() as { clearFilters: boolean }).clearFilters, true);
+  });
+});
+
+describe("paired update strategies", () => {
+  test("full state requires every field; diff accepts a partial command", () => {
+    const partial = { filters: { category: "books" }, explanation: "books" };
+    assert.ok(buildCommandSchema("diff").safeParse(partial).success);
+    assert.ok(!buildCommandSchema("full").safeParse(partial).success);
+    assert.ok(buildCommandSchema("full").safeParse({
+      filters: { category: "books", maxPrice: 500, minRating: null, inStockOnly: false },
+      sort: null, explanation: "books",
+    }).success);
+  });
+  test("mode selects the matching prompt and changes the schema fingerprint", () => {
+    const full = resolveSystemPrompt({ LNGUI_COMMAND_MODE: "full" });
+    assert.equal(full, normalizePrompt(readFileSync("prompts/full-state.txt", "utf8")));
+    assert.notEqual(full, DEFAULT);
+    assert.notEqual(promptHashes(DEFAULT, "diff").commandSchemaHash,
+      promptHashes(DEFAULT, "full").commandSchemaHash);
+    assert.equal(resolveSystemPrompt({ LNGUI_COMMAND_MODE: "full", SYSTEM_PROMPT: "custom" }), "custom");
   });
 });

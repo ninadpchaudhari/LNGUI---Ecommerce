@@ -7,6 +7,7 @@
  * "every reported result will be paired with the model identifier and
  * parameters" — and what §5.7 needs in order to hold P fixed across mediators.
  */
+import { FULL_STATE_PROMPT } from "../shared/full-state-prompt.ts";
 import { DEFAULT_SYSTEM_PROMPT } from "../shared/default-prompt.ts";
 import { normalizePrompt } from "../shared/prompt-text.ts";
 import {
@@ -21,6 +22,7 @@ export type { HistoryConfig } from "../shared/history.ts";
 export type RuntimeEnv = Record<string, string | undefined>;
 
 export type CommandRuntimeEnv = {
+  LNGUI_COMMAND_MODE?: string;
   /** OpenRouter is the default provider. Both spellings of the key are accepted. */
   OPEN_ROUTER_API_KEY?: string;
   OPENROUTER_API_KEY?: string;
@@ -43,8 +45,7 @@ export type CommandRuntimeEnv = {
   HISTORY_POLICY?: string;
   HISTORY_MAX_TURNS?: string;
   /** "false" removes clearFilters from Q and from the system prompt. */
-  /** "true" lets Q accept clearFilters. Off by default. */
-  CLEAR_ACTION_ENABLED?: string;
+  /** "true" lets Q accept clearFilters. On by default. */
   /** baseline | extended. See api/prompt.ts — the two are not interchangeable. */
   /** The system prompt text. Unset: prompts/default.txt. Set per request by experiment conditions. */
   SYSTEM_PROMPT?: string;
@@ -52,8 +53,6 @@ export type CommandRuntimeEnv = {
   LANGFUSE_SECRET_KEY?: string;
   LANGFUSE_BASE_URL?: string;
   LOCAL_TEST_MODE?: string;
-  RUNS_WRITE_TOKEN?: string;
-  RUNS_READ_TOKEN?: string;
   /** openrouter | openai | ollama. Unset: key-first resolution. */
   LLM_PROVIDER?: string;
   /** Model id for whichever provider is selected. */
@@ -279,21 +278,20 @@ export function resolveHistoryConfig(env: RuntimeEnv): HistoryConfig {
   return { policy, maxTurns: k };
 }
 
-/**
- * Whether the command language Q accepts `clearFilters`. Off by default. It
- * changes the schema the model must satisfy and nothing in the prompt text.
- */
-export function clearActionEnabled(env: RuntimeEnv): boolean {
-  return bool(env, "CLEAR_ACTION_ENABLED", false);
+/** How Q states an update: "diff" (partial updates) or "full" (the complete state). Defaults to diff. */
+export function resolveCommandMode(env: RuntimeEnv): "diff" | "full" {
+  const mode = str(env, "LNGUI_COMMAND_MODE");
+  if (mode && mode !== "diff" && mode !== "full") throw new Error("LNGUI_COMMAND_MODE must be diff or full");
+  return mode === "full" ? "full" : "diff";
 }
 
 /**
  * The system prompt in force: the request's own text (SYSTEM_PROMPT), else the
- * committed default, prompts/default.txt. There is no named variant.
+ * committed prompt for the command mode (prompts/default.txt for diff).
  */
 export function resolveSystemPrompt(env: RuntimeEnv): string {
   const text = getEnvVar(env, "SYSTEM_PROMPT");
-  return text !== undefined && text.trim() !== "" ? normalizePrompt(text) : DEFAULT_SYSTEM_PROMPT;
+  return text !== undefined && text.trim() !== "" ? normalizePrompt(text) : resolveCommandMode(env) === "full" ? FULL_STATE_PROMPT : DEFAULT_SYSTEM_PROMPT;
 }
 
 export function langfuseEnabled(env: RuntimeEnv): boolean {

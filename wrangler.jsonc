@@ -34,15 +34,10 @@
     // expensive model on the account key. Local dev can still set it true.
     "OPENROUTER_MODEL_ALLOW_ANY": "false",
     "OPENROUTER_APP_TITLE": "LNGUI Ecommerce Case Study",
-    "LLM_TEMPERATURE": "0",
-    "LLM_TOP_P": "1",
-    "HISTORY_POLICY": "full",
-    // baseline is the prompt as recorded with Figure 1.2, so the deployed
-    // instance keeps the motivating fault. Switching to "extended" makes
-    // multi-turn refinement work but loses the case-invariance violation —
-    // see api/prompt.ts. Under baseline the clear action below is inert.
-    "PROMPT_VARIANT": "baseline",
-    "CLEAR_ACTION_ENABLED": "true",
+    // Temperature, top_p, history policy and command mode are left unset on
+    // purpose: the chat app shows default behaviour (provider defaults, full
+    // history, prompts/default.txt with partial updates). Experiments set
+    // them per condition instead.
     "LANGFUSE_BASE_URL": "https://us.cloud.langfuse.com",
     "LOCAL_TEST_MODE": "false"
   },

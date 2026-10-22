@@ -11,7 +11,7 @@ import { existsSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { readTrials } from "./lib/sweep.ts";
-import { caseTable, render, summaryTable, type Format } from "../shared/report.ts";
+import { caseTable, render, reportTitle, summaryTable, type Format } from "../shared/report.ts";
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,
@@ -57,7 +57,7 @@ if (manifestPath && existsSync(manifestPath)) {
 }
 
 const ks = values.k!.split(",").map((s) => Number(s.trim())).filter((k) => Number.isInteger(k) && k > 0);
-const title = values.title ?? `MR results, ${runId}`;
+const title = values.title ?? reportTitle(runId, rows);
 const table = values.by === "case" ? caseTable(rows, ks, title) : summaryTable(rows, ks, title);
 
 let text = render(table, format);

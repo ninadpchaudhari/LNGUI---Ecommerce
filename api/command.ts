@@ -17,19 +17,20 @@ import {
   type SortValue,
   type TokenUsage,
 } from "../shared/contract.ts";
-import { CATEGORY_VALUES } from "../shared/surface.generated.ts";
+import { applyCommand } from "../shared/transition.ts";
+import { CATEGORY_VALUES, V0 } from "../shared/surface.generated.ts";
 import { effectiveHistory, renderHistory, type ChatMessage } from "../shared/history.ts";
 import {
   buildCommandSchema,
   promptHashes,
 } from "./prompt.ts";
 import {
-  clearActionEnabled,
   getEnvVar,
   isLocalTestMode,
   resolveHistoryConfig,
   resolveLLMConfig,
   resolveSystemPrompt,
+  resolveCommandMode,
   selectModel,
   type CommandRuntimeEnv,
   type RuntimeEnv,
@@ -213,23 +214,31 @@ async function parseRequestBody(request: Request): Promise<ParsedBody> {
  * Deterministic stand-in for the mediator: no network call, no sampling.
  *
  * It is *stateless by construction* — it parses the current utterance alone and
- * ignores H entirely. So local mode behaves like HISTORY_POLICY=none no matter
- * what the policy is set to, and the amnesia and MR_AC/MR_CA/MR_REV relations
- * must be exercised against a real mediator. Local mode is for UI and plumbing
+ * ignores H entirely. Apply preserves omitted fields, but contextual references
+ * still require a real mediator. Local mode is for UI and plumbing
  * work, and for checking that a relation *runs*, not for measuring a mediator.
+ *
+ * It is the reference reading of the bundled cases: "highly rated" is
+ * minRating 4, while "best rated" or "top rated" only sorts. The prompt
+ * deliberately does not spell these readings out, so a model's own reading is
+ * what the relations measure. A dry-run failure should point at the harness or
+ * the case, not at the parser.
  */
-function buildLocalTestCommand(prompt: string, clearEnabled: boolean): Command {
+function buildLocalTestCommand(prompt: string): Command {
   const text = prompt.toLowerCase();
 
-  const category = CATEGORY_VALUES.find((c) => text.includes(c)) ?? null;
+  const category =
+    CATEGORY_VALUES.find((c) => text.includes(c)) ??
+    (/\b(?:tech|gadgets?)\b/.test(text) ? "electronics" : null);
 
   const maxPriceMatch =
-    text.match(/(?:under|less\s+than|below|max(?:imum)?\s+of?)\s*\$?\s*(\d+(?:\.\d+)?)/i) ??
+    text.match(/(?:under|less\s+than|cheaper\s+than|below|max(?:imum)?\s+of?)\s*\$?\s*(\d+(?:\.\d+)?)/i) ??
     text.match(/\$\s*(\d+(?:\.\d+)?)\s*(?:or\s+less|or\s+below|max)/i);
   const maxPrice = maxPriceMatch ? Number(maxPriceMatch[1]) : null;
 
   const ratingMatch = text.match(/(\d(?:\.\d)?)\s*(?:\+|and\s+up)?\s*stars?/i);
-  const highlyRated = /highly\s+rated|top\s+rated|best\s+rated/.test(text);
+  // Only "highly rated" sets a minimum; "best rated first" is a sort.
+  const highlyRated = /highly\s+rated/.test(text);
   const minRating = ratingMatch ? Number(ratingMatch[1]) : highlyRated ? 4 : null;
 
   // Negative phrasings first: "show out-of-stock items again" is the inverse of
@@ -247,12 +256,22 @@ function buildLocalTestCommand(prompt: string, clearEnabled: boolean): Command {
   else if (/(top\s+rated|rating|best\s+rated)/.test(text)) sort = "rating_desc";
   else if (/(alphabetical|name|a\s+to\s+z)/.test(text)) sort = "name_asc";
 
-  const wantsClear = /\b(clear|reset)\b.*\b(filter|filters|everything|all)\b/.test(text);
+  const wantsClear = /\b(?:clear|reset)\s+(?:(?:all|the|every)\s+)?filters?\b|\b(?:clear|reset)\s+(?:everything|all)\b|\bstart over\b/.test(text);
 
   return {
-    filters: { category, maxPrice, minRating, inStockOnly },
-    sort,
-    ...(clearEnabled && wantsClear ? { clearFilters: true } : {}),
+    filters: {
+      ...(category === null ? {} : { category }),
+      ...(maxPrice === null ? {} : { maxPrice }),
+      ...(minRating === null ? {} : { minRating }),
+      ...(inStockOnly === null ? {} : { inStockOnly }),
+      ...(/(?:remove|clear|reset).*category|all categories/.test(text) ? { category: null } : {}),
+      ...(/(?:remove|clear|reset).*(?:price|budget)/.test(text) ? { maxPrice: null } : {}),
+      ...(/(?:remove|clear|reset).*rating/.test(text) ? { minRating: null } : {}),
+      ...(/(?:remove|clear|reset).*(?:stock|availability)/.test(text) ? { inStockOnly: null } : {}),
+    },
+    ...(sort === null ? {} : { sort }),
+    ...(/(?:remove|clear|reset).*sort|default order/.test(text) ? { sort: null } : {}),
+    ...(wantsClear ? { clearFilters: true } : {}),
     explanation: "Local test mode parsed request without external LLM call.",
   };
 }
@@ -280,11 +299,11 @@ export async function handleCommandRequest(
   }
 
   const env = runtimeEnv as RuntimeEnv;
-  const clearEnabled = clearActionEnabled(env);
+  const commandMode = resolveCommandMode(env);
   const historyConfig = resolveHistoryConfig(env);
-  const schema = buildCommandSchema(clearEnabled);
+  const schema = buildCommandSchema(commandMode);
   const system = resolveSystemPrompt(env);
-  const hashes = promptHashes(system, clearEnabled);
+  const hashes = promptHashes(system, commandMode);
   const requestId = crypto.randomUUID();
   const startedAtMs = Date.now();
   const timestamp = new Date().toISOString();
@@ -316,7 +335,7 @@ export async function handleCommandRequest(
             commandSchemaHash: hashes.commandSchemaHash,
             historyPolicy: historyConfig.policy,
             historyMaxTurns: historyConfig.maxTurns,
-            clearActionEnabled: clearEnabled,
+            commandMode,
           },
           attempts: [],
           repaired: false,
@@ -349,7 +368,7 @@ export async function handleCommandRequest(
     commandSchemaHash: hashes.commandSchemaHash,
     historyPolicy: historyConfig.policy,
     historyMaxTurns: historyConfig.maxTurns,
-    clearActionEnabled: clearEnabled,
+    commandMode,
   });
 
   // Sweeps send `x-lngui-langfuse: off` unless the experimenter opts in.
@@ -366,7 +385,7 @@ export async function handleCommandRequest(
       model: chosenModel,
       baseURL: llm.baseURL,
       historyPolicy: historyConfig.policy,
-      clearActionEnabled: clearEnabled,
+      commandMode,
     },
     ...(parsedBody.sessionId ? { sessionId: parsedBody.sessionId } : {}),
   });
@@ -440,8 +459,19 @@ export async function handleCommandRequest(
   }
 
   if (localMode) {
+    let command = buildLocalTestCommand(parsedBody.prompt);
+    if (commandMode === "full") {
+      // Deterministic plumbing stand-in: reconstruct only from supplied command history.
+      let valuation = { ...V0 };
+      for (const turn of sentTurns) {
+        if (turn.q) valuation = applyCommand(valuation, turn.q).V;
+      }
+      valuation = applyCommand(valuation, command).V;
+      const { category, maxPrice, minRating, inStockOnly, sort } = valuation;
+      command = { ...command, filters: { category, maxPrice, minRating, inStockOnly }, sort };
+    }
     return finish(
-      buildLocalTestCommand(parsedBody.prompt, clearEnabled) as unknown as Record<string, unknown>,
+      command as unknown as Record<string, unknown>,
       200,
       null,
       "ok-local-test",

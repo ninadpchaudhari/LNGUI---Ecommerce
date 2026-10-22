@@ -90,7 +90,8 @@ function ValuationDiff({ turn }: { turn: TurnRecord }) {
   );
 }
 
-function Detail({ turn }: { turn: TurnRecord }) {
+/** One turn as u → q → V′ → D′, with its P. Also used by the case inspector. */
+export function TurnDetail({ turn }: { turn: TurnRecord }) {
   const m = turn.meta;
   const added = turn.dAfter.productIds.filter((id) => !turn.dBefore.productIds.includes(id));
   const removed = turn.dBefore.productIds.filter((id) => !turn.dAfter.productIds.includes(id));
@@ -191,7 +192,7 @@ function Detail({ turn }: { turn: TurnRecord }) {
               {m.P.historyMaxTurns !== null && ` (k=${m.P.historyMaxTurns})`}
               {" · sent "}{m.historyTurnsEffective}/{m.historyTurnsDisplayed}
             </span>
-            <span>clear action {m.P.clearActionEnabled ? "on" : "off"}</span>
+            {m.P.clearActionEnabled === false && <span>clear action off (older run)</span>}
             {!turn.flags.contextIntact && (
               <span className="trace-flag-bad">
                 ⚠ context integrity: {m.historyTurnsDisplayed} turn(s) shown,{" "}
@@ -315,7 +316,7 @@ export function TracePanel(props: Props) {
                 </tr>,
                 open ? (
                   <tr key={t.id + "-detail"}>
-                    <td colSpan={8}><Detail turn={t} /></td>
+                    <td colSpan={8}><TurnDetail turn={t} /></td>
                   </tr>
                 ) : null,
               ];

@@ -172,7 +172,7 @@ classDiagram
     +commandSchemaHash: string
     +historyPolicy: full | last-k | none
     +historyMaxTurns: number or null
-    +clearActionEnabled: boolean
+    +clearActionEnabled?: boolean  older records only
   }
   class Product {
     +id: number
@@ -243,7 +243,7 @@ classDiagram
   class RejectedAssignment {
     +control: ControlId
     +value: unknown
-    +reason: out-of-domain | unknown-control | action-disabled
+    +reason: out-of-domain | unknown-control | action-disabled (older records)
   }
   class TurnRecord {
     +id: string
@@ -431,7 +431,7 @@ classDiagram
     SYSTEM_PROMPT  text, from the condition's prompt file
     LLM_TEMPERATURE, LLM_TOP_P
     HISTORY_POLICY, HISTORY_MAX_TURNS
-    CLEAR_ACTION_ENABLED
+    LNGUI_COMMAND_MODE
     LOCAL_TEST_MODE
   }
   class Transport {
@@ -650,7 +650,7 @@ classDiagram
     <<module api/command.ts>>
     +handleCommandRequest(request, env, deps) Response
     -callLLM(client, model, messages, llm)
-    -buildLocalTestCommand(prompt, clearEnabled) Command
+    -buildLocalTestCommand(prompt) Command
     -extractJSON(raw) string
   }
   class Config {
@@ -672,8 +672,8 @@ classDiagram
   }
   class PromptModule {
     <<module api/prompt.ts>>
-    +buildCommandSchema(clearEnabled) zod schema
-    +promptHashes(systemPrompt, clearEnabled)
+    +buildCommandSchema(mode) zod schema
+    +promptHashes(systemPrompt, mode)
   }
 
   TurnStore <|.. D1TurnStore

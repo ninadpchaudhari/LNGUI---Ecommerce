@@ -58,7 +58,7 @@ export interface SendCommandOptions {
    * experimental condition can carry its own environment.
    */
   fetchImpl?: FetchLike;
-  /** Extra headers, e.g. x-runs-token and the Langfuse switch. */
+  /** Extra headers, e.g. the Langfuse switch. */
   headers?: Record<string, string>;
   /** P overrides for this request (shared/overrides.ts). Sent in the body. */
   overrides?: Overrides;

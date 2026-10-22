@@ -19,7 +19,6 @@ const P: PromptConfig = {
   commandSchemaHash: "h",
   historyPolicy: "full",
   historyMaxTurns: null,
-  clearActionEnabled: true,
 };
 
 function q(filters: Partial<Command["filters"]>, sort: Command["sort"] = null): Command {
@@ -36,7 +35,7 @@ function trace(commands: Command[]): TraceResult {
   const records: TurnRecord[] = [];
   commands.forEach((c, i) => {
     const before = state;
-    state = step(state, `u${i}`, c, { clearActionEnabled: true }).state;
+    state = step(state, `u${i}`, c).state;
     records.push({ ok: true, fp: [], writeSet: null, error: null, meta: null, vBefore: before.V } as unknown as TurnRecord);
   });
   return { state, records };
@@ -74,6 +73,19 @@ describe("check — MR_CE and MR_COMP use observational equality", () => {
     // The second turn dropped the category: constraint lost across turns.
     const leaky = trace([q({ category: "electronics" }), q({ maxPrice: 100 })]);
     assert.equal(check(instance("MR_COMP"), leaky, one).holds, false);
+  });
+});
+
+describe("check — the faults the old local parser made stay detectable", () => {
+  // CEP-005 under the parser before it followed the prompt: "tech products"
+  // lost the category and "best rated first" added minRating 4.
+  const source = trace([q({ category: "electronics", maxPrice: 100 }, "rating_desc")]);
+  const faulty = trace([q({ maxPrice: 100, minRating: 4 }, "rating_desc")]);
+
+  test("MR_CE fails on the dropped category and the added minimum", () => {
+    const r = check(instance("MR_CE"), source, faulty);
+    assert.equal(r.holds, false);
+    assert.equal(r.reason, "V and D both differ");
   });
 });
 

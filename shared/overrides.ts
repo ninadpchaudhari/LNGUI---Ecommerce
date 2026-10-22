@@ -32,11 +32,11 @@ export const OVERRIDE_KEYS = [
   "OPENAI_MODEL",
   "OLLAMA_MODEL",
   "SYSTEM_PROMPT",
+  "LNGUI_COMMAND_MODE",
   "LLM_TEMPERATURE",
   "LLM_TOP_P",
   "HISTORY_POLICY",
   "HISTORY_MAX_TURNS",
-  "CLEAR_ACTION_ENABLED",
   "LOCAL_TEST_MODE",
 ] as const;
 
@@ -57,12 +57,20 @@ export function checkOverrides(raw: unknown): { overrides: Overrides; problems: 
     return { overrides, problems: ["overrides must be an object of string values"] };
   }
   for (const [k, v] of Object.entries(raw)) {
+    if (k === "CLEAR_ACTION_ENABLED") {
+      problems.push("CLEAR_ACTION_ENABLED was removed: clearFilters is always part of the command language");
+      continue;
+    }
     if (!isKey(k)) {
       problems.push(`${k} cannot be overridden (allowed: ${OVERRIDE_KEYS.join(", ")})`);
       continue;
     }
     if (typeof v !== "string" || v.trim() === "") {
       problems.push(`${k} must be a non-empty string`);
+      continue;
+    }
+    if (k === "LNGUI_COMMAND_MODE" && !["diff", "full"].includes(v.trim())) {
+      problems.push("LNGUI_COMMAND_MODE must be diff or full");
       continue;
     }
     if (k === "SYSTEM_PROMPT") {

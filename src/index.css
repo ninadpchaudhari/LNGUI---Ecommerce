@@ -777,6 +777,9 @@ body {
 .xp-table th, .xp-table td { text-align: left; padding: 5px 8px; border-bottom: 1px solid #eee; vertical-align: top; }
 .xp-table th { font-weight: 600; color: #555; background: #fafafa; position: sticky; top: 0; }
 .xp-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.xp-report-details { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer; }
+.xp-report-table .xp-table th, .xp-report-table .xp-table td { padding: 12px; }
+.xp-report-table .xp-table th { white-space: nowrap; }
 .xp-table tr.off td { opacity: 0.45; text-decoration: line-through; }
 .xp-progress { display: grid; gap: 6px; }
 .xp-bar { height: 6px; background: #eef0f3; border-radius: 3px; overflow: hidden; }
@@ -784,6 +787,44 @@ body {
 .xp-issue { font-size: 0.8rem; padding: 7px 10px; border-radius: 6px; }
 .xp-issue.bad { background: #fee2e2; color: #991b1b; }
 .xp-issue.warn { background: #fef3c7; color: #92400e; }
+.xp-mode { font-size: 0.8rem; padding: 7px 10px; border-radius: 6px; background: #eef2ff; color: #1e3a8a; }
+.xp-file { display: inline-flex; flex-direction: column; gap: 2px; font-size: 0.75rem; color: #555; }
+.xp-clickable tbody tr { cursor: pointer; }
+.xp-clickable tbody tr:hover td { background: #f5f7fb; }
+.xp-clickable tbody tr.on td { background: #eef2ff; }
+.xp-clickable tbody tr:focus-visible { outline: 2px solid #2563eb; outline-offset: -2px; }
+
+/* Case inspector (CaseInspector.tsx) */
+.ci { border: 1px solid #d0d4da; border-radius: 8px; padding: 12px; display: grid; gap: 10px; min-width: 0; }
+.ci-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.ci-head h4 { margin: 0; font-size: 0.95rem; flex: 1 1 auto; }
+.ci-case { border-top: 1px solid #eee; padding-top: 8px; }
+.ci-case > summary { cursor: pointer; display: flex; gap: 12px; flex-wrap: wrap; align-items: baseline; font-size: 0.85rem; }
+.ci-case > summary::marker { content: ""; }
+.ci-case > summary::before { content: "▸"; color: #777; }
+.ci-case[open] > summary::before { content: "▾"; }
+.ci-case > .xp-note { margin: 6px 0; }
+.ci-trial { margin: 8px 0 0 14px; padding: 8px 10px; border-left: 3px solid #d0d4da; background: #fafafa; border-radius: 0 6px 6px 0; display: grid; gap: 6px; font-size: 0.8rem; min-width: 0; }
+.ci-trial.ci-fail { border-left-color: #dc2626; }
+.ci-trial.ci-pass { border-left-color: #16a34a; }
+.ci-trial.ci-infra { border-left-color: #d97706; }
+.ci-trial-head { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ci-badge { font-size: 0.7rem; padding: 1px 6px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.03em; }
+.ci-badge-pass { background: #dcfce7; color: #166534; }
+.ci-badge-fail { background: #fee2e2; color: #991b1b; }
+.ci-badge-infra { background: #fef3c7; color: #92400e; }
+.ci-k { font-weight: 600; color: #555; margin-right: 4px; }
+.ci-traces { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+.ci-trace h5 { margin: 0 0 4px; font-size: 0.75rem; text-transform: uppercase; color: #777; }
+.ci-trace ol { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.ci-turn-head { all: unset; cursor: pointer; display: inline-flex; gap: 6px; }
+.ci-turn-head:focus-visible { outline: 2px solid #2563eb; }
+.ci-u { font-style: italic; overflow-wrap: anywhere; }
+.ci-turn-body { display: grid; gap: 2px; margin-top: 2px; overflow-wrap: anywhere; }
+.ci-turn-body code { font-size: 0.75rem; background: #f0f2f5; padding: 1px 4px; border-radius: 3px; }
+.ci-chg { display: inline-block; margin-right: 8px; }
+.ci-bad { color: #b91c1c; }
+.ci-reason, .ci-obs { overflow-wrap: anywhere; }
 .xp-side { position: sticky; top: 16px; display: grid; gap: 12px; min-width: 0; }
 .xp-run-estimate { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
 .xp-estimate-heading { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px 6px; font-size: 0.8rem; font-weight: 600; color: #444; }
@@ -850,3 +891,7 @@ body {
 
 .xp-hash { display: inline-block; padding: 2px 6px; border: 1px solid #d8dee4; border-radius: 5px; background: #f6f8fa; color: #57606a; font: 0.74rem/1.3 ui-monospace, Menlo, monospace; white-space: nowrap; }
 .xp-sheet-fingerprint .xp-hash { background: #1e293b; border-color: #334155; color: #cbd5e1; }
+
+.xp-advanced { margin: 12px 0; padding: 12px; border: 1px solid #ddd; border-radius: 6px; }
+.xp-advanced summary { cursor: pointer; font-weight: 600; }
+.xp-advanced[open] summary { margin-bottom: 12px; }

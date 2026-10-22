@@ -1,7 +1,7 @@
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 
-import { caseStats, failAtK, latexEscape, render, reportGroup, summaryTable } from "./report.ts";
+import { caseStats, failAtK, latexEscape, render, reportGroup, reportTitle, runModeLabel, summaryTable } from "./report.ts";
 import type { TrialRow } from "./trials.ts";
 
 describe("failAtK", () => {
@@ -106,4 +106,18 @@ describe("reportGroup", () => {
 
 test("latexEscape handles the characters that break a tabular", () => {
   assert.equal(latexEscape("a_b & 5% $x #1"), "a\\_b \\& 5\\% \\$x \\#1");
+});
+
+describe("run mode label", () => {
+  test("marks a dry run so it cannot pass for a model run", () => {
+    assert.equal(runModeLabel([row("A", 1, "pass", { mode: "local-test" })]), "dry run — local parser");
+    assert.equal(reportTitle("r", [row("A", 1, "pass", { mode: "local-test" })]), "MR results, r (dry run — local parser)");
+    assert.equal(runModeLabel([row("A", 1, "pass", { mode: "llm" })]), "LLM");
+  });
+
+  test("flags mixed rows, and says nothing when no row records its mode", () => {
+    assert.equal(runModeLabel([row("A", 1, "pass", { mode: "llm" }), row("B", 1, "pass", { mode: "local-test" })]), "mixed: dry run and LLM");
+    assert.equal(runModeLabel([row("A", 1, "pass")]), null);
+    assert.equal(reportTitle("r", [row("A", 1, "pass")]), "MR results, r");
+  });
 });

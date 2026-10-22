@@ -3,7 +3,7 @@
  * the unit of RQ1 and RQ2, written by the sweep engine whichever front end
  * drives it, and read by the report.
  */
-import type { ControlId, Observation, RelationName } from "./contract.ts";
+import type { ControlId, LlmProvider, Observation, RelationName, RunMode } from "./contract.ts";
 
 export type TrialStatus = "pass" | "fail" | "infra";
 
@@ -11,6 +11,10 @@ export interface TrialRow {
   schemaVersion: 1;
   runId: string;
   conditionId: string;
+  commandMode?: "diff" | "full";
+  /** "local-test" is the rule-based parser, not a model. Absent on rows from before it was recorded. */
+  mode?: RunMode;
+  provider?: LlmProvider;
   caseId: string;
   relation: RelationName;
   semanticGroup: string;

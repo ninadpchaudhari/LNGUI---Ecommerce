@@ -64,7 +64,11 @@ export type HistoryPolicy = "full" | "last-k" | "none";
  * and so never enter a verdict". P is provenance, recorded so that a violation
  * can be attributed to a mediator version and context policy (§4.17).
  */
+export type CommandMode = "diff" | "full";
+
 export interface PromptConfig {
+  /** Absent on historical records. */
+  commandMode?: CommandMode;
   requestedModel: string;
   /** What the provider actually served; may differ after routing. */
   resolvedModel: string | null;
@@ -75,7 +79,11 @@ export interface PromptConfig {
   commandSchemaHash: string;
   historyPolicy: HistoryPolicy;
   historyMaxTurns: number | null;
-  clearActionEnabled: boolean;
+  /**
+   * Historical records only. clearFilters is now always part of Q; runs from
+   * before that could switch it off (CLEAR_ACTION_ENABLED).
+   */
+  clearActionEnabled?: boolean;
 }
 
 export interface SystemState {
@@ -101,23 +109,24 @@ export interface Observation {
  * Appendix A.1 documents a *flat* shape; the appendix is out of step with the
  * implementation, not the reverse.
  */
+/** Partial update: omission preserves; explicit null resets to the control default. */
 export interface CommandFilters {
   /** Constrained to Dom(category): zod validates the enum before a Command exists. */
-  category: CategoryValue | null;
+  category?: CategoryValue | null;
   /**
    * Numerics are intentionally wider than their domains, so that a mediator
    * emitting e.g. minRating 4.2 is representable in q and can be *rejected* by
    * Apply rather than hidden behind a schema error.
    */
-  maxPrice: number | null;
-  minRating: number | null;
-  inStockOnly: boolean | null;
+  maxPrice?: number | null;
+  minRating?: number | null;
+  inStockOnly?: boolean | null;
 }
 
 export interface Command {
   filters: CommandFilters;
-  sort: SortValue | null;
-  /** Present only when CLEAR_ACTION_ENABLED; absent from the schema otherwise. */
+  sort?: SortValue | null;
+  /** Explicit clear-all operation; applied before individual updates. */
   clearFilters?: boolean | null;
   explanation: string;
 }
@@ -125,6 +134,7 @@ export interface Command {
 // ── Apply — outcome of applying q to V ──────────────────────────────────────
 
 /** Why a requested assignment was not applied. */
+/** "action-disabled" appears only in records from when clearFilters could be switched off. */
 export type RejectionReason = "out-of-domain" | "unknown-control" | "action-disabled";
 
 export interface RejectedAssignment {
@@ -318,6 +328,7 @@ export interface MrCaseRecord {
 // ── /api/config ─────────────────────────────────────────────────────────────
 
 export interface AppConfig {
+  commandMode?: CommandMode;
   schemaVersion: number;
   mode: RunMode;
   provider: LlmProvider;
@@ -331,7 +342,6 @@ export interface AppConfig {
   commandSchemaHash: string;
   historyPolicy: HistoryPolicy;
   historyMaxTurns: number | null;
-  clearActionEnabled: boolean;
   langfuseEnabled: boolean;
   persistence: "d1" | "file" | "none";
   /** C, Dom and V₀, so the client never hardcodes the control surface. */
@@ -346,6 +356,7 @@ export interface AppConfig {
  */
 export function promptConfigFrom(config: AppConfig, model: string): PromptConfig {
   return {
+    commandMode: config.commandMode,
     requestedModel: model,
     resolvedModel: null,
     temperature: config.temperature,
@@ -354,7 +365,6 @@ export function promptConfigFrom(config: AppConfig, model: string): PromptConfig
     commandSchemaHash: config.commandSchemaHash,
     historyPolicy: config.historyPolicy,
     historyMaxTurns: config.historyMaxTurns,
-    clearActionEnabled: config.clearActionEnabled,
   };
 }
 
