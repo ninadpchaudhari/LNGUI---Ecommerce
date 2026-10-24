@@ -36,7 +36,7 @@
       "id": "lean-tdefault",
       "prompt": {
         "file": "prompts/lean.txt",
-        "sha256": "abfa65eb89e912efeaf26740b033e25e9b06b24b07ce372c5d918a6cca032f8a"
+        "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151"
       },
       "env": {
         "LLM_PROVIDER": "openrouter",
@@ -48,7 +48,7 @@
       "id": "lean-t0",
       "prompt": {
         "file": "prompts/lean.txt",
-        "sha256": "abfa65eb89e912efeaf26740b033e25e9b06b24b07ce372c5d918a6cca032f8a"
+        "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151"
       },
       "env": {
         "LLM_PROVIDER": "openrouter",
