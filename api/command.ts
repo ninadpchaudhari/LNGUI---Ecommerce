@@ -497,142 +497,96 @@ export async function handleCommandRequest(
   });
 
   const historyMessages = renderHistory(sentTurns);
-  let userMessage = parsedBody.prompt;
+  const userMessage = parsedBody.prompt;
+  // One call. A reply that is not JSON or fails the schema is M's answer and is
+  // recorded as it is; there is no second "repair" attempt.
+  const attempt = 1;
+  const name: AttemptName = "initial";
+  const messages: ChatMessage[] = [
+    { role: "system", content: system },
+    ...historyMessages,
+    { role: "user", content: userMessage },
+  ];
 
-  // One attempt: a malformed reply is M's answer and is recorded as it is. A
-  // second "repair" attempt would grade the model's corrected retry instead of
-  // its reply; set this to 2 to bring it back. Kept as a loop so that every exit
-  // path runs through `finish` and therefore carries meta.
-  const MAX_ATTEMPTS = 1;
-  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-    const name: AttemptName = attempt === 1 ? "initial" : "repair";
-    const messages: ChatMessage[] = [
-      { role: "system", content: system },
-      ...(attempt === 1 ? historyMessages : []),
-      { role: "user", content: userMessage },
-    ];
+  const generation = trace?.generation?.({
+    name: `command-llm-${name}`,
+    model: chosenModel,
+    input: { messages },
+    metadata: { attempt, historyTurns: sentTurns.length },
+  });
 
-    const generation = trace?.generation?.({
-      name: `command-llm-${name}`,
-      model: chosenModel,
-      input: { messages },
-      metadata: { attempt, historyTurns: attempt === 1 ? sentTurns.length : 0 },
-    });
-
-    const attemptStartedAt = new Date().toISOString();
-    let call: LLMCallResult;
-    try {
-      call = await callLLM(client, chosenModel, messages, llm);
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e);
-      attempts.push({
-        attempt,
-        name,
-        startedAt: attemptStartedAt,
-        latencyMs: Date.now() - startedAtMs,
-        requestedModel: chosenModel,
-        resolvedModel: null,
-        responseId: null,
-        providerName: null,
-        finishReason: null,
-        userPrompt: userMessage,
-        rawText: null,
-        rawTruncated: false,
-        usage: null,
-        outcome: "llm-error",
-        errorMessage: msg,
-      });
-      generation?.end?.({ level: "ERROR", statusMessage: msg });
-      return finish(
-        { error: attempt === 1 ? "LLM call failed" : "LLM retry failed", detail: msg },
-        502,
-        "llm_error",
-        attempt === 1 ? "llm-call-failed" : "llm-retry-failed",
-      );
-    }
-
-    let extracted: string;
-    let outcome: AttemptOutcome;
-    let parsed: Command | null = null;
-    let validationError: string | undefined;
-    try {
-      extracted = extractJSON(call.raw);
-      const result = schema.safeParse(JSON.parse(extracted));
-      if (result.success) {
-        outcome = "parsed";
-        parsed = result.data as Command;
-      } else {
-        outcome = "schema-invalid";
-        validationError = result.error.message;
-      }
-    } catch {
-      extracted = call.raw;
-      outcome = "json-invalid";
-    }
-
-    const raw = truncate(call.raw);
+  const attemptStartedAt = new Date().toISOString();
+  let call: LLMCallResult;
+  try {
+    call = await callLLM(client, chosenModel, messages, llm);
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
     attempts.push({
       attempt,
       name,
       startedAt: attemptStartedAt,
-      latencyMs: call.latencyMs,
+      latencyMs: Date.now() - startedAtMs,
       requestedModel: chosenModel,
-      resolvedModel: call.resolvedModel,
-      responseId: call.responseId,
-      providerName: call.providerName,
-      finishReason: call.finishReason,
+      resolvedModel: null,
+      responseId: null,
+      providerName: null,
+      finishReason: null,
       userPrompt: userMessage,
-      rawText: raw.text,
-      rawTruncated: raw.truncated,
-      usage: call.usage,
-      outcome,
-      errorMessage: validationError ?? null,
+      rawText: null,
+      rawTruncated: false,
+      usage: null,
+      outcome: "llm-error",
+      errorMessage: msg,
     });
-    generation?.end?.({
-      output: call.raw,
-      usageDetails: call.usage,
-      level: outcome === "parsed" ? "DEFAULT" : "WARNING",
-      statusMessage: outcome,
-    });
-
-    if (parsed !== null) {
-      return finish(
-        parsed as unknown as Record<string, unknown>,
-        200,
-        null,
-        attempt === 1 ? "ok-first-pass" : "ok-repair",
-      );
-    }
-
-    if (attempt === MAX_ATTEMPTS) {
-      const first = attempts[0]?.rawText ?? null;
-      return outcome === "schema-invalid"
-        ? finish(
-            {
-              error: MAX_ATTEMPTS > 1 ? "Invalid command after retry" : "Invalid command",
-              firstResponse: first,
-              secondResponse: extracted,
-              validationError,
-            },
-            422,
-            "schema_invalid",
-            "validation-failed",
-          )
-        : finish(
-            { error: "Could not parse LLM response as JSON", raw: raw.text },
-            422,
-            "invalid_json",
-            "json-parse-failed",
-          );
-    }
-
-    userMessage =
-      `The following was supposed to be valid JSON matching the schema but failed:\n\n` +
-      `${extracted}\n\nFix it and output ONLY valid JSON. No other text.`;
+    generation?.end?.({ level: "ERROR", statusMessage: msg });
+    return finish({ error: "LLM call failed", detail: msg }, 502, "llm_error", "llm-call-failed");
   }
 
-  // Unreachable: the loop returns on every path.
-  return finish({ error: "Internal error" }, 500, "internal", "internal");
+  let outcome: AttemptOutcome;
+  let parsed: Command | null = null;
+  let validationError: string | undefined;
+  try {
+    const result = schema.safeParse(JSON.parse(extractJSON(call.raw)));
+    if (result.success) {
+      outcome = "parsed";
+      parsed = result.data as Command;
+    } else {
+      outcome = "schema-invalid";
+      validationError = result.error.message;
+    }
+  } catch {
+    outcome = "json-invalid";
+  }
+
+  const raw = truncate(call.raw);
+  attempts.push({
+    attempt,
+    name,
+    startedAt: attemptStartedAt,
+    latencyMs: call.latencyMs,
+    requestedModel: chosenModel,
+    resolvedModel: call.resolvedModel,
+    responseId: call.responseId,
+    providerName: call.providerName,
+    finishReason: call.finishReason,
+    userPrompt: userMessage,
+    rawText: raw.text,
+    rawTruncated: raw.truncated,
+    usage: call.usage,
+    outcome,
+    errorMessage: validationError ?? null,
+  });
+  generation?.end?.({
+    output: call.raw,
+    usageDetails: call.usage,
+    level: outcome === "parsed" ? "DEFAULT" : "WARNING",
+    statusMessage: outcome,
+  });
+
+  if (parsed !== null) return finish(parsed as unknown as Record<string, unknown>, 200, null, "ok-first-pass");
+  return outcome === "schema-invalid"
+    ? finish({ error: "Invalid command", raw: raw.text, validationError }, 422, "schema_invalid", "validation-failed")
+    : finish({ error: "Could not parse LLM response as JSON", raw: raw.text }, 422, "invalid_json", "json-parse-failed");
 }
 
 export default handleCommandRequest;

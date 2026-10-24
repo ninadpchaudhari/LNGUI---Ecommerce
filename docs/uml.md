@@ -727,8 +727,8 @@ sequenceDiagram
 
 The handler records one attempt. A reply that is not valid JSON or fails the
 schema is M's answer: the handler returns 422 and the turn is recorded as a
-mediator failure. (An earlier version retried once with a "repair" prompt and
-no history; `MAX_ATTEMPTS` in `api/command.ts` brings that back.)
+mediator failure. An earlier version retried once with a "repair" prompt and
+no history; that was removed so the model's first reply is the one judged.
 
 ```mermaid
 sequenceDiagram
