@@ -1,0 +1,65 @@
+{
+  "runId": "pilot-local-smoke-2026-10-24T19-32-03-735Z",
+  "runner": "cli",
+  "langfuse": false,
+  "experimentPath": "experiments/pilot-local-smoke.json",
+  "experiment": {
+    "name": "pilot-local-smoke",
+    "cases": "cases/pilot.jsonl",
+    "casesSha256": "a3c32eae2d7edeaf753290944f231f5488d0d4e52fc09706c7ca43aab1331d67",
+    "n": 2,
+    "seed": 420361,
+    "concurrency": 8,
+    "maxInfraRetries": 0,
+    "conditions": [
+      {
+        "id": "local",
+        "prompt": {
+          "file": "prompts/default.txt",
+          "sha256": "8ab84361ddc42f58ab5bd1257e2ab484dabaca0b72a128b70a29d93be3e51ec3"
+        },
+        "env": {
+          "LOCAL_TEST_MODE": "true",
+          "HISTORY_POLICY": "full"
+        }
+      }
+    ]
+  },
+  "casesSha256": "a3c32eae2d7edeaf753290944f231f5488d0d4e52fc09706c7ca43aab1331d67",
+  "caseCount": 100,
+  "plannedInvocations": 558,
+  "git": {
+    "commit": "0ffabfdd7e8c5aeba7904330466817b7f9571eb7",
+    "branch": "master",
+    "dirty": false
+  },
+  "node": "v24.14.1",
+  "startedAt": "2026-10-24T19:32:03.785Z",
+  "prompts": {
+    "fnv1a32:5a348657": {
+      "file": "prompts/default.txt",
+      "sha256": "8ab84361ddc42f58ab5bd1257e2ab484dabaca0b72a128b70a29d93be3e51ec3",
+      "text": "You are a product filter assistant. Given a user's natural language request, output ONLY a JSON object matching this schema:\n\n{\n  \"filters\": {\n    \"category\": <one of [\"electronics\",\"books\",\"clothing\",\"home\",\"sports\"] or null>,\n    \"maxPrice\": <number or null>,\n    \"minRating\": <number or null>,\n    \"inStockOnly\": <boolean or null>\n  },\n  \"sort\": <one of [\"price_asc\",\"price_desc\",\"rating_desc\",\"name_asc\"] or null>,\n  \"explanation\": \"<short summary of what you set>\"\n}\n\nRules:\n- If the user does NOT mention a field, return null for it. Do NOT invent constraints.\n- category must be exactly one of the known values or null.\n- sort must be exactly one of the known values or null.\n- \"under $X\" or \"less than $X\" means maxPrice = X.\n- \"highly rated\" / \"top rated\" means minRating >= 4.0 and/or sort \"rating_desc\".\n- \"in stock\" / \"available\" means inStockOnly = true.\n- Output ONLY the JSON object. No markdown fences, no extra text."
+    }
+  },
+  "conditions": [
+    {
+      "id": "local",
+      "model": "openai/gpt-4o-mini",
+      "P": {
+        "commandMode": "full",
+        "requestedModel": "openai/gpt-4o-mini",
+        "resolvedModel": null,
+        "temperature": null,
+        "topP": null,
+        "systemPromptHash": "fnv1a32:5a348657",
+        "commandSchemaHash": "fnv1a32:50ca4ace",
+        "historyPolicy": "full",
+        "historyMaxTurns": null
+      },
+      "mode": "local-test",
+      "provider": "local-test"
+    }
+  ],
+  "finishedAt": "2026-10-24T19:32:03.985Z"
+}
