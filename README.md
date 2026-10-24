@@ -113,7 +113,7 @@ and local-test mode. §4.17 requires it: *"every reported result will be paired
 with the model identifier and parameters. It turns out cloud providers actively
 change models, even under the same name."*
 
-`meta` carries `P`, per-attempt records (initial and the JSON repair), token
+`meta` carries `P`, the attempt record (one attempt; there is no JSON repair), token
 usage, and `langfuse {traceId, url}`. `requestId` doubles as the Langfuse trace
 id, so a D1 row and its trace join on one key.
 
@@ -359,7 +359,7 @@ direct OpenAI; else HTTP 500.
 Langfuse is an LLM tracing service. With `LANGFUSE_PUBLIC_KEY`,
 `LANGFUSE_SECRET_KEY` and `LANGFUSE_BASE_URL` set, every `/api/command` call
 from the chat UI becomes one trace. The trace holds a generation for the
-initial attempt and, when needed, one for the JSON repair. Each generation
+single attempt. Each generation
 records the exact messages sent (system prompt, rendered history, utterance),
 the raw reply, token usage and latency. The trace id equals the turn's
 `requestId`, which is also the `TurnRecord.id`. The trace panel's "Langfuse
@@ -442,7 +442,7 @@ implementation (`full`). To run the same text under the other implementation,
 save it as a separate prompt with the other header.
 
 Full mode requires every filter field and sort; omitted fields are schema
-errors and use the existing repair path. Diff mode permits omission. Both use
+errors, recorded as a failed turn with no retry. Diff mode permits omission. Both use
 the same Apply function and explicit reset/clear semantics. Both receive the
 same history policy, not an additional current-state snapshot. Full dry runs
 reconstruct values from the effective command history; they are deterministic

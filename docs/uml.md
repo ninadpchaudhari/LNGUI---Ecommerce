@@ -725,8 +725,10 @@ sequenceDiagram
 
 ### 3.2 Command handler: attempts and repair
 
-The handler records one or two attempts. A repair retries once without
-history when the first reply is not valid JSON or fails the schema.
+The handler records one attempt. A reply that is not valid JSON or fails the
+schema is M's answer: the handler returns 422 and the turn is recorded as a
+mediator failure. (An earlier version retried once with a "repair" prompt and
+no history; `MAX_ATTEMPTS` in `api/command.ts` brings that back.)
 
 ```mermaid
 sequenceDiagram
@@ -753,12 +755,7 @@ sequenceDiagram
     else parsed and schema-valid
       H-->>C: 200 q + meta
     else json-invalid or schema-invalid
-      H->>L: attempt 2 "repair": system, repair prompt
-      alt parsed
-        H-->>C: 200 q + meta (repaired = true)
-      else still invalid
-        H-->>C: 422 invalid_json or schema_invalid + meta
-      end
+      H-->>C: 422 invalid_json or schema_invalid + meta
     end
   end
 ```

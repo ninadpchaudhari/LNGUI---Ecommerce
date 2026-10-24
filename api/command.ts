@@ -499,9 +499,12 @@ export async function handleCommandRequest(
   const historyMessages = renderHistory(sentTurns);
   let userMessage = parsedBody.prompt;
 
-  // Two attempts: the initial call and one JSON repair. Collapsed into a loop so
-  // that every exit path runs through `finish` and therefore carries meta.
-  for (let attempt = 1; attempt <= 2; attempt++) {
+  // One attempt: a malformed reply is M's answer and is recorded as it is. A
+  // second "repair" attempt would grade the model's corrected retry instead of
+  // its reply; set this to 2 to bring it back. Kept as a loop so that every exit
+  // path runs through `finish` and therefore carries meta.
+  const MAX_ATTEMPTS = 1;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     const name: AttemptName = attempt === 1 ? "initial" : "repair";
     const messages: ChatMessage[] = [
       { role: "system", content: system },
@@ -601,12 +604,12 @@ export async function handleCommandRequest(
       );
     }
 
-    if (attempt === 2) {
+    if (attempt === MAX_ATTEMPTS) {
       const first = attempts[0]?.rawText ?? null;
       return outcome === "schema-invalid"
         ? finish(
             {
-              error: "Invalid command after retry",
+              error: MAX_ATTEMPTS > 1 ? "Invalid command after retry" : "Invalid command",
               firstResponse: first,
               secondResponse: extracted,
               validationError,
