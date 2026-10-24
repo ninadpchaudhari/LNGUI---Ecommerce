@@ -51,6 +51,13 @@ const shortModel = (m: string) => slug(m.split("/").pop()!.replace(/:/g, "-"));
 const parseList = (s: string) => s.split(",").map((t) => t.trim()).filter(Boolean);
 const newSeed = () => 100000 + Math.floor(Math.random() * 900000);
 
+/**
+ * What a condition sets, so a condition from a file can be matched to one the
+ * page builds. The command mode is left out: the prompt's header decides it.
+ */
+const conditionKey = (promptName: string, env: Record<string, string>) =>
+  JSON.stringify([promptName, Object.entries(env).filter(([k]) => k !== "LNGUI_COMMAND_MODE").sort(([a], [b]) => a.localeCompare(b))]);
+
 /** A model choice: which provider serves it, and the provider's model id. */
 interface ModelChoice {
   provider: "openrouter" | "ollama";
@@ -465,6 +472,9 @@ export function ExperimentsPage({ config }: Props) {
   const [topP, setTopP] = useState("");
   const [local, setLocal] = useState(false);
   const [condOff, setCondOff] = useState<Set<string>>(new Set());
+  // A loaded experiment file keeps its own condition ids, keyed by what each condition sets.
+  const [loadedIds, setLoadedIds] = useState<Map<string, string>>(new Map());
+  const [pendingKeep, setPendingKeep] = useState<Set<string> | null>(null);
 
   const chosenModels = models.filter((m) => modelsOn.includes(keyOf(m)));
   const chosenPrompts = prompts.filter((p) => promptsOn.includes(p.name));
@@ -494,12 +504,27 @@ export function ExperimentsPage({ config }: Props) {
             if (chosenPrompts.length > 1 || pr.name !== "default") parts.push(pr.name);
             if (!local) parts.push(t === "default" ? "tdefault" : `t${t}`);
             if (history.length > 1 || h !== "full") parts.push(h === "last-k" ? `last${maxTurns}` : h);
-            out.push({ id: parts.join("-"), env, prompt: { name: pr.name, text: normalizePrompt(pr.text) } });
+            const id = loadedIds.get(conditionKey(pr.name, env)) ?? parts.join("-");
+            out.push({ id, env, prompt: { name: pr.name, text: normalizePrompt(pr.text) } });
           }
     return out;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [local, modelsOn, models, temps, prompts, promptsOn, history, maxTurns, topP]);
+  }, [local, modelsOn, models, temps, prompts, promptsOn, history, maxTurns, topP, loadedIds]);
   const conditions = allConditions.filter((c) => !condOff.has(c.id));
+
+  // After a load, the factors above produce every combination; switch off the
+  // ones the file did not list, and say which listed ones the page cannot build.
+  const [loadNotes, setLoadNotes] = useState<Array<["bad" | "warn" | "ok", string]>>([]);
+  useEffect(() => {
+    if (!pendingKeep) return;
+    const built = new Set(allConditions.map((c) => conditionKey(c.prompt.name, c.env)));
+    setCondOff(new Set(allConditions.filter((c) => !pendingKeep.has(conditionKey(c.prompt.name, c.env))).map((c) => c.id)));
+    const missing = [...pendingKeep].filter((k) => !built.has(k)).map((k) => loadedIds.get(k) ?? k);
+    if (missing.length) {
+      setLoadNotes((n) => [...n, ["bad", `The page cannot build ${missing.length} condition(s) from this file, so they are left out: ${missing.join(", ")}. They set something this page has no control for.`]]);
+    }
+    setPendingKeep(null);
+  }, [pendingKeep, allConditions, loadedIds]);
 
   const toggle = (list: string[], set: (v: string[]) => void, v: string) =>
     set(list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
@@ -542,6 +567,62 @@ export function ExperimentsPage({ config }: Props) {
   const autoName = slug(`${suite.short}-${modelsPart}-${conditions.length}cond-n${exp.n}`);
   const [customName, setCustomName] = useState<string | null>(null);
   const name = customName ?? autoName;
+
+  /** Fills the page from an experiments/*.json, so it can be read, changed and saved again. */
+  const loadExperiment = async (fileName: string, text: string) => {
+    let raw: unknown;
+    try {
+      raw = JSON.parse(text);
+    } catch {
+      return setLoadNotes([["bad", `${fileName} is not JSON.`]]);
+    }
+    const parsed = experimentSchema.safeParse(raw);
+    if (!parsed.success) {
+      return setLoadNotes(parsed.error.issues.map((i) => ["bad", `${fileName}: ${i.path.join(".") || "experiment"}: ${i.message}`]));
+    }
+    const e = parsed.data;
+    const notes: Array<["bad" | "warn" | "ok", string]> = [];
+
+    if (e.cases !== "cases/pilot.jsonl") notes.push(["warn", `The file uses ${e.cases}; this page only bundles cases/pilot.jsonl, so it shows that instead.`]);
+    else if (e.casesSha256 && e.casesSha256 !== (await sha256Hex(pilotText))) {
+      notes.push(["bad", "cases/pilot.jsonl has changed since this experiment was written; the CLI will refuse to run it."]);
+    }
+    setSource("bundled");
+    setExcluded(new Set());
+
+    const promptNames = [...new Set(e.conditions.map((c) => c.prompt.file.replace(/^prompts\//, "").replace(/\.txt$/, "")))];
+    for (const c of e.conditions) {
+      const pname = c.prompt.file.replace(/^prompts\//, "").replace(/\.txt$/, "");
+      const p = COMMITTED_PROMPTS.find((x) => x.name === pname);
+      if (!p) notes.push(["bad", `${c.id}: ${c.prompt.file} is not in prompts/.`]);
+      else if ((await promptSha256(p.text)) !== c.prompt.sha256) {
+        notes.push(["bad", `${c.id}: ${c.prompt.file} has changed since this experiment was written; the CLI will refuse to run it.`]);
+      }
+    }
+    const uniq = (xs: string[]) => [...new Set(xs)];
+    const envs = e.conditions.map((c) => c.env);
+    const isLocal = envs.some((v) => v.LOCAL_TEST_MODE === "true");
+    const chosen: ModelChoice[] = uniq(envs.filter((v) => v.LLM_MODEL).map((v) => `${v.LLM_PROVIDER ?? "openrouter"}:${v.LLM_MODEL}`))
+      .map((k) => ({ provider: k.slice(0, k.indexOf(":")) as ModelChoice["provider"], model: k.slice(k.indexOf(":") + 1) }));
+    setLocal(isLocal);
+    setModels((m) => [...m, ...chosen.filter((c) => !m.some((x) => keyOf(x) === keyOf(c)))]);
+    if (!isLocal) setModelsOn(chosen.map(keyOf));
+    setPromptsOn(promptNames.filter((n) => COMMITTED_NAMES.has(n)));
+    setEditing(promptNames[0]);
+    setTemps(uniq(envs.map((v) => v.LLM_TEMPERATURE ?? "default")).join(", "));
+    setTopP(envs.find((v) => v.LLM_TOP_P)?.LLM_TOP_P ?? "");
+    setHistory(uniq(envs.map((v) => v.HISTORY_POLICY ?? "full")));
+    const k = envs.find((v) => v.HISTORY_MAX_TURNS)?.HISTORY_MAX_TURNS;
+    if (k) setMaxTurns(Number(k));
+    setExp({ n: e.n, seed: e.seed, concurrency: e.concurrency, maxInfraRetries: e.maxInfraRetries });
+    setCustomName(e.name);
+
+    const ids = new Map(e.conditions.map((c) => [conditionKey(c.prompt.file.replace(/^prompts\//, "").replace(/\.txt$/, ""), c.env), c.id] as const));
+    setLoadedIds(ids);
+    setPendingKeep(new Set(ids.keys()));
+    notes.unshift(["ok", `Loaded ${fileName}: ${e.conditions.length} condition(s), N=${e.n}, seed ${e.seed}. Change anything below, then copy or download the file again.`]);
+    setLoadNotes(notes);
+  };
 
   const experiment = {
     name,
@@ -1016,6 +1097,18 @@ export function ExperimentsPage({ config }: Props) {
         <section className="xp-block">
           <h2>4. Experiment <small>experiments/&lt;name&gt;.json</small></h2>
           <div className="xp-body">
+            <div className="xp-row">
+              <label className="xp-file-btn">
+                Load experiment .json
+                <input id="experiment-file" type="file" accept=".json,application/json" onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  e.target.value = "";
+                  if (f) void f.text().then((t) => loadExperiment(f.name, t));
+                }} />
+              </label>
+              <span className="xp-note">Fills sections 1–4 from a file in experiments/.</span>
+            </div>
+            {loadNotes.map(([k, m], i) => <div key={i} className={`xp-issue ${k === "ok" ? "" : k}`}>{m}</div>)}
             <div className="xp-grid">
               <Field label="Name" help="Names the experiment file and the run folder, runs/<name>-<time>/. It is built from the test set, models, condition count and N until you edit it.">
                 <span className="xp-inline">
