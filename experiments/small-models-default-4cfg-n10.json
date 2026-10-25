@@ -1,0 +1,63 @@
+{
+  "name": "small-models-default-4cfg-n10",
+  "cases": "cases/pilot.jsonl",
+  "casesSha256": "a3c32eae2d7edeaf753290944f231f5488d0d4e52fc09706c7ca43aab1331d67",
+  "n": 10,
+  "seed": 406269,
+  "concurrency": 4,
+  "maxInfraRetries": 2,
+  "conditions": [
+    {
+      "id": "gpt-5-nano-default",
+      "prompt": {
+        "file": "prompts/default.txt",
+        "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151"
+      },
+      "env": {
+        "LLM_PROVIDER": "openrouter",
+        "LLM_MODEL": "openai/gpt-5-nano",
+        "HISTORY_POLICY": "full"
+      }
+    },
+    {
+      "id": "claude-haiku-5.5-default",
+      "prompt": {
+        "file": "prompts/default.txt",
+        "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151"
+      },
+      "env": {
+        "LLM_PROVIDER": "openrouter",
+        "LLM_MODEL": "anthropic/claude-haiku-5.5",
+        "HISTORY_POLICY": "full"
+      }
+    },
+    {
+      "id": "llama-3.2-3b-instruct-default-t0.6-p0.9",
+      "prompt": {
+        "file": "prompts/default.txt",
+        "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151"
+      },
+      "env": {
+        "LLM_PROVIDER": "openrouter",
+        "LLM_MODEL": "meta-llama/llama-3.2-3b-instruct",
+        "LLM_TEMPERATURE": "0.6",
+        "LLM_TOP_P": "0.9",
+        "HISTORY_POLICY": "full"
+      }
+    },
+    {
+      "id": "qwen3.5-9b-default-t1-p0.95",
+      "prompt": {
+        "file": "prompts/default.txt",
+        "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151"
+      },
+      "env": {
+        "LLM_PROVIDER": "openrouter",
+        "LLM_MODEL": "qwen/qwen3.5-9b",
+        "LLM_TEMPERATURE": "1",
+        "LLM_TOP_P": "0.95",
+        "HISTORY_POLICY": "full"
+      }
+    }
+  ]
+}

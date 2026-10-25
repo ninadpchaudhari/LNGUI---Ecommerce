@@ -96,7 +96,7 @@ for (const condition of loaded.conditions) {
 }
 
 const planned = plannedInvocations(cases, runtimes.length, experiment.n);
-console.log(`experiment ${experiment.name}: ${cases.length} cases × ${runtimes.length} condition(s) × N=${experiment.n}`);
+console.log(`experiment ${experiment.name}: ${cases.length} cases × ${runtimes.length} configuration(s) × N=${experiment.n}`);
 console.log(`cases ${experiment.cases} sha256 ${casesSha256.slice(0, 16)}…`);
 for (const rt of runtimes) {
   const c = rt.config;
