@@ -18,6 +18,7 @@ import { join } from "node:path";
 import { handleApiRequest } from "../../api/router.ts";
 import { toFetchRequest } from "../../api/node-adapter.ts";
 import { generateCandidates, selectCases } from "../../shared/generate.ts";
+import { parseCasesJsonl } from "../../shared/cases.ts";
 import { sameOutcome, trialKey } from "../../shared/trials.ts";
 import { promptHash } from "../../shared/prompt-text.ts";
 import { memorySink, openCondition, runSweep, type Condition, type Transport } from "../../src/utils/sweep.ts";
@@ -51,6 +52,41 @@ test("the engine runs every case N times and resumes without repeating work", as
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
+});
+
+test("over-reach is reported beside the verdict and never decides it", async () => {
+  // CEP-005 may write category, maxPrice and sort. The mediator below answers
+  // every utterance with the same command, which also sets minRating and
+  // inStockOnly: both runs over-reach identically, so the relation holds.
+  const pilot = parseCasesJsonl(await readFile("cases/pilot.jsonl", "utf8"));
+  const cep005 = pilot.cases.filter((c) => c.id === "CEP-005");
+  assert.equal(cep005.length, 1);
+
+  const inner = inProcessTransport();
+  const overReaching: Transport = {
+    ...inner,
+    fetchImpl: async (input, init) => {
+      const res = await inner.fetchImpl!(input, init);
+      if (!String(input).startsWith("/api/command")) return res;
+      const body = (await res.json()) as Record<string, unknown>;
+      return new Response(JSON.stringify({
+        ...body,
+        filters: { category: "electronics", maxPrice: 100, minRating: 4, inStockOnly: true },
+        sort: "rating_desc",
+        clearFilters: false,
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    },
+  };
+
+  const sink = memorySink();
+  const rt = await openCondition(LOCAL, overReaching);
+  await runSweep({ runId: "overreach", cases: cep005, conditions: [rt], n: 1, seed: 1, concurrency: 1, maxInfraRetries: 0, sink });
+
+  assert.equal(sink.rows.length, 1);
+  const [row] = sink.rows;
+  assert.equal(row.status, "pass", row.reason);
+  assert.equal(row.overReach, true);
+  assert.deepEqual([...row.overReachControls].sort(), ["inStockOnly", "minRating"]);
 });
 
 async function body(req: IncomingMessage): Promise<string> {
