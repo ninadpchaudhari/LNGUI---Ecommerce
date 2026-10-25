@@ -20,7 +20,7 @@ const promptRefSchema = z.object({
 
 const conditionSchema = z
   .object({
-    id: z.string().regex(/^[\w.-]+$/, "condition ids use letters, digits, dot, dash and underscore"),
+    id: z.string().regex(/^[\w.-]+$/, "configuration ids use letters, digits, dot, dash and underscore"),
     prompt: promptRefSchema,
     env: z.record(z.string(), z.string()).default({}),
   })
@@ -82,7 +82,7 @@ export const experimentSchema = z
   .superRefine((e, ctx) => {
     const ids = e.conditions.map((c) => c.id);
     const dupes = [...new Set(ids.filter((x, i) => ids.indexOf(x) !== i))];
-    if (dupes.length > 0) ctx.addIssue({ code: "custom", message: `duplicate condition ids: ${dupes.join(", ")}` });
+    if (dupes.length > 0) ctx.addIssue({ code: "custom", message: `duplicate configuration ids: ${dupes.join(", ")}` });
     // Two conditions that send the same thing are the same run, paid for twice.
     const seen = new Map<string, string>();
     for (const c of e.conditions) {
@@ -90,7 +90,7 @@ export const experimentSchema = z
       delete env.LNGUI_COMMAND_MODE; // set by the prompt's header
       const key = JSON.stringify([c.prompt.sha256, Object.entries(env).sort(([a], [b]) => a.localeCompare(b))]);
       const twin = seen.get(key);
-      if (twin) ctx.addIssue({ code: "custom", message: `conditions ${twin} and ${c.id} are the same run; change or remove one` });
+      if (twin) ctx.addIssue({ code: "custom", message: `configurations ${twin} and ${c.id} are the same run; change or remove one` });
       else seen.set(key, c.id);
     }
   });

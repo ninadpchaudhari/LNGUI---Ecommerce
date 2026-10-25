@@ -38,13 +38,13 @@ export async function loadConditions(experimentConditions: readonly ExperimentCo
       try {
         raw = await readFile(c.prompt.file, "utf8");
       } catch {
-        throw new Error(`condition ${c.id}: cannot read ${c.prompt.file}`);
+        throw new Error(`configuration ${c.id}: cannot read ${c.prompt.file}`);
       }
       let parsed;
       try {
         parsed = parsePromptFile(raw);
       } catch (e) {
-        throw new Error(`condition ${c.id}: ${c.prompt.file}: ${(e as Error).message}`);
+        throw new Error(`configuration ${c.id}: ${c.prompt.file}: ${(e as Error).message}`);
       }
       const { text, implementation } = parsed;
       p = { file: c.prompt.file, text, implementation, sha256: await promptSha256(text), hash: promptHash(text) };
@@ -52,20 +52,20 @@ export async function loadConditions(experimentConditions: readonly ExperimentCo
     }
     if (p.sha256 !== c.prompt.sha256) {
       throw new Error(
-        `condition ${c.id}: ${c.prompt.file} is not the prompt this experiment was designed for ` +
+        `configuration ${c.id}: ${c.prompt.file} is not the prompt this experiment was designed for ` +
           `(expected ${c.prompt.sha256.slice(0, 12)}…, found ${p.sha256.slice(0, 12)}…)`,
       );
     }
     const declared = p.implementation;
     if (declared && c.env.LNGUI_COMMAND_MODE && c.env.LNGUI_COMMAND_MODE !== declared) {
       throw new Error(
-        `condition ${c.id}: ${c.prompt.file} declares implementation ${declared}, ` +
-          `but the condition sets LNGUI_COMMAND_MODE=${c.env.LNGUI_COMMAND_MODE}`,
+        `configuration ${c.id}: ${c.prompt.file} declares implementation ${declared}, ` +
+          `but the configuration sets LNGUI_COMMAND_MODE=${c.env.LNGUI_COMMAND_MODE}`,
       );
     }
     // The same function the Experiments page uses, so a file sends the same thing from either.
     const { env, dropped } = effectiveEnv(c.env);
-    if (dropped.length) warnings.push(`condition ${c.id}: ${env.LLM_MODEL} takes no temperature or top_p; ignoring ${dropped.join(" and ")}`);
+    if (dropped.length) warnings.push(`configuration ${c.id}: ${env.LLM_MODEL} takes no temperature or top_p; ignoring ${dropped.join(" and ")}`);
     conditions.push({
       id: c.id,
       env: { ...env, ...(declared ? { LNGUI_COMMAND_MODE: declared } : {}), SYSTEM_PROMPT: p.text },

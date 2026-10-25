@@ -76,7 +76,6 @@ function Settings({ settings: s, onChange, locked }: {
           <input className="model-picker-input" value={s.topP} disabled={fixed} placeholder={fixed ? "not accepted" : "not sent"} onChange={(e) => set({ topP: e.target.value })} />
         </label>
       </div>
-      {fixed && <p className="chat-hint">This model does not accept temperature or top_p, so neither is sent.</p>}
       {locked && <p className="chat-hint">Settings are fixed for the session. Reset the session to change them.</p>}
     </fieldset>
   );

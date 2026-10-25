@@ -87,10 +87,10 @@ for (const w of loaded.warnings) console.warn(`! ${w}`);
 for (const condition of loaded.conditions) {
   const rt = await openCondition(condition, transport);
   if (rt.config.mode === "local-test" && condition.env.LOCAL_TEST_MODE !== "true") {
-    die(`condition ${condition.id} resolved to LOCAL_TEST_MODE from .env; set it explicitly in the condition if intended`);
+    die(`configuration ${condition.id} resolved to LOCAL_TEST_MODE from .env; set it explicitly in the configuration if intended`);
   }
   if (rt.config.mode === "llm" && rt.config.provider === "none") {
-    die(`condition ${condition.id}: no API key (OPEN_ROUTER_API_KEY or OPENAI_API_KEY)`);
+    die(`configuration ${condition.id}: no API key (OPEN_ROUTER_API_KEY or OPENAI_API_KEY)`);
   }
   runtimes.push(rt);
 }

@@ -127,7 +127,7 @@ describe("loadConditions", () => {
   test("reports a missing file by condition", async () => {
     await inTempDir(async () => {
       const parsed = experimentSchema.parse(base([{ id: "c1", prompt: { file: "prompts/none.txt", sha256: SHA }, env: T }]));
-      await assert.rejects(loadConditions(parsed.conditions), /condition c1: cannot read prompts\/none.txt/);
+      await assert.rejects(loadConditions(parsed.conditions), /configuration c1: cannot read prompts\/none.txt/);
     });
   });
 });

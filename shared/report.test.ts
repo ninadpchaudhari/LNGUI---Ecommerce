@@ -72,7 +72,7 @@ describe("summaries", () => {
 
   test("renders every format", () => {
     const t = summaryTable(rows, [1, 3], "Pilot_results 100%");
-    assert.match(render(t, "md"), /^\| Condition/);
+    assert.match(render(t, "md"), /^\| Configuration/);
     const tex = render(t, "latex");
     assert.match(tex, /\$MR_\{CE\}\$/);
     assert.match(tex, /Pilot\\_results 100\\%/);

@@ -475,7 +475,7 @@ export function ExperimentsPage() {
     setBlocks(loaded);
     setExp({ n: e.n, seed: e.seed, concurrency: e.concurrency, maxInfraRetries: e.maxInfraRetries });
     setCustomName(e.name);
-    notes.unshift(["ok", `Loaded ${fileName}: ${e.conditions.length} condition(s), N=${e.n}, seed ${e.seed}. Change anything below, then copy or download the file again.`]);
+    notes.unshift(["ok", `Loaded ${fileName}: ${e.conditions.length} configuration(s), N=${e.n}, seed ${e.seed}. Change anything below, then copy or download the file again.`]);
     setLoadNotes(notes);
   };
 
@@ -551,7 +551,7 @@ export function ExperimentsPage() {
       for (const c of conditions) {
         const rt = await openCondition(toEngine(c), transport);
         if (rt.config.mode === "llm" && rt.config.provider === "none") {
-          throw new Error(`Condition ${c.id}: the server has no API key for this provider.`);
+          throw new Error(`Configuration ${c.id}: the server has no API key for this provider.`);
         }
         runtimes.push(rt);
       }
@@ -794,7 +794,7 @@ export function ExperimentsPage() {
               )}
             </div>
             {!isCommitted && (
-              <Field label="Name" help="Becomes the file name, prompts/<name>.txt, and part of each condition's id. Letters, digits, dot, dash and underscore.">
+              <Field label="Name" help="Becomes the file name, prompts/<name>.txt, and part of each configuration's id. Letters, digits, dot, dash and underscore.">
                 <input id="prompt-name" type="text" value={editingPrompt.name} spellCheck={false} onChange={(e) => {
                   const next = e.target.value;
                   const old = editingPrompt.name;
@@ -840,7 +840,7 @@ export function ExperimentsPage() {
         </section>
 
         <section className="xp-block">
-          <h2>3. Configurations <small>one per condition in the experiment file</small></h2>
+          <h2>3. Configurations</h2>
           <div className="xp-body">
             <p className="xp-note">
               Each configuration runs exactly as written. To compare two settings, duplicate a configuration and change one field.
@@ -852,7 +852,7 @@ export function ExperimentsPage() {
               return (
                 <div key={b.key} className="xp-config">
                   <div className="xp-row">
-                    <Field label="Id" help="The condition's name in the experiment file and in every trial row. Filled in from the settings until you type one.">
+                    <Field label="Id" help="The configuration's name in the experiment file and in every trial row. Filled in from the settings until you type one.">
                       <input type="text" value={b.id} placeholder={autoId(b)} spellCheck={false} onChange={(e) => updateBlock(b.key, { id: e.target.value })} />
                     </Field>
                     <button type="button" onClick={() => setBlocks((bs) => {
@@ -895,7 +895,6 @@ export function ExperimentsPage() {
                       </Field>
                     )}
                   </div>
-                  {!sampling && b.model !== LOCAL && <p className="xp-note">This model takes no temperature or top_p, so neither is sent.</p>}
                   <div className="xp-mono xp-dim">{c ? pText(c) : "prompt missing"}</div>
                 </div>
               );
@@ -922,13 +921,13 @@ export function ExperimentsPage() {
             </div>
             {loadNotes.map(([k, m], i) => <div key={i} className={`xp-issue ${k === "ok" ? "" : k}`}>{m}</div>)}
             <div className="xp-grid">
-              <Field label="Name" help="Names the experiment file and the run folder, runs/<name>-<time>/. It is built from the test set, models, condition count and N until you edit it.">
+              <Field label="Name" help="Names the experiment file and the run folder, runs/<name>-<time>/. It is built from the test set, models, configuration count and N until you edit it.">
                 <span className="xp-inline">
                   <input id="exp-name" type="text" value={name} onChange={(e) => setCustomName(e.target.value)} spellCheck={false} />
                   {customName !== null && <button type="button" onClick={() => setCustomName(null)}>Auto</button>}
                 </span>
               </Field>
-              <Field label="Trials per case (N)" help="How many times each case runs under each condition. RQ2's fail@k needs N ≥ k. Ten is the pilot budget.">
+              <Field label="Trials per case (N)" help="How many times each case runs under each configuration. RQ2's fail@k needs N ≥ k. Ten is the pilot budget.">
                 <input id="exp-n" type="number" min={1} value={exp.n} onChange={(e) => setExp({ ...exp, n: Number(e.target.value) })} />
               </Field>
               <Field label="Trial-order seed" help="Seeds the shuffled order of trials within each round. It is recorded in the experiment file, so a run's order can be reproduced. It does not change which cases run.">

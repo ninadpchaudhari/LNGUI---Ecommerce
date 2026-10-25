@@ -138,7 +138,7 @@ function orderedConditions(rows: readonly { conditionId: string }[]): string[] {
 export function summaryTable(rows: readonly TrialRow[], ks: readonly number[], title: string): Table {
   const stats = caseStats(rows);
   const columns: Column[] = [
-    { key: "condition", label: "Condition", numeric: false },
+    { key: "condition", label: "Configuration", numeric: false },
     { key: "mr", label: "MR", numeric: false },
     { key: "cases", label: "Cases", numeric: true },
     { key: "groups", label: "Groups", numeric: true },
@@ -196,7 +196,7 @@ export function caseTable(rows: readonly TrialRow[], ks: readonly number[], titl
   return {
     title,
     columns: [
-      { key: "condition", label: "Condition", numeric: false },
+      { key: "condition", label: "Configuration", numeric: false },
       { key: "case", label: "Case", numeric: false },
       { key: "mr", label: "MR", numeric: false },
       { key: "group", label: "Group", numeric: false },
