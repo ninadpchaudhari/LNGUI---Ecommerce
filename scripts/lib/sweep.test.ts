@@ -28,7 +28,7 @@ import { fileSink, readTrials } from "./sweep.ts";
 const { cases } = selectCases(generateCandidates().candidates, { seed: 1, groups: 2, perGroup: 1 });
 const LOCAL: Condition = { id: "local", env: { LOCAL_TEST_MODE: "true" } };
 
-test("the engine runs every case N times and resumes without repeating work", async () => {
+test("the engine runs every case N times and records every turn", async () => {
   const dir = await mkdtemp(join(tmpdir(), "lngui-sweep-"));
   try {
     const rt = await openCondition(LOCAL, inProcessTransport());
@@ -45,10 +45,8 @@ test("the engine runs every case N times and resumes without repeating work", as
     const expectedTurns = cases.reduce((s, c) => s + c.sourceTrace.length + c.followupTrace.length, 0) * 2;
     assert.equal(turns.length, expectedTurns);
 
-    const done = new Set((await readTrials(trialsPath)).map(trialKey));
-    const second = await runSweep({ ...common, n: 3, done, sink: fileSink(trialsPath, turnsPath) });
-    assert.equal(second.length, cases.length);
-    assert.ok(second.every((r) => r.trial === 3));
+    const written = await readTrials(trialsPath);
+    assert.deepEqual(written.map(trialKey).sort(), first.map(trialKey).sort());
   } finally {
     await rm(dir, { recursive: true, force: true });
   }

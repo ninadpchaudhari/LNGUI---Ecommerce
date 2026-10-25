@@ -1,6 +1,6 @@
 /**
  * Node-side pieces of a sweep: a sink that appends JSONL files, and reading
- * trial rows back for resume and reporting. The engine itself is
+ * trial rows back for reporting. The engine itself is
  * src/utils/sweep.ts, shared with the browser.
  */
 import { appendFile, readFile } from "node:fs/promises";

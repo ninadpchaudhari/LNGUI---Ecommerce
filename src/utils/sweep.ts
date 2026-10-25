@@ -23,7 +23,7 @@ import { promptConfigFrom, type AppConfig, type PromptConfig, type TurnRecord } 
 import type { MrCase } from "../../shared/cases.ts";
 import type { Overrides } from "../../shared/overrides.ts";
 import { rng, shuffle } from "../../shared/random.ts";
-import { trialKey, type TrialRow } from "../../shared/trials.ts";
+import type { TrialRow } from "../../shared/trials.ts";
 import type { FetchLike } from "./api.ts";
 import { runTrial } from "./relations.ts";
 
@@ -88,8 +88,6 @@ export interface SweepOptions {
   concurrency: number;
   maxInfraRetries: number;
   sink: TrialSink;
-  /** Keys already completed (pass or fail); these are skipped on resume. */
-  done?: ReadonlySet<string>;
   onTrial?: (row: TrialRow, progress: { done: number; total: number; round: number }) => void;
   /** Stops scheduling new trials; trials in flight finish and are recorded. */
   signal?: AbortSignal;
@@ -99,8 +97,10 @@ export interface SweepOptions {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+/** Runs one case once under one configuration, retrying infrastructure failures, and records the trial. */
 async function runOne(c: MrCase, rt: ConditionRuntime, trial: number, opts: SweepOptions): Promise<TrialRow> {
   for (let attempt = 1; ; attempt++) {
+    // 1. Run the source and follow-up traces through the mediator.
     const started = Date.now();
     const { source, followup, outcome } = await runTrial(rt.P, c, {
       sessionId: `${opts.runId}/${rt.condition.id}`,
@@ -112,19 +112,26 @@ async function runOne(c: MrCase, rt: ConditionRuntime, trial: number, opts: Swee
     const latencyMs = Date.now() - started;
     const records = [...source.records, ...followup.records];
 
-    await opts.sink.turns(
-      records.map((r) => ({ ...r, runId: opts.runId, conditionId: rt.condition.id, caseId: c.id, attempt })),
-    );
+    // 2. Record every turn, tagged with where it belongs in the run.
+    const tagged = records.map((r) => ({ ...r, runId: opts.runId, conditionId: rt.condition.id, caseId: c.id, attempt }));
+    await opts.sink.turns(tagged);
 
+    // 3. Add up tokens and cost; null when no turn reported them.
     let tokens: number | null = null;
     let costUsd: number | null = null;
     for (const r of records) {
-      const u = r.meta?.usageTotal;
-      if (typeof u?.totalTokens === "number") tokens = (tokens ?? 0) + u.totalTokens;
-      if (typeof u?.costUsd === "number") costUsd = (costUsd ?? 0) + u.costUsd;
+      const usage = r.meta?.usageTotal;
+      if (typeof usage?.totalTokens === "number") tokens = (tokens ?? 0) + usage.totalTokens;
+      if (typeof usage?.costUsd === "number") costUsd = (costUsd ?? 0) + usage.costUsd;
     }
-    const attempts = records.flatMap((r) => r.meta?.attempts ?? []);
 
+    // 4. Build the trial row. The verdict is the relation's check (outcome), nothing else.
+    const attempts = records.flatMap((r) => r.meta?.attempts ?? []);
+    const resolvedModels = attempts.map((a) => a.resolvedModel).filter((m): m is string => !!m);
+    const providers = attempts.map((a) => a.providerName).filter((p): p is string => !!p);
+    let status: TrialRow["status"] = "fail";
+    if (outcome.holds) status = "pass";
+    if (outcome.infra) status = "infra";
     const row: TrialRow = {
       schemaVersion: 1,
       runId: opts.runId,
@@ -138,7 +145,7 @@ async function runOne(c: MrCase, rt: ConditionRuntime, trial: number, opts: Swee
       strata: c.strata,
       trial,
       attempt,
-      status: outcome.infra ? "infra" : outcome.holds ? "pass" : "fail",
+      status,
       reason: outcome.reason,
       invocations: records.length,
       tokens,
@@ -147,8 +154,8 @@ async function runOne(c: MrCase, rt: ConditionRuntime, trial: number, opts: Swee
       overReach: records.some((r) => r.flags.commandOverReach),
       overReachControls: [...new Set(records.flatMap((r) => r.flags.overReachControls))],
       contextIntact: records.every((r) => r.flags.contextIntact),
-      resolvedModels: [...new Set(attempts.map((a) => a.resolvedModel).filter((m): m is string => !!m))],
-      providers: [...new Set(attempts.map((a) => a.providerName).filter((p): p is string => !!p))],
+      resolvedModels: [...new Set(resolvedModels)],
+      providers: [...new Set(providers)],
       observations: {
         source: { V: source.state.V, D: source.state.D },
         followup: { V: followup.state.V, D: followup.state.D },
@@ -157,6 +164,7 @@ async function runOne(c: MrCase, rt: ConditionRuntime, trial: number, opts: Swee
       createdAt: new Date().toISOString(),
     };
 
+    // 5. An infrastructure failure is retried, up to maxInfraRetries; anything else is recorded.
     const retry = outcome.infra && attempt <= opts.maxInfraRetries && !opts.signal?.aborted;
     if (!retry) {
       await opts.sink.trial(row);
@@ -166,23 +174,20 @@ async function runOne(c: MrCase, rt: ConditionRuntime, trial: number, opts: Swee
   }
 }
 
-/** Runs the sweep and returns the rows it produced (not including skipped ones). */
+/** Runs the sweep and returns the rows it produced. */
 export async function runSweep(opts: SweepOptions): Promise<TrialRow[]> {
-  const done = opts.done ?? new Set<string>();
   const next = rng(opts.seed);
   const total = opts.cases.length * opts.conditions.length * opts.n;
-  let completed = done.size;
+  let completed = 0;
   const produced: TrialRow[] = [];
 
   for (let round = 1; round <= opts.n; round++) {
-    // Shuffle every round, even when resuming, so the order is a function of
-    // the seed alone and a resumed run matches an uninterrupted one.
-    const order = shuffle(
-      opts.conditions.flatMap((rt) => opts.cases.map((c) => ({ rt, c }))),
-      next,
-    ).filter(({ rt, c }) => !done.has(trialKey({ conditionId: rt.condition.id, caseId: c.id, trial: round })));
+    // 1. Put every (configuration, case) pair in this round's seeded order.
+    const pairs = opts.conditions.flatMap((rt) => opts.cases.map((c) => ({ rt, c })));
+    const order = shuffle(pairs, next);
     if (opts.signal?.aborted) break;
 
+    // 2. Run the pairs with `concurrency` workers, each taking the next pair in order.
     let cursor = 0;
     const worker = async () => {
       while (cursor < order.length && !opts.signal?.aborted) {
@@ -193,8 +198,12 @@ export async function runSweep(opts: SweepOptions): Promise<TrialRow[]> {
         opts.onTrial?.(row, { done: completed, total, round });
       }
     };
-    await Promise.all(Array.from({ length: Math.max(1, opts.concurrency) }, worker));
-    await Promise.all([...new Set(opts.conditions.map((rt) => rt.transport.drain))].map((d) => d?.()));
+    const workers = Array.from({ length: Math.max(1, opts.concurrency) }, worker);
+    await Promise.all(workers);
+
+    // 3. Wait for background work the handler scheduled (Langfuse), once per transport.
+    const drains = [...new Set(opts.conditions.map((rt) => rt.transport.drain))];
+    await Promise.all(drains.map((drain) => drain?.()));
   }
 
   await opts.sink.flush?.();
