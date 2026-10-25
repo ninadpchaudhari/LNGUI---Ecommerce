@@ -5,9 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite\" \"tsx server.ts\"",
-    "dev:docker": "concurrently \"vite --host 0.0.0.0 --port 5173\" \"tsx server.ts\"",
-    "dev:client": "vite",
-    "dev:server": "tsx server.ts",
     "gen:surface": "tsx scripts/gen-surface.ts",
     "gen:cases": "tsx scripts/gen-cases.ts",
     "sweep": "tsx scripts/sweep.ts",
@@ -18,12 +15,10 @@
     "test": "tsx --test shared/*.test.ts api/*.test.ts scripts/lib/*.test.ts",
     "build": "npm run gen:surface && tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
     "dev:cf": "npm run build && wrangler dev",
     "deploy": "npm run build && wrangler deploy",
     "d1:migrate:local": "wrangler d1 migrations apply lngui-turns --local",
-    "d1:migrate": "wrangler d1 migrations apply lngui-turns --remote",
-    "cf:tail": "wrangler tail"
+    "d1:migrate": "wrangler d1 migrations apply lngui-turns --remote"
   },
   "dependencies": {
     "langfuse": "^3.38.20",

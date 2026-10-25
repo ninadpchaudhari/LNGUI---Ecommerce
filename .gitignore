@@ -36,3 +36,6 @@ dist-ssr
 
 # Sweep outputs (scripts/sweep.ts). Large; archive the ones you report.
 runs/
+
+# Claude Code worktrees
+.claude/worktrees/
