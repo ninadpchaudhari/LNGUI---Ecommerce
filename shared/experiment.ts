@@ -32,8 +32,7 @@ const conditionSchema = z
     if (c.env.LOCAL_TEST_MODE === "true") {
       // The local parser does not sample.
     } else if (fixedSampling(c.env.LLM_PROVIDER, c.env.LLM_MODEL)) {
-      // The provider drops them unsent, so the record would state a sampling never used.
-      if (sampled) ctx.addIssue({ code: "custom", message: `${c.id}: ${c.env.LLM_MODEL} takes no temperature or top_p; leave both unset` });
+      // Takes neither; any given are dropped with a warning when the conditions load.
     } else if (!sampled) {
       // Unset, the provider's own default applies, and providers differ (Ollama 0.8, OpenAI 1).
       ctx.addIssue({ code: "custom", message: `${c.id}: set LLM_TEMPERATURE or LLM_TOP_P, so the sampling is stated rather than left to the provider` });

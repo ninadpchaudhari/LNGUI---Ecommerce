@@ -36,12 +36,11 @@ describe("experiment schema: the prompt is part of every condition", () => {
     assert.ok(experimentSchema.safeParse(cond({ LOCAL_TEST_MODE: "true" })).success);
   });
 
-  test("a model that takes no sampling settings must not be given any", () => {
+  test("a model that takes no sampling settings needs none, and may be given some", () => {
     const cond = (env: Record<string, string>) => base([{ id: "c", prompt: { file: "prompts/x.txt", sha256: SHA }, env }]);
     const nano = { LLM_PROVIDER: "openrouter", LLM_MODEL: "openai/gpt-5-nano" };
     assert.ok(experimentSchema.safeParse(cond(nano)).success);
-    assert.equal(experimentSchema.safeParse(cond({ ...nano, LLM_TEMPERATURE: "0" })).success, false);
-    assert.equal(experimentSchema.safeParse(cond({ ...nano, LLM_TOP_P: "1" })).success, false);
+    assert.ok(experimentSchema.safeParse(cond({ ...nano, LLM_TEMPERATURE: "0" })).success, "dropped on loading, not refused");
   });
 
   test("prompt text is never put in env", () => {
@@ -73,6 +72,25 @@ describe("loadConditions", () => {
       assert.equal(conditions[0].env.SYSTEM_PROMPT, "Line one\nLine two");
       assert.equal(conditions[0].env.HISTORY_POLICY, "full");
       assert.equal(prompts.length, 1);
+    });
+  });
+
+  test("drops sampling settings a model does not take, and refuses conditions that become the same run", async () => {
+    await inTempDir(async () => {
+      await writeFile("prompts/a.txt", "Hi");
+      const sha256 = await promptSha256("Hi");
+      const haiku = { LLM_PROVIDER: "openrouter", LLM_MODEL: "anthropic/claude-haiku-5.5", HISTORY_POLICY: "full" };
+      const one = experimentSchema.parse(base([{ id: "h", prompt: { file: "prompts/a.txt", sha256 }, env: { ...haiku, LLM_TEMPERATURE: "0", LLM_TOP_P: "1" } }]));
+      const loaded = await loadConditions(one.conditions);
+      assert.equal(loaded.conditions[0].env.LLM_TEMPERATURE, undefined);
+      assert.equal(loaded.conditions[0].env.LLM_TOP_P, undefined);
+      assert.equal(loaded.warnings.length, 1);
+
+      const two = experimentSchema.parse(base([
+        { id: "h-t0", prompt: { file: "prompts/a.txt", sha256 }, env: { ...haiku, LLM_TEMPERATURE: "0" } },
+        { id: "h-t1", prompt: { file: "prompts/a.txt", sha256 }, env: { ...haiku, LLM_TEMPERATURE: "1" } },
+      ]));
+      await assert.rejects(loadConditions(two.conditions), /h-t0 and h-t1 are the same run/);
     });
   });
 

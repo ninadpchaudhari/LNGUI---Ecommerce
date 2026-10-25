@@ -83,6 +83,7 @@ const transport = inProcessTransport({ [LANGFUSE_HEADER]: values.langfuse ? "on"
 const runtimes: ConditionRuntime[] = [];
 const loaded = await loadConditions(experiment.conditions).catch((e: Error) => die(e.message));
 const { prompts } = loaded;
+for (const w of loaded.warnings) console.warn(`! ${w}`);
 for (const condition of loaded.conditions) {
   const rt = await openCondition(condition, transport);
   if (rt.config.mode === "local-test" && condition.env.LOCAL_TEST_MODE !== "true") {

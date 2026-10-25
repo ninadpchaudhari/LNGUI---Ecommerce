@@ -1015,6 +1015,15 @@ export function ExperimentsPage() {
                 <input id="temps" type="text" value={temps} onChange={(e) => setTemps(e.target.value)} spellCheck={false} />
               </Field>
             )}
+            {!local && (() => {
+              const fixed = chosenModels.filter((m) => fixedSampling(m.provider, m.model)).map((m) => m.model);
+              return fixed.length > 0 && (
+                <p className="xp-note">
+                  {fixed.join(" and ")} {fixed.length === 1 ? "takes" : "take"} no temperature or top_p, so {fixed.length === 1 ? "it runs" : "they run"} once
+                  per prompt with neither sent. The temperatures and top_p here apply to the other models.
+                </p>
+              );
+            })()}
             <div className="xp-factor">
               <div className="xp-label">History policy <em>HISTORY_POLICY</em><Help>How much of the conversation reaches the mediator. full sends every turn. last-k sends the last k turns. none sends nothing, which seeds the display-only-history fault.</Help></div>
               <div className="xp-chips">
