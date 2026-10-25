@@ -233,6 +233,8 @@ npm run dev              # Vite on :5173, API on :3001
 | `npm run gen:cases` | build a frozen cases file from `Γ_app` (see below) |
 | `npm run sweep` | run an experiment headlessly (see below) |
 | `npm run report` | print a results table for a sweep |
+| `npm run judge` | ask an LLM judge about every turn of a run (costs money; `--yes`) |
+| `npm run oracles` | RQ1 table: MR checker vs implicit oracle vs LLM judge, no model calls |
 | `npm run dev:cf` | build, then `wrangler dev` in the real Workers runtime |
 | `npm run deploy` | build and deploy |
 | `npm run d1:migrate[:local]` | apply migrations |
@@ -268,6 +270,29 @@ npm run report -- runs/pilot-<time>                 # Markdown table
 npm run report -- runs/pilot-<time> --format latex  # booktabs, for \input
 npm run report -- runs/pilot-<time> --by case       # one row per case
 ```
+
+**RQ1: three oracles on the same run.** `npm run oracles -- runs/<dir>` compares,
+per configuration and relation, the trials failed by the MR checker (the
+recorded verdict; its column equals the report's failures), by the implicit
+oracle (a turn errored, was malformed or had a value rejected; no model), and,
+once `judge.jsonl` exists, by an LLM judge, with the overlaps (both, MR only,
+judge only). The judge reads the recorded turns; the mediator is not run again.
+
+```bash
+npm run judge -- runs/<dir> --dry-run                      # turns to judge and the price
+npm run judge -- runs/<dir> --config <id> --yes            # one configuration; writes judge.jsonl
+npm run oracles -- runs/<dir> --format latex
+```
+
+The judge (default `anthropic/claude-sonnet-5.5`, reasoning `low`, at most 2048
+output tokens a call; `--model`, `--reasoning`, `--max-tokens` change them) gets
+`judge/judge.txt` and, per turn, the user's earlier requests in that trace, the
+latest request, and the filters before and after. It is not told the phrase
+readings the test set uses. A trial fails the judge when any of its turns does.
+Every row of `judge.jsonl` records the judge's model, served model, reasoning,
+token cap and prompt hash; a file written by one judge refuses another.
+Unreadable replies are recorded as `invalid`, never guessed; failed calls are
+retried on the next run.
 
 - **Cases** (`cases/*.jsonl`) are frozen: one fixed instance per line, with a
   `semanticGroup` (rewordings of one situation are clustered, not independent)
@@ -424,7 +449,7 @@ API: `POST /api/command`, `GET /api/config`, `POST|GET|DELETE /api/runs`,
 ## Not implemented
 
 LLM paraphrase and translation generation for `Para` (§4.10.1), mutation
-analysis (§4.19), the LLM-as-judge baseline (§5.3), and the external subjects —
+analysis (§4.19), seeded faults for RQ1 ground truth (§4.11), and the external subjects —
 Home Assistant, WebArena, and the Appendix B probes.
 
 ### Update strategy

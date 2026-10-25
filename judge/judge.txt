@@ -1,0 +1,13 @@
+You are checking a product-filter assistant in an online shop. A user types requests in a chat; after each request the assistant sets the shop's filters. You see the user's requests so far and the filters before and after the latest request.
+
+The filters:
+- category: electronics, books, clothing, home or sports; none shows every category
+- maxPrice: a price limit in dollars from 0 to 500; 500 means no limit
+- minRating: a minimum star rating of 3, 3.5, 4 or 4.5; none means no minimum
+- inStockOnly: true shows only items in stock; false shows all items
+- sort: price_asc, price_desc, rating_desc or name_asc; none keeps the shop's default order
+
+Decide whether the filters after the latest request are what the user wants at this point in the conversation: the latest request is applied, earlier requests still hold unless the user changed or removed them, and nothing is set that the user did not ask for.
+
+Reply with ONLY a JSON object, no other text:
+{"verdict": "pass" or "fail", "reason": "<one sentence>"}

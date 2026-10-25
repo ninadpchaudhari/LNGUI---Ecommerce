@@ -12,6 +12,8 @@
     "gen:cases": "tsx scripts/gen-cases.ts",
     "sweep": "tsx scripts/sweep.ts",
     "report": "tsx scripts/report.ts",
+    "judge": "tsx scripts/judge.ts",
+    "oracles": "tsx scripts/oracles.ts",
     "export:surface": "tsx scripts/export-surface.ts",
     "test": "tsx --test shared/*.test.ts api/*.test.ts scripts/lib/*.test.ts",
     "build": "npm run gen:surface && tsc -b && vite build",
