@@ -25,12 +25,12 @@ export interface InspectorSelection {
   label: string;
 }
 
-type Filter = "all" | "fail" | "passOverreach";
+type Filter = "all" | "fail" | "pass";
 
 const bottom = (v: unknown) => (v === null || v === undefined ? "⊥" : JSON.stringify(v));
 
 const matches = (t: TrialRow, f: Filter) =>
-  f === "all" || (f === "fail" ? t.status === "fail" : t.status === "pass" && t.overReach);
+  f === "all" || t.status === f;
 
 /** A command in one line: the assignments it asks for, then sort and clear. */
 function commandText(q: Command | null): string {
@@ -165,7 +165,7 @@ export function CaseInspector({
   const counts = {
     all: stats.length,
     fail: stats.filter((s) => s.fails > 0).length,
-    passOverreach: stats.filter((s) => scoped.some((t) => t.caseId === s.caseId && matches(t, "passOverreach"))).length,
+    pass: stats.filter((s) => scoped.some((t) => t.caseId === s.caseId && matches(t, "pass"))).length,
   };
   const shown = stats.filter((s) => filter === "all" || scoped.some((t) => t.caseId === s.caseId && matches(t, filter)));
   const missingTurns = turns === null || scoped.some((r) => r.turnIds.some((id) => !turns.has(id)));
@@ -175,9 +175,9 @@ export function CaseInspector({
       <div className="ci-head">
         <h4>{selection.label}</h4>
         <div className="xp-tabs" role="group" aria-label="Filter cases">
-          {(["all", "fail", "passOverreach"] as const).filter((f) => f !== "passOverreach" || counts[f] > 0 || filter === f).map((f) => (
+          {(["all", "fail", "pass"] as const).map((f) => (
             <button key={f} type="button" className={filter === f ? "on" : ""} onClick={() => setFilter(f)}>
-              {f === "all" ? "All" : f === "fail" ? "Failed" : "Passed, with over-reach"} ({counts[f]})
+              {f === "all" ? "All" : f === "fail" ? "Failed" : "Passed"} ({counts[f]})
             </button>
           ))}
         </div>
@@ -205,7 +205,7 @@ export function CaseInspector({
               {selection.group === null && <span className="xp-dim">{s.group}</span>}
               <span>{s.fails} / {s.n} failed</span>
               {(() => {
-                const n = scoped.filter((t) => t.caseId === s.caseId && matches(t, "passOverreach")).length;
+                const n = scoped.filter((t) => t.caseId === s.caseId && t.status === "pass" && t.overReach).length;
                 return n > 0 && <span className="ci-bad">{n} passed with over-reach</span>;
               })()}
               {s.infra > 0 && <span className="xp-dim">{s.infra} infra</span>}
