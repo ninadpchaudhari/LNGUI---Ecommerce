@@ -787,7 +787,7 @@ export function ExperimentsPage({ config }: Props) {
     columns: reportTable.columns.filter((column) => {
       if (detailedMetrics) return true;
       if (column.key === "condition") return new Set(reportRows.map((row) => row.conditionId)).size > 1;
-      return (by === "mr" ? ["mr", "cases", "rate", "overreach"] : ["case", "mr", "cn", "reason"]).includes(column.key);
+      return (by === "mr" ? ["mr", "cases", "rate"] : ["case", "mr", "cn", "reason"]).includes(column.key);
     }).map((column) => ({
       ...column,
       label: column.key === "cn" ? "Failed / trials" : column.label,
@@ -1246,9 +1246,18 @@ export function ExperimentsPage({ config }: Props) {
                 ) : (
                   <p className="xp-note">Click a row to see its cases: the requests, the commands returned, the changes made and why each trial passed or failed.</p>
                 )}
-                <p className="xp-note">
-                  Over-reach: trials where the system changed a control outside the request’s allowed changes. Checked separately from pass/fail.
-                </p>
+                {(() => {
+                  // Over-reach in a failed trial is already counted as a failure; only passes need a word.
+                  const passed = reportRows.filter((r) => r.status === "pass" && r.overReach);
+                  if (passed.length === 0) return null;
+                  const ids = [...new Set(passed.map((r) => `${r.caseId} (${r.conditionId})`))];
+                  return (
+                    <div className="xp-issue warn">
+                      {passed.length} passed {passed.length === 1 ? "trial" : "trials"} changed a control outside the request’s allowed changes: {ids.join(", ")}.
+                      The relation held, so these count as passed.
+                    </div>
+                  );
+                })()}
                 <div className="xp-row">
                   <select id="report-format" value={format} onChange={(e) => setFormat(e.target.value as Format)}>
                     <option value="md">Markdown</option><option value="latex">LaTeX</option><option value="csv">CSV</option>

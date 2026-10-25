@@ -25,12 +25,12 @@ export interface InspectorSelection {
   label: string;
 }
 
-type Filter = "all" | "fail" | "overreach";
+type Filter = "all" | "fail" | "passOverreach";
 
 const bottom = (v: unknown) => (v === null || v === undefined ? "⊥" : JSON.stringify(v));
 
 const matches = (t: TrialRow, f: Filter) =>
-  f === "all" || (f === "fail" ? t.status === "fail" : t.overReach);
+  f === "all" || (f === "fail" ? t.status === "fail" : t.status === "pass" && t.overReach);
 
 /** A command in one line: the assignments it asks for, then sort and clear. */
 function commandText(q: Command | null): string {
@@ -164,9 +164,9 @@ export function CaseInspector({
   const counts = {
     all: stats.length,
     fail: stats.filter((s) => s.fails > 0).length,
-    overreach: stats.filter((s) => s.overReachTrials > 0).length,
+    passOverreach: stats.filter((s) => scoped.some((t) => t.caseId === s.caseId && matches(t, "passOverreach"))).length,
   };
-  const shown = stats.filter((s) => filter === "all" || (filter === "fail" ? s.fails > 0 : s.overReachTrials > 0));
+  const shown = stats.filter((s) => filter === "all" || scoped.some((t) => t.caseId === s.caseId && matches(t, filter)));
   const missingTurns = turns === null || scoped.some((r) => r.turnIds.some((id) => !turns.has(id)));
 
   return (
@@ -174,9 +174,9 @@ export function CaseInspector({
       <div className="ci-head">
         <h4>{selection.label}</h4>
         <div className="xp-tabs" role="group" aria-label="Filter cases">
-          {(["all", "fail", "overreach"] as const).map((f) => (
+          {(["all", "fail", "passOverreach"] as const).filter((f) => f !== "passOverreach" || counts[f] > 0 || filter === f).map((f) => (
             <button key={f} type="button" className={filter === f ? "on" : ""} onClick={() => setFilter(f)}>
-              {f === "all" ? "All" : f === "fail" ? "Failed" : "Over-reach"} ({counts[f]})
+              {f === "all" ? "All" : f === "fail" ? "Failed" : "Passed, with over-reach"} ({counts[f]})
             </button>
           ))}
         </div>
