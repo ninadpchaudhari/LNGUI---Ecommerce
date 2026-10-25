@@ -1,26 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { AppConfig, ChatMessage, Command, TurnRecord } from "../utils/types.ts";
 import { COMMITTED_PROMPTS, describeP, promptNameOf } from "../utils/prompts.ts";
-import { ModelPicker } from "./ModelPicker.tsx";
-
-/** The chat's condition: what an experiment condition states, for one session. */
-export interface ChatSettings {
-  /** The rule-based parser instead of a model, as the Experiments page's dry run. */
-  local: boolean;
-  provider: "openrouter" | "ollama";
-  model: string;
-  /** A prompts/*.txt name. */
-  prompt: string;
-  /** Empty means not sent. At least one of the two must be set. */
-  temperature: string;
-  topP: string;
-}
+import { CHAT_MODELS, settingsFor, type ChatSettings } from "../utils/chat-models.ts";
 
 interface Props {
   messages: ChatMessage[];
   lastCommand: Command | null;
   lastTurn: TurnRecord | null;
-  config: AppConfig | null;
   settings: ChatSettings;
   onSettingsChange: (s: ChatSettings) => void;
   /** P as the server resolves the settings, or null while unresolved. */
@@ -55,75 +41,40 @@ function StatusLine({ turn }: { turn: TurnRecord | null }) {
   );
 }
 
-/** Dry run, provider, model, prompt and sampling. Fixed for a session, as P is for a trace. */
-function Settings({ config, settings: s, onChange, locked }: {
-  config: AppConfig | null;
+/** Model, prompt and sampling. Fixed for a session, as P is for a trace. */
+function Settings({ settings: s, onChange, locked }: {
   settings: ChatSettings;
   onChange: (s: ChatSettings) => void;
   locked: boolean;
 }) {
   const set = (patch: Partial<ChatSettings>) => onChange({ ...s, ...patch });
-  const [ollamaModels, setOllamaModels] = useState<string[]>([]);
-  useEffect(() => {
-    if (s.provider !== "ollama" || s.local) return;
-    let live = true;
-    void fetch("/api/ollama/models")
-      .then((r) => r.json() as Promise<{ models: string[] }>)
-      .then((b) => live && setOllamaModels(b.models ?? []))
-      .catch(() => {});
-    return () => {
-      live = false;
-    };
-  }, [s.provider, s.local]);
-
   return (
     <fieldset className="chat-settings" disabled={locked}>
       <label className="model-picker-label">
-        <input type="checkbox" checked={s.local} onChange={(e) => set({ local: e.target.checked })} />
-        dry run (local parser, no model call)
+        model
+        <select value={s.model} onChange={(e) => {
+          const m = CHAT_MODELS.find((x) => x.model === e.target.value);
+          if (m) onChange(settingsFor(m, s.prompt));
+        }}>
+          {CHAT_MODELS.map((m) => <option key={m.model} value={m.model}>{m.label}</option>)}
+        </select>
       </label>
-      {!s.local && (
-        <>
-          <label className="model-picker-label">
-            provider
-            <select value={s.provider} onChange={(e) => {
-              const provider = e.target.value as ChatSettings["provider"];
-              set({ provider, model: provider === "openrouter" ? config?.defaultModel ?? "" : "" });
-            }}>
-              <option value="openrouter">OpenRouter</option>
-              <option value="ollama">Ollama</option>
-            </select>
-          </label>
-          {s.provider === "openrouter" ? (
-            <ModelPicker config={config} model={s.model} onChange={(model) => set({ model })} />
-          ) : (
-            <label className="model-picker-label">
-              model
-              <input className="model-picker-input" list="chat-ollama-models" value={s.model} placeholder="llama3.2:latest"
-                onChange={(e) => set({ model: e.target.value })} />
-              <datalist id="chat-ollama-models">{ollamaModels.map((m) => <option key={m} value={m} />)}</datalist>
-            </label>
-          )}
-        </>
-      )}
       <label className="model-picker-label">
         prompt
         <select value={s.prompt} onChange={(e) => set({ prompt: e.target.value })}>
           {COMMITTED_PROMPTS.map((p) => <option key={p.name} value={p.name}>{p.name} ({p.implementation})</option>)}
         </select>
       </label>
-      {!s.local && (
-        <div className="chat-settings-row">
-          <label className="model-picker-label">
-            temperature
-            <input className="model-picker-input" value={s.temperature} placeholder="not sent" onChange={(e) => set({ temperature: e.target.value })} />
-          </label>
-          <label className="model-picker-label">
-            top_p
-            <input className="model-picker-input" value={s.topP} placeholder="not sent" onChange={(e) => set({ topP: e.target.value })} />
-          </label>
-        </div>
-      )}
+      <div className="chat-settings-row">
+        <label className="model-picker-label">
+          temperature
+          <input className="model-picker-input" value={s.temperature} placeholder="not sent" onChange={(e) => set({ temperature: e.target.value })} />
+        </label>
+        <label className="model-picker-label">
+          top_p
+          <input className="model-picker-input" value={s.topP} placeholder="not sent" onChange={(e) => set({ topP: e.target.value })} />
+        </label>
+      </div>
       {locked && <p className="chat-hint">Settings are fixed for the session. Reset the session to change them.</p>}
     </fieldset>
   );
@@ -160,7 +111,6 @@ export function ChatPanel(props: Props) {
       </p>
 
       <Settings
-        config={props.config}
         settings={props.settings}
         onChange={props.onSettingsChange}
         locked={loading || props.historyTurns > 0}

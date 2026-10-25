@@ -1018,7 +1018,7 @@ export function ExperimentsPage({ config }: Props) {
               </div>
             )}
             {!local && (
-              <Field label={<>Temperatures <em>LLM_TEMPERATURE</em></>} help="Comma-separated numbers, sent as given, for example 0 for near-deterministic decoding. The word default sends no temperature, so the provider's default applies; that is allowed only with a top_p, because every condition must state its sampling.">
+              <Field label={<>Temperatures <em>LLM_TEMPERATURE</em></>} help="Comma-separated numbers, sent as given">
                 <input id="temps" type="text" value={temps} onChange={(e) => setTemps(e.target.value)} spellCheck={false} />
               </Field>
             )}

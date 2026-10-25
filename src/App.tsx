@@ -19,7 +19,8 @@ import { inferWriteSet } from "./utils/relations.ts";
 import { runTurn } from "./utils/mediator.ts";
 import { FilterPanel } from "./components/FilterPanel.tsx";
 import { ProductGrid } from "./components/ProductGrid.tsx";
-import { ChatPanel, type ChatSettings } from "./components/ChatPanel.tsx";
+import { ChatPanel } from "./components/ChatPanel.tsx";
+import { CHAT_MODELS, settingsFor, type ChatSettings } from "./utils/chat-models.ts";
 import { TracePanel } from "./components/TracePanel.tsx";
 import { ExperimentsPage } from "./components/ExperimentsPage.tsx";
 
@@ -53,9 +54,7 @@ export default function App() {
   const [config, setConfig] = useState<AppConfig | null>(null);
   // The chat runs as one condition: the same settings an experiment states,
   // sent as overrides, so the server's .env never fills a gap.
-  const [settings, setSettings] = useState<ChatSettings>({
-    local: false, provider: "openrouter", model: "", prompt: COMMITTED_PROMPTS[0].name, temperature: "0", topP: "",
-  });
+  const [settings, setSettings] = useState<ChatSettings>(() => settingsFor(CHAT_MODELS[0], COMMITTED_PROMPTS[0].name));
   const [resolved, setResolved] = useState<{ P: AppConfig | null; error: string | null }>({ P: null, error: null });
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [lastCommand, setLastCommand] = useState<Command | null>(null);
@@ -77,7 +76,6 @@ export default function App() {
         const c = await fetchConfig();
         if (cancelled) return;
         setConfig(c);
-        setSettings((s) => (s.model ? s : { ...s, model: c.defaultModel }));
       } catch {
         // Leave the bootstrap P in place; the first response will correct it.
       }
@@ -94,25 +92,18 @@ export default function App() {
   const overrides = useMemo((): Overrides => {
     const p = COMMITTED_PROMPTS.find((x) => x.name === settings.prompt) ?? COMMITTED_PROMPTS[0];
     const base: Overrides = { SYSTEM_PROMPT: normalizePrompt(p.text), LNGUI_COMMAND_MODE: p.implementation, HISTORY_POLICY: "full" };
-    if (settings.local) return { ...base, LOCAL_TEST_MODE: "true" };
     const t = settings.temperature.trim();
     const topP = settings.topP.trim();
     return {
       ...base,
       LLM_PROVIDER: settings.provider,
-      ...(settings.model.trim() ? { LLM_MODEL: settings.model.trim() } : {}),
+      LLM_MODEL: settings.model,
       ...(t ? { LLM_TEMPERATURE: t } : {}),
       ...(topP ? { LLM_TOP_P: topP } : {}),
     };
   }, [settings]);
   // The same rule as an experiment condition (shared/experiment.ts).
-  const settingsProblem = settings.local
-    ? null
-    : !settings.model.trim()
-      ? "Choose a model."
-      : !settings.temperature.trim() && !settings.topP.trim()
-        ? "Set a temperature or a top_p."
-        : null;
+  const settingsProblem = !settings.temperature.trim() && !settings.topP.trim() ? "Set a temperature or a top_p." : null;
 
   // P as the server resolves these settings: what the next turn will run under.
   useEffect(() => {
@@ -256,7 +247,6 @@ export default function App() {
           messages={messages}
           lastCommand={lastCommand}
           lastTurn={lastTurn}
-          config={config}
           settings={settings}
           onSettingsChange={setSettings}
           resolvedP={resolved.P}
