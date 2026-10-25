@@ -7,7 +7,6 @@ below can be regenerated from these files with no `.env`, no API key and no serv
 | Run | Experiment file | Model / mediator | Cases × conditions × N | Date | Git commit | Purpose |
 |---|---|---|---|---|---|---|
 | `pilot-local-smoke-2026-10-24T19-32-03-735Z` | `experiments/pilot-local-smoke.json` | none: `LOCAL_TEST_MODE` rule-based parser, no model call | 100 × 1 × 2 = 200 trials, 558 turns | 2026-10-24 | `0ffabfd` (clean) | **Harness check, not a result.** Shows that the sweep, the records and the checker work end to end. 0 failures, 0 infra; there are no violations to look at. |
-| *pending* | `experiments/paper0-gpt-4o-mini-4cond-n10.json` | `openai/gpt-4o-mini` via OpenRouter; default and minimal prompts × default temperature and T=0 | 100 × 4 × 10 | — | — | The Paper 0 runs. **Not yet run; Ninad runs them** (they cost money and need a key). Copy the run directory here when done and add a row. |
 
 Cases for all runs: `cases/pilot.jsonl` (sha256 `a3c32eae2d7edeaf753290944f231f5488d0d4e52fc09706c7ca43aab1331d67`).
 

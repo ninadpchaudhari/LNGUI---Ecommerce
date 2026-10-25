@@ -438,6 +438,20 @@ body {
 
 /* ── Chat panel additions ───────────────────────────────────────────────── */
 
+.chat-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+}
+
+.chat-settings-row {
+  display: flex;
+  gap: 8px;
+}
+
 .chat-panel-head {
   display: flex;
   align-items: baseline;

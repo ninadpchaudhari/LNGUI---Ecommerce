@@ -103,6 +103,20 @@ export async function fetchConfig(): Promise<AppConfig> {
   return (await res.json()) as AppConfig;
 }
 
+/** P for a set of overrides, resolved by the server exactly as /api/command will. */
+export async function resolveConfig(overrides: Overrides): Promise<AppConfig> {
+  const res = await fetch(url("/api/config"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ overrides }),
+  });
+  if (!res.ok) {
+    const body = (await readJson(res)) as { error?: string };
+    throw new Error(body.error ?? `POST /api/config failed: ${res.status}`);
+  }
+  return (await res.json()) as AppConfig;
+}
+
 /**
  * Fire-and-forget. `keepalive` so a turn issued just before navigation still
  * lands, and a persistence failure never blocks the UI.

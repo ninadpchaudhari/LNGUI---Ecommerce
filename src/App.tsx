@@ -11,12 +11,15 @@ import type {
   Valuation,
 } from "./utils/types.ts";
 import { renderData, resetState, visibleProducts } from "../shared/transition.ts";
-import { fetchConfig, fetchTurns, saveTurn } from "./utils/api.ts";
+import { fetchConfig, fetchTurns, resolveConfig, saveTurn } from "./utils/api.ts";
+import { COMMITTED_PROMPTS } from "./utils/prompts.ts";
+import { normalizePrompt } from "../shared/prompt-text.ts";
+import type { Overrides } from "../shared/overrides.ts";
 import { inferWriteSet } from "./utils/relations.ts";
 import { runTurn } from "./utils/mediator.ts";
 import { FilterPanel } from "./components/FilterPanel.tsx";
 import { ProductGrid } from "./components/ProductGrid.tsx";
-import { ChatPanel } from "./components/ChatPanel.tsx";
+import { ChatPanel, type ChatSettings } from "./components/ChatPanel.tsx";
 import { TracePanel } from "./components/TracePanel.tsx";
 import { ExperimentsPage } from "./components/ExperimentsPage.tsx";
 
@@ -48,7 +51,12 @@ export default function App() {
   const [sessionId, setSessionId] = useState(() => crypto.randomUUID());
 
   const [config, setConfig] = useState<AppConfig | null>(null);
-  const [model, setModel] = useState("");
+  // The chat runs as one condition: the same settings an experiment states,
+  // sent as overrides, so the server's .env never fills a gap.
+  const [settings, setSettings] = useState<ChatSettings>({
+    local: false, provider: "openrouter", model: "", prompt: COMMITTED_PROMPTS[0].name, temperature: "0", topP: "",
+  });
+  const [resolved, setResolved] = useState<{ P: AppConfig | null; error: string | null }>({ P: null, error: null });
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [lastCommand, setLastCommand] = useState<Command | null>(null);
   const [loading, setLoading] = useState(false);
@@ -69,8 +77,7 @@ export default function App() {
         const c = await fetchConfig();
         if (cancelled) return;
         setConfig(c);
-        setModel(c.defaultModel);
-        setState((prev) => ({ ...prev, P: promptConfigFrom(c, c.defaultModel) }));
+        setSettings((s) => (s.model ? s : { ...s, model: c.defaultModel }));
       } catch {
         // Leave the bootstrap P in place; the first response will correct it.
       }
@@ -84,9 +91,47 @@ export default function App() {
     };
   }, []);
 
+  const overrides = useMemo((): Overrides => {
+    const p = COMMITTED_PROMPTS.find((x) => x.name === settings.prompt) ?? COMMITTED_PROMPTS[0];
+    const base: Overrides = { SYSTEM_PROMPT: normalizePrompt(p.text), LNGUI_COMMAND_MODE: p.implementation, HISTORY_POLICY: "full" };
+    if (settings.local) return { ...base, LOCAL_TEST_MODE: "true" };
+    const t = settings.temperature.trim();
+    const topP = settings.topP.trim();
+    return {
+      ...base,
+      LLM_PROVIDER: settings.provider,
+      ...(settings.model.trim() ? { LLM_MODEL: settings.model.trim() } : {}),
+      ...(t ? { LLM_TEMPERATURE: t } : {}),
+      ...(topP ? { LLM_TOP_P: topP } : {}),
+    };
+  }, [settings]);
+  // The same rule as an experiment condition (shared/experiment.ts).
+  const settingsProblem = settings.local
+    ? null
+    : !settings.model.trim()
+      ? "Choose a model."
+      : !settings.temperature.trim() && !settings.topP.trim()
+        ? "Set a temperature or a top_p."
+        : null;
+
+  // P as the server resolves these settings: what the next turn will run under.
   useEffect(() => {
-    if (config) setState((prev) => ({ ...prev, P: promptConfigFrom(config, model) }));
-  }, [config, model]);
+    let live = true;
+    const t = window.setTimeout(async () => {
+      try {
+        const P = await resolveConfig(overrides);
+        if (!live) return;
+        setResolved({ P, error: null });
+        setState((prev) => ({ ...prev, P: promptConfigFrom(P, P.defaultModel) }));
+      } catch (e) {
+        if (live) setResolved({ P: null, error: e instanceof Error ? e.message : String(e) });
+      }
+    }, 300);
+    return () => {
+      live = false;
+      window.clearTimeout(t);
+    };
+  }, [overrides]);
 
   const displayed = useMemo(() => visibleProducts(state.V), [state.V]);
 
@@ -105,12 +150,13 @@ export default function App() {
    * previous render's values.
    */
   const handleSend = async (text: string) => {
+    if (settingsProblem || resolved.error) return;
     setMessages((prev) => [...prev, { role: "user", content: text }]);
     setLoading(true);
     const before = state.V;
     try {
       const { state: next, record: turn } = await runTurn(state, text, {
-        ...(model ? { model } : {}),
+        overrides,
         sessionId,
         turnIndex: turnIndex.current++,
         kind: "chat",
@@ -140,7 +186,7 @@ export default function App() {
 
   /** ResetApp — σ₀: V₀, empty H, fixed P, canonical D. */
   const handleReset = () => {
-    setState(resetState(config ? promptConfigFrom(config, model) : BOOTSTRAP_P));
+    setState(resetState(resolved.P ? promptConfigFrom(resolved.P, resolved.P.defaultModel) : BOOTSTRAP_P));
     setSessionId(crypto.randomUUID());
     setMessages([]);
     setLastCommand(null);
@@ -210,10 +256,12 @@ export default function App() {
           lastCommand={lastCommand}
           lastTurn={lastTurn}
           config={config}
-          model={model}
+          settings={settings}
+          onSettingsChange={setSettings}
+          resolvedP={resolved.P}
+          settingsError={settingsProblem ?? resolved.error ?? (resolved.P?.mode === "llm" && resolved.P.provider === "none" ? "The server has no API key for this provider." : null)}
           loading={loading}
           onSend={handleSend}
-          onModelChange={setModel}
           onReset={handleReset}
           historyTurns={state.H.length}
         />

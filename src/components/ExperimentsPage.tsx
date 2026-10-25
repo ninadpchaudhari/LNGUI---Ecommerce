@@ -24,6 +24,7 @@ import { summarizeSuite, type SuiteRow } from "../../shared/suite-summary.ts";
 import { LANGFUSE_HEADER, type Overrides } from "../../shared/overrides.ts";
 import { PROMPT_NAME_RE, formatPromptFile, normalizePrompt, parsePromptFile, promptHash, promptSha256 } from "../../shared/prompt-text.ts";
 import { adhocCases } from "../utils/relations.ts";
+import { COMMITTED_PROMPTS, describeP, type PromptEntry } from "../utils/prompts.ts";
 import { saveTurn } from "../utils/api.ts";
 import { downloadFile } from "../utils/logging.ts";
 import {
@@ -269,31 +270,8 @@ function SuiteTable({ rows, utterancesOf, excluded, onSet }: {
   );
 }
 
-/**
- * Every prompts/*.txt in the repo, bundled when the page is built. These are
- * the prompts an experiment can reference by file, so they are read-only here.
- * Each declares its implementation in a header (shared/prompt-text.ts). The
- * default comes first.
- */
-const COMMITTED_PROMPTS: PromptEntry[] = Object.entries(
-  import.meta.glob("../../prompts/*.txt", { query: "?raw", import: "default", eager: true }) as Record<string, string>,
-)
-  .map(([path, raw]) => {
-    const { text, implementation } = parsePromptFile(raw);
-    // api/prompt.test.ts fails if a committed prompt has no header.
-    return { name: path.split("/").pop()!.replace(/\.txt$/, ""), text, implementation: implementation ?? "diff" };
-  })
-  .sort((a, b) => (a.name === "default" ? -1 : b.name === "default" ? 1 : a.name.localeCompare(b.name)));
 const COMMITTED_NAMES = new Set(COMMITTED_PROMPTS.map((p) => p.name));
 const DEFAULT_TEXT = COMMITTED_PROMPTS.find((p) => p.name === "default")!.text;
-
-/** A system prompt the experiment can use. The text is sent exactly as written. */
-interface PromptEntry {
-  name: string;
-  text: string;
-  /** The reply format the prompt asks for, which sets LNGUI_COMMAND_MODE. */
-  implementation: CommandMode;
-}
 
 const IMPLEMENTATION_LABEL: Record<CommandMode, string> = {
   diff: "Application merges changes",
@@ -804,16 +782,7 @@ export function ExperimentsPage({ config }: Props) {
     const r = resolved[c.id];
     if (!r) return "resolving…";
     if (r.error) return `⚠ ${r.error}`;
-    const P = r.P!;
-    if (P.mode === "local-test") return `local parser · ${P.commandMode ?? "diff"} · prompt ${c.prompt.name} · history ${P.historyPolicy}`;
-    return [
-      `${P.provider} ${P.defaultModel}`,
-      `prompt ${c.prompt.name} · SHA-256 ${shas[c.prompt.name]?.slice(0, 7) ?? "pending"}`,
-      `T ${P.temperature ?? "provider default"}`,
-      `top_p ${P.topP ?? "provider default"}`,
-      `history ${P.historyPolicy}${P.historyMaxTurns !== null ? ` k=${P.historyMaxTurns}` : ""}`,
-      `update ${P.commandMode ?? "diff"}`,
-    ].join(" · ");
+    return describeP(r.P!, `${c.prompt.name} · SHA-256 ${shas[c.prompt.name]?.slice(0, 7) ?? "pending"}`);
   };
 
   // ── Render ────────────────────────────────────────────────────────────────
