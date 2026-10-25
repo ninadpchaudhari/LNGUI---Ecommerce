@@ -161,22 +161,18 @@ You are a product filter assistant. …
 
 The implementation is part of the prompt, not a separate setting, because the
 prompt is what tells the model to send every field or only the changed ones.
-Hashes cover only the text after the header. The committed prompts come in two
-families:
+Hashes cover only the text after the header. The committed prompts:
 
 | Prompt | Implementation | What it is |
 |---|---|---|
-| `default.txt` | full | The app's original prompt, byte for byte the one Figure 1.2 was recorded with (`fnv1a32:5a348657`). The server uses it when a request carries no prompt, so the chat app and deployed instance run it. Kept identical to `shared/default-prompt.ts`. |
-| `default-clear.txt` | full | The default plus the two `clearFilters` lines the app added later (`fnv1a32:be4d6b37`). |
-| `enhanced-diff.txt` | diff | Tightened: states the partial-update command language (omission preserves, null resets, `clearFilters`) and nothing else. |
-| `enhanced-full.txt` | full | Tightened: every field on every turn. |
-| `minimal.txt` | diff | `enhanced-diff` stripped to the format and the null rule. |
+| `default.txt` | full | The output schema and one line asking for JSON only; no phrase rules. The server uses it when a request carries no prompt, so the chat app and deployed instance run it. Kept identical to `shared/default-prompt.ts`. |
+| `default-diff.txt` | diff | `default.txt` asking for the changes only, plus the one line diff needs: a missing field is kept, null clears. |
+| `student-x.txt` | full | The app's original prompt, byte for byte the one Figure 1.2 was recorded with (`fnv1a32:5a348657`), with its phrase rules ("top rated means minRating >= 4.0 and/or sort"). |
 
-The default prompts ask for every field and spell out phrase readings ("top
-rated means minRating >= 4.0 and/or sort"). The enhanced prompts state the
-command language only and leave phrase readings to the model, because those
-readings are what the relations measure; a prompt that spells them out can
-hide or move faults (Figure 1.2 is one). The local parser holds the reference
+The two default prompts state the command language only and leave phrase
+readings to the model, because those readings are what the relations measure;
+a prompt that spells them out can hide or move faults (Figure 1.2 is one).
+`student-x.txt` keeps the original phrase rules for comparison. The local parser holds the reference
 readings instead. The schema is never sent to the model, so only the prompt
 text matters. The command-schema hash includes `partial-update-v1` or
 `full-state-v1`, so runs under each implementation stay distinguishable.
@@ -340,7 +336,7 @@ would swallow `/api/*`.
 | `OLLAMA_BASE_URL` / `OLLAMA_MODEL` | `http://localhost:11434/v1` / `llama3.1:8b` | local models through Ollama |
 | `OPENROUTER_MODELS` | — | comma-separated allowlist for the UI dropdown |
 | `OPENROUTER_MODEL_ALLOW_ANY` | `false` | permits arbitrary client model ids |
-| `LLM_TEMPERATURE` / `LLM_TOP_P` | unset | unset means not sent: the provider's default applies and P records null. Figure 1.2 was recorded at `0` |
+| `LLM_TEMPERATURE` / `LLM_TOP_P` | unset | unset means not sent: the provider's default applies and P records null. Every experiment condition that calls a model must set at least one. Figure 1.2 was recorded at `0` |
 | `LLM_TIMEOUT_MS` | `30000` | |
 | `HISTORY_POLICY` | `full` | `full` \| `last-k` \| `none` |
 | `HISTORY_MAX_TURNS` | `3` | with `last-k` |

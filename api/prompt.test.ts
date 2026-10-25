@@ -21,8 +21,8 @@ describe("prompt files declare their implementation", () => {
       assert.ok(parsed(f.replace(/\.txt$/, "")).implementation, `${f} declares no implementation`);
     }
     assert.equal(parsed("default").implementation, DEFAULT_IMPLEMENTATION);
-    assert.equal(parsed("enhanced-diff").implementation, "diff");
-    assert.equal(parsed("enhanced-full").implementation, "full");
+    assert.equal(parsed("default-diff").implementation, "diff");
+    assert.equal(parsed("student-x").implementation, "full");
   });
 
   test("the header is not part of the text, so hashes cover only what the model receives", () => {
@@ -45,17 +45,14 @@ describe("prompt files declare their implementation", () => {
 });
 
 describe("committed prompts", () => {
-  test("the server default is the original prompt, the one Figure 1.2 was recorded with", () => {
+  test("the server default is prompts/default.txt and names every category and sort", () => {
     assert.equal(DEFAULT, file("default"));
-    assert.equal(promptHash(DEFAULT), "fnv1a32:5a348657");
     assert.ok(DEFAULT.includes(JSON.stringify(CATEGORY_VALUES)));
     assert.ok(DEFAULT.includes(JSON.stringify(SORT_VALUES)));
   });
 
-  test("default-clear is the default plus exactly the two clearFilters lines", () => {
-    const extra = file("default-clear").split("\n").filter((l) => !DEFAULT.split("\n").includes(l));
-    assert.equal(extra.length, 2);
-    assert.ok(extra.every((l) => l.includes("clearFilters")));
+  test("student-x is the original prompt, the one Figure 1.2 was recorded with", () => {
+    assert.equal(promptHash(file("student-x")), "fnv1a32:5a348657");
   });
 
   test("schema preserves omitted fields and accepts explicit resets", () => {
@@ -87,12 +84,9 @@ describe("prompt text", () => {
 });
 
 describe("clearFilters is always part of the command language", () => {
-  test("both modes accept it, and both enhanced prompts offer it", () => {
+  test("both modes accept it, as null too", () => {
     for (const mode of ["diff", "full"] as const) assert.ok("clearFilters" in buildCommandSchema(mode).shape);
-    // default-clear asks for null when not clearing; that must not be a schema failure.
     assert.ok(buildCommandSchema().safeParse({ filters: {}, clearFilters: null, explanation: "x" }).success);
-    assert.ok(file("enhanced-diff").includes("clearFilters"));
-    assert.ok(file("enhanced-full").includes("clearFilters"));
   });
 
   test("the schema fingerprint still records it as on, so hashes match earlier runs that had it on", () => {

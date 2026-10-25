@@ -10,7 +10,7 @@
     {
       "id": "local",
       "prompt": {
-        "file": "prompts/default.txt",
+        "file": "prompts/student-x.txt",
         "sha256": "8ab84361ddc42f58ab5bd1257e2ab484dabaca0b72a128b70a29d93be3e51ec3"
       },
       "env": {

@@ -466,7 +466,7 @@ export function ExperimentsPage({ config }: Props) {
     setPromptsOn((on) => [...on, name]);
     setEditing(name);
   };
-  const [temps, setTemps] = useState("default");
+  const [temps, setTemps] = useState("0");
   const [history, setHistory] = useState<string[]>(["full"]);
   const [maxTurns, setMaxTurns] = useState(3);
   const [topP, setTopP] = useState("");
@@ -1049,7 +1049,7 @@ export function ExperimentsPage({ config }: Props) {
               </div>
             )}
             {!local && (
-              <Field label={<>Temperatures <em>LLM_TEMPERATURE</em></>} help="Comma-separated. The word default sends no temperature, so the provider's default for the model applies. Numbers are sent as given, for example 0 for near-deterministic decoding.">
+              <Field label={<>Temperatures <em>LLM_TEMPERATURE</em></>} help="Comma-separated numbers, sent as given, for example 0 for near-deterministic decoding. The word default sends no temperature, so the provider's default applies; that is allowed only with a top_p, because every condition must state its sampling.">
                 <input id="temps" type="text" value={temps} onChange={(e) => setTemps(e.target.value)} spellCheck={false} />
               </Field>
             )}

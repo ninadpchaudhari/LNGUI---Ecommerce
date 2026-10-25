@@ -36,7 +36,7 @@ export function buildCommandSchema(mode: "diff" | "full" = "diff") {
     sort: mode === "full" ? z.enum(SORT_VALUES).nullable() : z.enum(SORT_VALUES).nullable().optional(),
     explanation: z.string(),
   };
-  // null means "do not clear", as earlier prompts (prompts/default-clear.txt) ask for.
+  // null means "do not clear", as some earlier prompts asked for.
   return z.object({ ...base, clearFilters: z.boolean().nullable().optional() }).strict();
 }
 

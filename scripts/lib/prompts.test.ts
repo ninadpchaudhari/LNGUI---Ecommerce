@@ -12,17 +12,28 @@ const base = (conditions: unknown[]) => ({
   name: "t", cases: "cases/pilot.jsonl", n: 1, seed: 1, concurrency: 1, maxInfraRetries: 0, conditions,
 });
 const SHA = "a".repeat(64);
+/** Every model condition states its sampling. */
+const T = { LLM_TEMPERATURE: "0" };
 
 describe("experiment schema: the prompt is part of every condition", () => {
   test("a condition without a prompt is refused", () => {
-    assert.equal(experimentSchema.safeParse(base([{ id: "c", env: {} }])).success, false);
+    assert.equal(experimentSchema.safeParse(base([{ id: "c", env: T }])).success, false);
   });
 
   test("a prompt file must be in prompts/ and end in .txt", () => {
     for (const file of ["default.txt", "prompts/x.md", "../prompts/x.txt"]) {
-      assert.equal(experimentSchema.safeParse(base([{ id: "c", prompt: { file, sha256: SHA }, env: {} }])).success, false, file);
+      assert.equal(experimentSchema.safeParse(base([{ id: "c", prompt: { file, sha256: SHA }, env: T }])).success, false, file);
     }
-    assert.ok(experimentSchema.safeParse(base([{ id: "c", prompt: { file: "prompts/x.txt", sha256: SHA }, env: {} }])).success);
+    assert.ok(experimentSchema.safeParse(base([{ id: "c", prompt: { file: "prompts/x.txt", sha256: SHA }, env: T }])).success);
+  });
+
+  test("a model condition must set temperature or top_p; the local parser need not", () => {
+    const cond = (env: Record<string, string>) => base([{ id: "c", prompt: { file: "prompts/x.txt", sha256: SHA }, env }]);
+    assert.equal(experimentSchema.safeParse(cond({ LLM_MODEL: "m" })).success, false);
+    assert.equal(experimentSchema.safeParse(cond({ LLM_TEMPERATURE: " " })).success, false, "blank is unset");
+    assert.ok(experimentSchema.safeParse(cond({ LLM_TEMPERATURE: "0.8" })).success);
+    assert.ok(experimentSchema.safeParse(cond({ LLM_TOP_P: "1" })).success);
+    assert.ok(experimentSchema.safeParse(cond({ LOCAL_TEST_MODE: "true" })).success);
   });
 
   test("prompt text is never put in env", () => {
@@ -49,7 +60,7 @@ describe("loadConditions", () => {
     await inTempDir(async () => {
       await writeFile("prompts/a.txt", "Line one\r\nLine two\n\n");
       const sha256 = await promptSha256("Line one\nLine two");
-      const parsed = experimentSchema.parse(base([{ id: "c", prompt: { file: "prompts/a.txt", sha256 }, env: { HISTORY_POLICY: "full" } }]));
+      const parsed = experimentSchema.parse(base([{ id: "c", prompt: { file: "prompts/a.txt", sha256 }, env: { ...T, HISTORY_POLICY: "full" } }]));
       const { conditions, prompts } = await loadConditions(parsed.conditions);
       assert.equal(conditions[0].env.SYSTEM_PROMPT, "Line one\nLine two");
       assert.equal(conditions[0].env.HISTORY_POLICY, "full");
@@ -60,7 +71,7 @@ describe("loadConditions", () => {
   test("refuses a file whose text changed since the experiment was designed", async () => {
     await inTempDir(async () => {
       await writeFile("prompts/a.txt", "edited after the experiment was written");
-      const parsed = experimentSchema.parse(base([{ id: "c", prompt: { file: "prompts/a.txt", sha256: SHA }, env: {} }]));
+      const parsed = experimentSchema.parse(base([{ id: "c", prompt: { file: "prompts/a.txt", sha256: SHA }, env: T }]));
       await assert.rejects(loadConditions(parsed.conditions), /not the prompt this experiment was designed for/);
     });
   });
@@ -69,7 +80,7 @@ describe("loadConditions", () => {
     await inTempDir(async () => {
       await writeFile("prompts/a.txt", "---\nimplementation: full\n---\nSend every field.\n");
       const sha256 = await promptSha256("Send every field.");
-      const parsed = experimentSchema.parse(base([{ id: "c", prompt: { file: "prompts/a.txt", sha256 }, env: {} }]));
+      const parsed = experimentSchema.parse(base([{ id: "c", prompt: { file: "prompts/a.txt", sha256 }, env: T }]));
       const { conditions, prompts } = await loadConditions(parsed.conditions);
       assert.equal(conditions[0].env.SYSTEM_PROMPT, "Send every field.");
       assert.equal(conditions[0].env.LNGUI_COMMAND_MODE, "full");
@@ -81,14 +92,14 @@ describe("loadConditions", () => {
     await inTempDir(async () => {
       await writeFile("prompts/a.txt", "---\nimplementation: diff\n---\nSend only changes.");
       const sha256 = await promptSha256("Send only changes.");
-      const parsed = experimentSchema.parse(base([{ id: "c", prompt: { file: "prompts/a.txt", sha256 }, env: { LNGUI_COMMAND_MODE: "full" } }]));
+      const parsed = experimentSchema.parse(base([{ id: "c", prompt: { file: "prompts/a.txt", sha256 }, env: { ...T, LNGUI_COMMAND_MODE: "full" } }]));
       await assert.rejects(loadConditions(parsed.conditions), /declares implementation diff/);
     });
   });
 
   test("reports a missing file by condition", async () => {
     await inTempDir(async () => {
-      const parsed = experimentSchema.parse(base([{ id: "c1", prompt: { file: "prompts/none.txt", sha256: SHA }, env: {} }]));
+      const parsed = experimentSchema.parse(base([{ id: "c1", prompt: { file: "prompts/none.txt", sha256: SHA }, env: T }]));
       await assert.rejects(loadConditions(parsed.conditions), /condition c1: cannot read prompts\/none.txt/);
     });
   });
