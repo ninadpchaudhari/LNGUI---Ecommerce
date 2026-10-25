@@ -167,16 +167,16 @@ export function TurnDetail({ turn, earlier }: { turn: TurnRecord; earlier: reado
           <ValuationDiff turn={turn} />
           <div className="trace-sets">
             <span>fp = {`{${turn.fp.join(", ")}}`}</span>
-            <span title={turn.kind === "chat" ? "Guessed from the wording of the typed utterance (inferWriteSet)" : "Declared by the case's generation template"}>
+            <span title={turn.kind === "chat" ? "From fixed keyword rules on the typed sentence (regular expressions in inferWriteSet), not from a model" : "Declared by the case's generation template"}>
               W = {turn.writeSet === null ? "(unlabelled)" : `{${turn.writeSet.join(", ")}}`}
-              {turn.writeSet !== null && <em>{turn.kind === "chat" ? " inferred from wording" : " declared by the case"}</em>}
+              {turn.writeSet !== null && <em>{turn.kind === "chat" ? " from keyword rules" : " declared by the case"}</em>}
             </span>
           </div>
           {turn.flags.commandOverReach && (
             <div className="trace-flag trace-flag-bad">
               ⚠ command over-reach: the mediator changed {turn.flags.overReachControls.join(", ")}, which this utterance's write set W
-              {turn.kind === "chat" ? " (guessed from your wording)" : ""} does not include.
-              {turn.kind === "chat" && " If you did ask for it, the guess was too narrow and this is a false alarm."}
+              {turn.kind === "chat" ? " (from keyword rules on your wording)" : ""} does not include.
+              {turn.kind === "chat" && " If you did ask for it, the keyword rules missed it and this is a false alarm."}
             </div>
           )}
           {turn.rejected.length > 0 && (

@@ -636,7 +636,7 @@ export function ExperimentsPage({ config }: Props) {
   const resolveErrors = [...new Set(Object.values(resolved).map((r) => r.error).filter(Boolean))];
   if (resolveErrors.length) issues.push(["warn", `Could not resolve P: ${resolveErrors[0]}`]);
   if (derived) issues.push(["warn", `This test set differs from any file on disk. Download it to ${casesPath} before running from the CLI.`]);
-  if (suite.cases.some((c) => c.provenance.generator === "manual")) issues.push(["warn", "New utterances use inferred write sets. Treat their results as exploration."]);
+  if (suite.cases.some((c) => c.provenance.generator === "manual")) issues.push(["warn", "New sentences get their write sets from keyword rules (regular expressions), not a model. Treat their results as exploration."]);
   if (!local && exp.n < 3) issues.push(["warn", "With N below 3, fail@3 cannot be computed."]);
   if (!local && parseList(temps).every((t) => Number(t) === 0)) {
     issues.push(["warn", "Every condition runs at temperature 0, so per-case failure rates will sit near 0 or 1."]);
@@ -817,7 +817,7 @@ export function ExperimentsPage({ config }: Props) {
                     <Field label="Custom utterance">
                       <input id="adhoc-custom" type="text" value={customUtterance} onChange={(e) => setCustomUtterance(e.target.value)} placeholder="Enter a sentence" />
                     </Field>
-                    <p className="xp-note">Custom sentences have no predefined write set. Write sets are inferred, so these results are exploratory.</p>
+                    <p className="xp-note">Custom sentences have no predefined write set; it comes from keyword rules (regular expressions), not a model, so these results are exploratory.</p>
                   </>
                 ) : (
                   <p className="xp-note">Runs the existing cases containing this utterance, using their defined write sets.</p>
