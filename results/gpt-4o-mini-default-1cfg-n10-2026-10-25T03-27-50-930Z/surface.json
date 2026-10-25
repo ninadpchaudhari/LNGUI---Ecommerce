@@ -1,0 +1,333 @@
+{
+  "subject": "ecommerce",
+  "sha256": "5d236af69cdafbaac83d95c017bfd231084749c80dd965678a6040e14d2435d4",
+  "controls": [
+    {
+      "id": "category",
+      "label": "Category",
+      "device": null,
+      "area": null,
+      "domain": {
+        "kind": "enum",
+        "values": [
+          "electronics",
+          "books",
+          "clothing",
+          "home",
+          "sports"
+        ]
+      },
+      "reset": null,
+      "constraining": true,
+      "reversible": true
+    },
+    {
+      "id": "maxPrice",
+      "label": "Max Price ($)",
+      "device": null,
+      "area": null,
+      "domain": {
+        "kind": "number",
+        "min": 0,
+        "max": 500
+      },
+      "reset": 500,
+      "constraining": true,
+      "reversible": true
+    },
+    {
+      "id": "minRating",
+      "label": "Minimum Rating",
+      "device": null,
+      "area": null,
+      "domain": {
+        "kind": "enum",
+        "values": [
+          3,
+          3.5,
+          4,
+          4.5
+        ]
+      },
+      "reset": null,
+      "constraining": true,
+      "reversible": true
+    },
+    {
+      "id": "inStockOnly",
+      "label": "In stock only",
+      "device": null,
+      "area": null,
+      "domain": {
+        "kind": "boolean"
+      },
+      "reset": false,
+      "constraining": true,
+      "reversible": true
+    },
+    {
+      "id": "sort",
+      "label": "Sort",
+      "device": null,
+      "area": null,
+      "domain": {
+        "kind": "enum",
+        "values": [
+          "price_asc",
+          "price_desc",
+          "rating_desc",
+          "name_asc"
+        ]
+      },
+      "reset": null,
+      "constraining": false,
+      "reversible": true
+    },
+    {
+      "id": "clearFilters",
+      "label": "Clear Filters",
+      "device": null,
+      "area": null,
+      "domain": {
+        "kind": "action"
+      },
+      "reset": null,
+      "constraining": false,
+      "reversible": false
+    }
+  ],
+  "devices": [],
+  "areas": {},
+  "relations": [
+    "MR_CE",
+    "MR_AC",
+    "MR_CA",
+    "MR_REV",
+    "MR_COMP",
+    "CONTEXT_AMNESIA"
+  ],
+  "templates": [
+    {
+      "id": "category.show",
+      "text": "show {value} items",
+      "slot": "category",
+      "writes": [
+        "category"
+      ]
+    },
+    {
+      "id": "category.filter",
+      "text": "filter to {value} only",
+      "slot": "category",
+      "writes": [
+        "category"
+      ]
+    },
+    {
+      "id": "maxPrice.show",
+      "text": "show items under ${value}",
+      "slot": "maxPrice",
+      "writes": [
+        "maxPrice"
+      ]
+    },
+    {
+      "id": "maxPrice.cheaper",
+      "text": "show items cheaper than ${value}",
+      "slot": "maxPrice",
+      "writes": [
+        "maxPrice"
+      ]
+    },
+    {
+      "id": "minRating.show",
+      "text": "show items rated {value} and up",
+      "slot": "minRating",
+      "writes": [
+        "minRating"
+      ]
+    },
+    {
+      "id": "inStockOnly.hide",
+      "text": "hide out-of-stock items",
+      "slot": null,
+      "writes": [
+        "inStockOnly"
+      ]
+    },
+    {
+      "id": "inStockOnly.show",
+      "text": "show out-of-stock items again",
+      "slot": null,
+      "writes": [
+        "inStockOnly"
+      ]
+    },
+    {
+      "id": "sort.by",
+      "text": "sort by {value}",
+      "slot": "sort",
+      "writes": [
+        "sort"
+      ]
+    },
+    {
+      "id": "sort.order",
+      "text": "order the results by {value}",
+      "slot": "sort",
+      "writes": [
+        "sort"
+      ]
+    },
+    {
+      "id": "clearFilters.all",
+      "text": "clear all filters",
+      "slot": null,
+      "writes": [
+        "category",
+        "maxPrice",
+        "minRating",
+        "inStockOnly",
+        "sort",
+        "clearFilters"
+      ]
+    },
+    {
+      "id": "clearFilters.reset",
+      "text": "reset every filter",
+      "slot": null,
+      "writes": [
+        "category",
+        "maxPrice",
+        "minRating",
+        "inStockOnly",
+        "sort",
+        "clearFilters"
+      ]
+    }
+  ],
+  "refinementClauses": [
+    {
+      "id": "maxPrice.clause",
+      "text": "under ${value}",
+      "slot": "maxPrice",
+      "target": "maxPrice"
+    },
+    {
+      "id": "minRating.clause",
+      "text": "rated {value} and up",
+      "slot": "minRating",
+      "target": "minRating"
+    },
+    {
+      "id": "inStockOnly.clause",
+      "text": "that are in stock",
+      "slot": null,
+      "target": "inStockOnly",
+      "value": true
+    },
+    {
+      "id": "category.clause",
+      "text": "in {value}",
+      "slot": "category",
+      "target": "category"
+    }
+  ],
+  "surfaceTransforms": [
+    {
+      "id": "uppercase",
+      "kind": "uppercase"
+    },
+    {
+      "id": "synonymPrefix",
+      "kind": "replacePrefix",
+      "from": "show ",
+      "to": "display "
+    },
+    {
+      "id": "formatSuffix",
+      "kind": "append",
+      "text": " in a table"
+    },
+    {
+      "id": "clauseReorder",
+      "kind": "moveSortClauseFirst"
+    }
+  ],
+  "goldPairs": [
+    {
+      "source": "show electronics under $100 sorted by rating",
+      "variant": "list the tech products below $100, best rated first",
+      "writes": [
+        "category",
+        "maxPrice",
+        "sort"
+      ]
+    },
+    {
+      "source": "hide out-of-stock items",
+      "variant": "only show me things that are available right now",
+      "writes": [
+        "inStockOnly"
+      ]
+    },
+    {
+      "source": "show books",
+      "variant": "I'm looking for something to read",
+      "writes": [
+        "category"
+      ]
+    }
+  ],
+  "phrases": {
+    "category": {
+      "electronics": [
+        "electronics"
+      ],
+      "books": [
+        "books"
+      ],
+      "clothing": [
+        "clothing"
+      ],
+      "home": [
+        "home goods"
+      ],
+      "sports": [
+        "sports gear"
+      ]
+    },
+    "minRating": {
+      "3": [
+        "3 stars"
+      ],
+      "4": [
+        "4 stars"
+      ],
+      "3.5": [
+        "3.5 stars"
+      ],
+      "4.5": [
+        "4.5 stars"
+      ]
+    },
+    "sort": {
+      "price_asc": [
+        "lowest price first",
+        "price low to high"
+      ],
+      "price_desc": [
+        "highest price first",
+        "price high to low"
+      ],
+      "rating_desc": [
+        "rating",
+        "best rated first"
+      ],
+      "name_asc": [
+        "name",
+        "alphabetical order"
+      ]
+    }
+  }
+}
