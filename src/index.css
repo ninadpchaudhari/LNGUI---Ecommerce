@@ -445,11 +445,24 @@ body {
   margin: 0 0 10px;
   padding: 0;
   border: 0;
+  /* A fieldset will not shrink below its content by default. */
+  min-width: 0;
 }
 
 .chat-settings-row {
   display: flex;
   gap: 8px;
+}
+
+.chat-settings-row > label {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-settings select,
+.chat-settings .model-picker-input {
+  min-width: 0;
+  width: 100%;
 }
 
 .chat-panel-head {

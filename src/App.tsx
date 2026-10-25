@@ -220,7 +220,8 @@ export default function App() {
     setCursor(null);
   };
 
-  const lastTurn = turns.length > 0 ? turns[0] : null;
+  // The newest record of this session only; the store also holds earlier sessions and saved runs.
+  const lastTurn = turns.find((t) => t.sessionId === sessionId) ?? null;
 
   return (
     <div className="app">
