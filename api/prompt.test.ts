@@ -21,7 +21,6 @@ describe("prompt files declare their implementation", () => {
       assert.ok(parsed(f.replace(/\.txt$/, "")).implementation, `${f} declares no implementation`);
     }
     assert.equal(parsed("default").implementation, DEFAULT_IMPLEMENTATION);
-    assert.equal(parsed("default-diff").implementation, "diff");
     assert.equal(parsed("student-x").implementation, "full");
   });
 

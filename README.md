@@ -166,7 +166,6 @@ Hashes cover only the text after the header. The committed prompts:
 | Prompt | Implementation | What it is |
 |---|---|---|
 | `default.txt` | full | The output schema and one line asking for JSON only; no phrase rules. The server uses it when a request carries no prompt, so the chat app and deployed instance run it. Kept identical to `shared/default-prompt.ts`. |
-| `default-diff.txt` | diff | `default.txt` asking for the changes only, plus the one line diff needs: a missing field is kept, null clears. |
 | `student-x.txt` | full | The app's original prompt, byte for byte the one Figure 1.2 was recorded with (`fnv1a32:5a348657`), with its phrase rules ("top rated means minRating >= 4.0 and/or sort"). |
 
 The two default prompts state the command language only and leave phrase
@@ -181,8 +180,6 @@ text matters. The command-schema hash includes `partial-update-v1` or
 The schema fingerprint still records it as on, so hashes match earlier runs
 that had it on. Older experiment files that set it are rejected with a message
 saying so, and turn records from runs with it off still show "clear action off".
-Historical motivating-failure observations in `docs/dissertation-findings.md`
-are not results for this new benchmark and must be remeasured.
 
 ## Context policy — inducing amnesia
 
