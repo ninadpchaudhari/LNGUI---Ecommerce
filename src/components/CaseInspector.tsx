@@ -119,7 +119,8 @@ function Trial({ t, turns, mrCase }: { t: TrialRow; turns: ReadonlyMap<string, T
       <div className="ci-trial-head">
         <b>Trial {t.trial}</b>
         <span className={`ci-badge ci-badge-${t.status}`}>{t.status}</span>
-        {t.overReach && <span className="ci-badge ci-badge-fail">over-reach: {t.overReachControls.join(", ")}</span>}
+        {/* Over-reach in a failed trial is already part of the failure; only a pass needs the flag. */}
+        {t.status === "pass" && t.overReach && <span className="ci-badge ci-badge-fail">over-reach: {t.overReachControls.join(", ")}</span>}
         {!t.contextIntact && <span className="ci-badge ci-badge-infra">context not intact</span>}
         {t.attempt > 1 && <span className="xp-dim">attempt {t.attempt}</span>}
       </div>
@@ -203,7 +204,10 @@ export function CaseInspector({
               <code>{s.caseId}</code>
               {selection.group === null && <span className="xp-dim">{s.group}</span>}
               <span>{s.fails} / {s.n} failed</span>
-              {s.overReachTrials > 0 && <span className="ci-bad">{s.overReachTrials} over-reach</span>}
+              {(() => {
+                const n = scoped.filter((t) => t.caseId === s.caseId && matches(t, "passOverreach")).length;
+                return n > 0 && <span className="ci-bad">{n} passed with over-reach</span>;
+              })()}
               {s.infra > 0 && <span className="xp-dim">{s.infra} infra</span>}
             </summary>
             {mrCase?.description && <p className="xp-note">{mrCase.description}</p>}
