@@ -1,10 +1,10 @@
 {
-  "name": "small-models-default-4cfg-n10",
+  "name": "small-models-default-5cfg-n10",
   "cases": "cases/pilot.jsonl",
   "casesSha256": "a3c32eae2d7edeaf753290944f231f5488d0d4e52fc09706c7ca43aab1331d67",
   "n": 10,
   "seed": 406269,
-  "concurrency": 4,
+  "concurrency": 10,
   "maxInfraRetries": 2,
   "conditions": [
     {
@@ -58,6 +58,20 @@
         "LLM_MODEL": "qwen/qwen3.5-9b",
         "LLM_TEMPERATURE": "1",
         "LLM_TOP_P": "0.95",
+        "LLM_REASONING_EFFORT": "none",
+        "HISTORY_POLICY": "full"
+      }
+    },
+    {
+      "id": "qwen3.5-9b-default-t0-rnone",
+      "prompt": {
+        "file": "prompts/default.txt",
+        "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151"
+      },
+      "env": {
+        "LLM_PROVIDER": "openrouter",
+        "LLM_MODEL": "qwen/qwen3.5-9b",
+        "LLM_TEMPERATURE": "0",
         "LLM_REASONING_EFFORT": "none",
         "HISTORY_POLICY": "full"
       }
