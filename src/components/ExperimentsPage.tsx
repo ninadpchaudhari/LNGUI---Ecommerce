@@ -50,15 +50,7 @@ async function sha256Hex(text: string): Promise<string> {
 const fmt = (n: number) => n.toLocaleString("en-US");
 const slug = (s: string) => s.replace(/[^\w.-]+/g, "-").replace(/^-+|-+$/g, "");
 const shortModel = (m: string) => slug(m.split("/").pop()!.replace(/:/g, "-"));
-const parseList = (s: string) => s.split(",").map((t) => t.trim()).filter(Boolean);
 const newSeed = () => 100000 + Math.floor(Math.random() * 900000);
-
-/**
- * What a condition sets, so a condition from a file can be matched to one the
- * page builds. The command mode is left out: the prompt's header decides it.
- */
-const conditionKey = (promptName: string, env: Record<string, string>) =>
-  JSON.stringify([promptName, Object.entries(env).filter(([k]) => k !== "LNGUI_COMMAND_MODE").sort(([a], [b]) => a.localeCompare(b))]);
 
 /** A model choice: which provider serves it, and the provider's model id. */
 interface ModelChoice {
@@ -289,6 +281,77 @@ interface PageCondition {
 /** What the sweep engine and the server see: the prompt text rides in the overrides. */
 const toEngine = (c: PageCondition): Condition => ({ id: c.id, env: { ...c.env, SYSTEM_PROMPT: c.prompt.text } });
 
+/** The model select's value for the local parser; model values are `${provider}:${model}`. */
+const LOCAL = "local";
+
+/** One configuration as the page shows it: exactly one condition of the experiment file. */
+interface Block {
+  /** React key; stable while the block is edited. */
+  key: number;
+  /** Empty: use autoId(block). */
+  id: string;
+  /** LOCAL or `${provider}:${model}`. */
+  model: string;
+  prompt: string;
+  /** Empty: not sent. */
+  temperature: string;
+  topP: string;
+  history: "full" | "last-k" | "none";
+  maxTurns: string;
+}
+
+/** The condition keys a block sets; anything else in a loaded file is dropped. */
+const BLOCK_KEYS = new Set(["LLM_PROVIDER", "LLM_MODEL", "LLM_TEMPERATURE", "LLM_TOP_P", "HISTORY_POLICY", "HISTORY_MAX_TURNS", "LOCAL_TEST_MODE", "LNGUI_COMMAND_MODE"]);
+
+const splitModel = (value: string) => {
+  const i = value.indexOf(":");
+  return { provider: value.slice(0, i), model: value.slice(i + 1) };
+};
+
+/** Whether the block's model takes temperature and top_p. */
+const takesSampling = (model: string) => model !== LOCAL && !fixedSampling(splitModel(model).provider, splitModel(model).model);
+
+let nextBlockKey = 1;
+/** A block for a model, with that model's recommended sampling. */
+function newBlock(model: string, prompt: string): Block {
+  const entry = MODELS.find((m) => keyOf(m) === model);
+  return {
+    key: nextBlockKey++, id: "", model, prompt,
+    temperature: entry?.sampling?.temperature ?? "", topP: entry?.sampling?.topP ?? "",
+    history: "full", maxTurns: "3",
+  };
+}
+
+/** The id a block gets until one is typed: what it runs, in a few words. */
+function autoId(b: Block): string {
+  const parts = [b.model === LOCAL ? "local" : shortModel(splitModel(b.model).model), b.prompt];
+  if (takesSampling(b.model)) {
+    if (b.temperature.trim()) parts.push(`t${b.temperature.trim()}`);
+    if (b.topP.trim()) parts.push(`p${b.topP.trim()}`);
+  }
+  if (b.history === "last-k") parts.push(`last${b.maxTurns}`);
+  if (b.history === "none") parts.push("nohistory");
+  return slug(parts.join("-"));
+}
+
+/** The condition a block runs. Sampling is sent only to a model that takes it. Null: its prompt is gone. */
+function blockCondition(b: Block, prompt: PromptEntry | null): PageCondition | null {
+  if (!prompt) return null;
+  const env: Overrides = {};
+  if (b.model === LOCAL) env.LOCAL_TEST_MODE = "true";
+  else {
+    const { provider, model } = splitModel(b.model);
+    env.LLM_PROVIDER = provider;
+    env.LLM_MODEL = model;
+    if (takesSampling(b.model) && b.temperature.trim()) env.LLM_TEMPERATURE = b.temperature.trim();
+    if (takesSampling(b.model) && b.topP.trim()) env.LLM_TOP_P = b.topP.trim();
+  }
+  env.HISTORY_POLICY = b.history;
+  if (b.history === "last-k") env.HISTORY_MAX_TURNS = b.maxTurns;
+  env.LNGUI_COMMAND_MODE = prompt.implementation;
+  return { id: b.id.trim() || autoId(b), env, prompt: { name: prompt.name, text: normalizePrompt(prompt.text) } };
+}
+
 /** Lines added and removed against another text, ignoring order. */
 function lineDiff(base: string, text: string): { added: number; removed: number } {
   const count = (t: string) => t.split("\n").reduce<Map<string, number>>((m, l) => m.set(l, (m.get(l) ?? 0) + 1), new Map());
@@ -394,29 +457,8 @@ export function ExperimentsPage() {
     counts: groupCounts,
   });
 
-  // ── 2. Conditions ─────────────────────────────────────────────────────────
-  // The shared list (shared/models.ts), not the server's: the page and the chat offer the same models.
-  const [models, setModels] = useState<ModelChoice[]>(() => MODELS.map(({ provider, model }) => ({ provider, model })));
-  const [modelsOn, setModelsOn] = useState<string[]>(() => [keyOf(MODELS[0])]);
-  const [ollama, setOllama] = useState<{ loading: boolean; error: string }>({ loading: false, error: "" });
-  const loadOllama = async () => {
-    setOllama({ loading: true, error: "" });
-    try {
-      const res = await fetch("/api/ollama/models");
-      const body = (await res.json()) as { models: string[]; error?: string };
-      setModels((m) => {
-        const known = new Set(m.map(keyOf));
-        return [...m, ...body.models.map((model) => ({ provider: "ollama" as const, model })).filter((c) => !known.has(keyOf(c)))];
-      });
-      setOllama({ loading: false, error: body.error ?? (body.models.length === 0 ? "Ollama has no models installed." : "") });
-    } catch {
-      setOllama({ loading: false, error: "Could not reach the API server." });
-    }
-  };
-  const [newModel, setNewModel] = useState({ provider: "openrouter" as ModelChoice["provider"], model: "" });
-  // ── Prompts ──
+  // ── 2. Prompts ──
   const [prompts, setPrompts] = useState<PromptEntry[]>(COMMITTED_PROMPTS);
-  const [promptsOn, setPromptsOn] = useState<string[]>(["default"]);
   const [editing, setEditing] = useState("default");
   const [shas, setShas] = useState<Record<string, string>>({});
   useEffect(() => {
@@ -431,84 +473,31 @@ export function ExperimentsPage() {
   const addPrompt = (want: string, text: string, implementation: CommandMode) => {
     const name = uniqueName(prompts.map((p) => p.name), want);
     setPrompts((ps) => [...ps, { name, text, implementation }]);
-    setPromptsOn((on) => [...on, name]);
     setEditing(name);
   };
-  const [temps, setTemps] = useState("0");
-  const [history, setHistory] = useState<string[]>(["full"]);
-  const [maxTurns, setMaxTurns] = useState(3);
-  const [topP, setTopP] = useState("");
-  const [local, setLocal] = useState(false);
-  const [condOff, setCondOff] = useState<Set<string>>(new Set());
-  // A loaded experiment file keeps its own condition ids, keyed by what each condition sets.
-  const [loadedIds, setLoadedIds] = useState<Map<string, string>>(new Map());
-  const [pendingKeep, setPendingKeep] = useState<Set<string> | null>(null);
 
-  const chosenModels = models.filter((m) => modelsOn.includes(keyOf(m)));
-  const chosenPrompts = prompts.filter((p) => promptsOn.includes(p.name));
-  const allConditions: PageCondition[] = useMemo(() => {
-    const ms: (ModelChoice | null)[] = local ? [null] : chosenModels;
-    const out: PageCondition[] = [];
-    for (const m of ms) {
-      // A model that takes no temperature or top_p gets one condition per prompt, with neither set.
-      const fixed = !local && fixedSampling(m!.provider, m!.model);
-      const ts = local ? ["default"] : fixed ? ["fixed"] : parseList(temps);
-      for (const pr of chosenPrompts)
-        for (const t of ts)
-          for (const h of history) {
-            const impl = pr.implementation;
-            const env: Overrides = {};
-            if (local) env.LOCAL_TEST_MODE = "true";
-            else {
-              env.LLM_PROVIDER = m!.provider;
-              env.LLM_MODEL = m!.model;
-            }
-            if (!local && !fixed && t !== "default") env.LLM_TEMPERATURE = t;
-            if (!local && !fixed && topP.trim()) env.LLM_TOP_P = topP.trim();
-            env.HISTORY_POLICY = h;
-            if (h === "last-k") env.HISTORY_MAX_TURNS = String(maxTurns);
-            env.LNGUI_COMMAND_MODE = impl;
-            const parts: string[] = [impl];
-            if (local) parts.push("local");
-            else if (ms.length > 1) parts.push(`${m!.provider === "ollama" ? "ollama-" : ""}${shortModel(m!.model)}`);
-            if (chosenPrompts.length > 1 || pr.name !== "default") parts.push(pr.name);
-            if (!local) parts.push(t === "fixed" ? "tfixed" : t === "default" ? "tdefault" : `t${t}`);
-            if (history.length > 1 || h !== "full") parts.push(h === "last-k" ? `last${maxTurns}` : h);
-            const id = loadedIds.get(conditionKey(pr.name, env)) ?? parts.join("-");
-            out.push({ id, env, prompt: { name: pr.name, text: normalizePrompt(pr.text) } });
-          }
-    }
-    return out;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [local, modelsOn, models, temps, prompts, promptsOn, history, maxTurns, topP, loadedIds]);
-  const conditions = allConditions.filter((c) => !condOff.has(c.id));
-
-  // After a load, the factors above produce every combination; switch off the
-  // ones the file did not list, and say which listed ones the page cannot build.
+  // ── 3. Configurations: one block per condition, run exactly as written ──
+  const [blocks, setBlocks] = useState<Block[]>(() => [newBlock(keyOf(MODELS[0]), "default")]);
+  const updateBlock = (key: number, patch: Partial<Block>) =>
+    setBlocks((bs) => bs.map((b) => (b.key === key ? { ...b, ...patch } : b)));
+  const conditions: PageCondition[] = useMemo(
+    () => blocks.map((b) => blockCondition(b, prompts.find((p) => p.name === b.prompt) ?? null)).filter((c): c is PageCondition => c !== null),
+    [blocks, prompts],
+  );
   const [loadNotes, setLoadNotes] = useState<Array<["bad" | "warn" | "ok", string]>>([]);
-  useEffect(() => {
-    if (!pendingKeep) return;
-    const built = new Set(allConditions.map((c) => conditionKey(c.prompt.name, c.env)));
-    setCondOff(new Set(allConditions.filter((c) => !pendingKeep.has(conditionKey(c.prompt.name, c.env))).map((c) => c.id)));
-    const missing = [...pendingKeep].filter((k) => !built.has(k)).map((k) => loadedIds.get(k) ?? k);
-    if (missing.length) {
-      setLoadNotes((n) => [...n, ["bad", `The page cannot build ${missing.length} condition(s) from this file, so they are left out: ${missing.join(", ")}. They set something this page has no control for.`]]);
-    }
-    setPendingKeep(null);
-  }, [pendingKeep, allConditions, loadedIds]);
-
-  const toggle = (list: string[], set: (v: string[]) => void, v: string) =>
-    set(list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
+  /** All configurations use the local parser: no model calls. */
+  const local = conditions.length > 0 && conditions.every((c) => c.env.LOCAL_TEST_MODE === "true");
+  const modelCalls = conditions.filter((c) => c.env.LOCAL_TEST_MODE !== "true").length;
 
   // Each condition's P, as the server resolves it. Shows exactly what a run
   // will use, including code defaults for anything the condition leaves out.
   const [resolved, setResolved] = useState<Record<string, { P?: AppConfig; error?: string }>>({});
-  const condKey = JSON.stringify(allConditions);
+  const condKey = JSON.stringify(conditions);
   useEffect(() => {
     let live = true;
     const t = window.setTimeout(async () => {
       const out: Record<string, { P?: AppConfig; error?: string }> = {};
-      await Promise.all(allConditions.map(async (c) => {
+      await Promise.all(conditions.map(async (c) => {
         try {
           const res = await fetch("/api/config", {
             method: "POST",
@@ -534,7 +523,8 @@ export function ExperimentsPage() {
 
   // ── 3. Experiment file ────────────────────────────────────────────────────
   const [exp, setExp] = useState(() => ({ n: 10, seed: newSeed(), concurrency: 4, maxInfraRetries: 2 }));
-  const modelsPart = local ? "local" : chosenModels.length === 1 ? shortModel(chosenModels[0].model) : `${chosenModels.length}models`;
+  const usedModels = [...new Set(blocks.map((b) => b.model))];
+  const modelsPart = local ? "local" : usedModels.length === 1 ? shortModel(usedModels[0]) : `${usedModels.length}models`;
   const autoName = slug(`${suite.short}-${modelsPart}-${conditions.length}cond-n${exp.n}`);
   const [customName, setCustomName] = useState<string | null>(null);
   const name = customName ?? autoName;
@@ -561,36 +551,31 @@ export function ExperimentsPage() {
     setSource("bundled");
     setExcluded(new Set());
 
-    const promptNames = [...new Set(e.conditions.map((c) => c.prompt.file.replace(/^prompts\//, "").replace(/\.txt$/, "")))];
+    const loaded: Block[] = [];
     for (const c of e.conditions) {
       const pname = c.prompt.file.replace(/^prompts\//, "").replace(/\.txt$/, "");
-      const p = COMMITTED_PROMPTS.find((x) => x.name === pname);
-      if (!p) notes.push(["bad", `${c.id}: ${c.prompt.file} is not in prompts/.`]);
-      else if ((await promptSha256(p.text)) !== c.prompt.sha256) {
+      const p = prompts.find((x) => x.name === pname);
+      if (!p) {
+        notes.push(["bad", `${c.id}: ${c.prompt.file} is not in prompts/, so this configuration is left out.`]);
+        continue;
+      }
+      if ((await promptSha256(p.text)) !== c.prompt.sha256) {
         notes.push(["bad", `${c.id}: ${c.prompt.file} has changed since this experiment was written; the CLI will refuse to run it.`]);
       }
+      const unused = Object.keys(c.env).filter((k) => !BLOCK_KEYS.has(k));
+      if (unused.length) notes.push(["warn", `${c.id}: ${unused.join(", ")} cannot be set on this page and is dropped.`]);
+      loaded.push({
+        ...newBlock(c.env.LOCAL_TEST_MODE === "true" ? LOCAL : `${c.env.LLM_PROVIDER ?? "openrouter"}:${c.env.LLM_MODEL ?? ""}`, pname),
+        id: c.id,
+        temperature: c.env.LLM_TEMPERATURE ?? "",
+        topP: c.env.LLM_TOP_P ?? "",
+        history: (c.env.HISTORY_POLICY as Block["history"]) ?? "full",
+        maxTurns: c.env.HISTORY_MAX_TURNS ?? "3",
+      });
     }
-    const uniq = (xs: string[]) => [...new Set(xs)];
-    const envs = e.conditions.map((c) => c.env);
-    const isLocal = envs.some((v) => v.LOCAL_TEST_MODE === "true");
-    const chosen: ModelChoice[] = uniq(envs.filter((v) => v.LLM_MODEL).map((v) => `${v.LLM_PROVIDER ?? "openrouter"}:${v.LLM_MODEL}`))
-      .map((k) => ({ provider: k.slice(0, k.indexOf(":")) as ModelChoice["provider"], model: k.slice(k.indexOf(":") + 1) }));
-    setLocal(isLocal);
-    setModels((m) => [...m, ...chosen.filter((c) => !m.some((x) => keyOf(x) === keyOf(c)))]);
-    if (!isLocal) setModelsOn(chosen.map(keyOf));
-    setPromptsOn(promptNames.filter((n) => COMMITTED_NAMES.has(n)));
-    setEditing(promptNames[0]);
-    setTemps(uniq(envs.map((v) => v.LLM_TEMPERATURE ?? "default")).join(", "));
-    setTopP(envs.find((v) => v.LLM_TOP_P)?.LLM_TOP_P ?? "");
-    setHistory(uniq(envs.map((v) => v.HISTORY_POLICY ?? "full")));
-    const k = envs.find((v) => v.HISTORY_MAX_TURNS)?.HISTORY_MAX_TURNS;
-    if (k) setMaxTurns(Number(k));
+    setBlocks(loaded);
     setExp({ n: e.n, seed: e.seed, concurrency: e.concurrency, maxInfraRetries: e.maxInfraRetries });
     setCustomName(e.name);
-
-    const ids = new Map(e.conditions.map((c) => [conditionKey(c.prompt.file.replace(/^prompts\//, "").replace(/\.txt$/, ""), c.env), c.id] as const));
-    setLoadedIds(ids);
-    setPendingKeep(new Set(ids.keys()));
     notes.unshift(["ok", `Loaded ${fileName}: ${e.conditions.length} condition(s), N=${e.n}, seed ${e.seed}. Change anything below, then copy or download the file again.`]);
     setLoadNotes(notes);
   };
@@ -616,29 +601,41 @@ export function ExperimentsPage() {
   if (suite.problems.length) issues.push(["bad", `Cases file has ${suite.problems.length} problem(s): ${suite.problems[0]}`]);
   if (included.length === 0) issues.push(["bad", "The test set has no cases."]);
 
-  if (chosenPrompts.length === 0) issues.push(["bad", "Tick at least one prompt."]);
-  for (const pr of chosenPrompts) {
+  if (blocks.length === 0) issues.push(["bad", "Add at least one configuration."]);
+  for (const b of blocks) {
+    if (!prompts.some((p) => p.name === b.prompt)) issues.push(["bad", `${b.id || autoId(b)}: prompt ${b.prompt} no longer exists.`]);
+    for (const [label, v] of [["temperature", b.temperature], ["top_p", b.topP]] as const) {
+      if (v.trim() && !(Number(v) >= 0 && Number(v) <= 2)) issues.push(["bad", `${b.id || autoId(b)}: ${label} must be a number from 0 to 2.`]);
+    }
+  }
+  // Two configurations that send the same thing are the same run, paid for twice.
+  const runKeys = new Map<string, string>();
+  for (const c of conditions) {
+    const k = JSON.stringify([c.prompt.text, Object.entries(c.env).sort(([x], [y]) => x.localeCompare(y))]);
+    const twin = runKeys.get(k);
+    if (twin) issues.push(["bad", `${twin} and ${c.id} are the same run; change or remove one.`]);
+    else runKeys.set(k, c.id);
+  }
+  for (const pr of prompts.filter((p) => blocks.some((b) => b.prompt === p.name))) {
     if (!PROMPT_NAME_RE.test(pr.name)) issues.push(["bad", `Prompt name "${pr.name}" may use only letters, digits, dot, dash and underscore.`]);
     if (normalizePrompt(pr.text) === "") issues.push(["bad", `Prompt ${pr.name} is empty.`]);
   }
   const prNames = prompts.map((p) => p.name);
   if (new Set(prNames).size !== prNames.length) issues.push(["bad", "Two prompts share a name."]);
-  if (!local && parseList(temps).some((t) => t !== "default" && !(Number(t) >= 0 && Number(t) <= 2))) {
-    issues.push(["bad", "Temperatures are numbers from 0 to 2, or the word default."]);
-  }
   const resolveErrors = [...new Set(Object.values(resolved).map((r) => r.error).filter(Boolean))];
   if (resolveErrors.length) issues.push(["warn", `Could not resolve P: ${resolveErrors[0]}`]);
   if (derived) issues.push(["warn", `This test set differs from any file on disk. Download it to ${casesPath} before running from the CLI.`]);
   if (suite.cases.some((c) => c.provenance.generator === "manual")) issues.push(["warn", "New sentences get their write sets from keyword rules (regular expressions), not a model. Treat their results as exploration."]);
   if (!local && exp.n < 3) issues.push(["warn", "With N below 3, fail@3 cannot be computed."]);
-  if (!local && parseList(temps).every((t) => Number(t) === 0)) {
-    issues.push(["warn", "Every condition runs at temperature 0, so per-case failure rates will sit near 0 or 1."]);
+  const sampled = conditions.filter((c) => c.env.LLM_TEMPERATURE !== undefined);
+  if (sampled.length > 0 && sampled.every((c) => Number(c.env.LLM_TEMPERATURE) === 0)) {
+    issues.push(["warn", "Every configuration with a temperature runs at 0, so per-case failure rates will sit near 0 or 1."]);
   }
   const blocked = issues.some(([k]) => k === "bad");
   const experimentJson = JSON.stringify(check.success ? check.data : experiment, null, 2) + "\n";
   const filePath = `experiments/${name || "experiment"}.json`;
   const utterancesPerSuite = plannedInvocations(included, 1, 1);
-  const calls = utterancesPerSuite * conditions.length * exp.n;
+  const calls = utterancesPerSuite * modelCalls * exp.n;
   const trials = included.length * conditions.length * exp.n;
 
   // ── 4. Run here ───────────────────────────────────────────────────────────
@@ -873,20 +870,12 @@ export function ExperimentsPage() {
         </section>
 
         <section className="xp-block">
-          <h2>2. Prompts <small>the system prompt</small></h2>
+          <h2>2. Prompts <small>the system prompts configurations can use</small></h2>
           <div className="xp-body">
-            <div className="xp-chips">
-              {prompts.map((p) => (
-                <label key={p.name} className={`xp-chip ${promptsOn.includes(p.name) ? "on" : ""}`}>
-                  <input type="checkbox" checked={promptsOn.includes(p.name)} onChange={() => toggle(promptsOn, setPromptsOn, p.name)} />
-                  {p.name} <span className="xp-impl">{p.implementation}</span> <ShortHash value={shas[p.name]} />
-                </label>
-              ))}
-            </div>
             <div className="xp-row">
               <Field label="Showing">
                 <select id="prompt-edit" value={editingPrompt.name} onChange={(e) => setEditing(e.target.value)}>
-                  {prompts.map((p) => <option key={p.name} value={p.name}>{p.name}</option>)}
+                  {prompts.map((p) => <option key={p.name} value={p.name}>{p.name} ({p.implementation})</option>)}
                 </select>
               </Field>
               <button type="button" onClick={() => addPrompt(`${editingPrompt.name}-edit`, editingPrompt.text, editingPrompt.implementation)}>Duplicate to edit</button>
@@ -911,7 +900,7 @@ export function ExperimentsPage() {
               {!isCommitted && (
                 <button type="button" onClick={() => {
                   setPrompts((ps) => ps.filter((p) => p.name !== editingPrompt.name));
-                  setPromptsOn((on) => on.filter((n) => n !== editingPrompt.name));
+                  setBlocks((bs) => bs.map((b) => (b.prompt === editingPrompt.name ? { ...b, prompt: "default" } : b)));
                   setEditing("default");
                 }}>Delete</button>
               )}
@@ -922,7 +911,7 @@ export function ExperimentsPage() {
                   const next = e.target.value;
                   const old = editingPrompt.name;
                   setPrompts((ps) => ps.map((p) => (p.name === old ? { ...p, name: next } : p)));
-                  setPromptsOn((on) => on.map((n) => (n === old ? next : n)));
+                  setBlocks((bs) => bs.map((b) => (b.prompt === old ? { ...b, prompt: next } : b)));
                   setEditing(next);
                 }} />
               </Field>
@@ -963,104 +952,68 @@ export function ExperimentsPage() {
         </section>
 
         <section className="xp-block">
-          <h2>3. Configurations to compare</h2>
+          <h2>3. Configurations <small>one per condition in the experiment file</small></h2>
           <div className="xp-body">
             <p className="xp-note">
-              Select one or more values for each setting. Each combination becomes a configuration to compare.
-              
+              Each configuration runs exactly as written. To compare two settings, duplicate a configuration and change one field.
             </p>
-            <label className="xp-check xp-boxed">
-              <input id="local" type="checkbox" checked={local} onChange={(e) => setLocal(e.target.checked)} />
-              <span><b>Dry Run.</b> Run tests with simulated responses. No model calls or conversation history.</span>
-            </label>
-            {!local && (
-              <div className="xp-factor">
-                <div className="xp-label">Models<Help>Each checked model becomes its own set of conditions. OpenRouter models use the server's OpenRouter key. Ollama models run on the server's local Ollama (OLLAMA_BASE_URL, default http://localhost:11434/v1).</Help></div>
-                {(["openrouter", "ollama"] as const).map((prov) => (
-                  <div key={prov} className="xp-provider">
-                    <span className="xp-provider-name">{prov === "openrouter" ? "OpenRouter" : "Ollama"}</span>
-                    <div className="xp-chips">
-                      {models.filter((m) => m.provider === prov).map((m) => (
-                        <label key={keyOf(m)} className={`xp-chip ${modelsOn.includes(keyOf(m)) ? "on" : ""}`}>
-                          <input type="checkbox" checked={modelsOn.includes(keyOf(m))} onChange={() => toggle(modelsOn, setModelsOn, keyOf(m))} />{m.model}
-                        </label>
-                      ))}
-                      {prov === "ollama" && (
-                        <button type="button" className="xp-small" onClick={() => void loadOllama()} disabled={ollama.loading}>
-                          {ollama.loading ? "Loading…" : "Load installed models"}
-                        </button>
-                      )}
-                    </div>
-                    {prov === "ollama" && ollama.error && <span className="xp-dim xp-small-text">{ollama.error}</span>}
+            {blocks.map((b) => {
+              const c = conditions.find((x) => x.id === (b.id.trim() || autoId(b)));
+              const known = b.model === LOCAL || MODELS.some((m) => keyOf(m) === b.model);
+              const sampling = takesSampling(b.model);
+              return (
+                <div key={b.key} className="xp-config">
+                  <div className="xp-row">
+                    <Field label="Id" help="The condition's name in the experiment file and in every trial row. Filled in from the settings until you type one.">
+                      <input type="text" value={b.id} placeholder={autoId(b)} spellCheck={false} onChange={(e) => updateBlock(b.key, { id: e.target.value })} />
+                    </Field>
+                    <button type="button" onClick={() => setBlocks((bs) => {
+                      const i = bs.findIndex((x) => x.key === b.key);
+                      return [...bs.slice(0, i + 1), { ...b, key: nextBlockKey++, id: "" }, ...bs.slice(i + 1)];
+                    })}>Duplicate</button>
+                    <button type="button" onClick={() => setBlocks((bs) => bs.filter((x) => x.key !== b.key))}>Remove</button>
                   </div>
-                ))}
-                <div className="xp-row">
-                  <select id="new-model-provider" value={newModel.provider} onChange={(e) => setNewModel({ ...newModel, provider: e.target.value as ModelChoice["provider"] })}>
-                    <option value="openrouter">OpenRouter</option><option value="ollama">Ollama</option>
-                  </select>
-                  <input id="new-model" type="text" placeholder={newModel.provider === "ollama" ? "llama3.1:8b" : "provider/model-id"} value={newModel.model} onChange={(e) => setNewModel({ ...newModel, model: e.target.value })} spellCheck={false} />
-                  <button type="button" onClick={() => {
-                    const v = newModel.model.trim();
-                    if (!/^[A-Za-z0-9._:/-]{1,120}$/.test(v)) return say("Model ids use letters, digits and . _ : / - only.");
-                    const choice = { provider: newModel.provider, model: v };
-                    setModels((m) => (m.some((x) => keyOf(x) === keyOf(choice)) ? m : [...m, choice]));
-                    setModelsOn((on) => [...new Set([...on, keyOf(choice)])]);
-                    setNewModel({ ...newModel, model: "" });
-                  }}>Add model</button>
+                  <div className="xp-grid">
+                    <Field label="Model" help="OpenRouter models use the server's OpenRouter key; Ollama models run on the server's local Ollama. The local parser makes no model call and tests the harness only.">
+                      <select value={b.model} onChange={(e) => {
+                        // A new model starts from its own recommended sampling.
+                        const fresh = newBlock(e.target.value, b.prompt);
+                        updateBlock(b.key, { model: e.target.value, temperature: fresh.temperature, topP: fresh.topP });
+                      }}>
+                        {MODELS.map((m) => <option key={keyOf(m)} value={keyOf(m)}>{m.label}</option>)}
+                        <option value={LOCAL}>Local parser (no model)</option>
+                        {!known && <option value={b.model}>{b.model} (from the loaded file)</option>}
+                      </select>
+                    </Field>
+                    <Field label="Prompt">
+                      <select value={b.prompt} onChange={(e) => updateBlock(b.key, { prompt: e.target.value })}>
+                        {prompts.map((p) => <option key={p.name} value={p.name}>{p.name} ({p.implementation})</option>)}
+                      </select>
+                    </Field>
+                    <Field label="Temperature" help="Sent as given. Empty: not sent. A model that takes sampling needs a temperature or a top_p.">
+                      <input type="text" value={sampling ? b.temperature : ""} disabled={!sampling} placeholder={sampling ? "not sent" : "not accepted"} onChange={(e) => updateBlock(b.key, { temperature: e.target.value })} />
+                    </Field>
+                    <Field label="top_p" help="Sent as given. Empty: not sent.">
+                      <input type="text" value={sampling ? b.topP : ""} disabled={!sampling} placeholder={sampling ? "not sent" : "not accepted"} onChange={(e) => updateBlock(b.key, { topP: e.target.value })} />
+                    </Field>
+                    <Field label="History" help="How much of the conversation reaches the model. full sends every earlier turn, last-k the last k, none nothing.">
+                      <select value={b.history} onChange={(e) => updateBlock(b.key, { history: e.target.value as Block["history"] })}>
+                        <option value="full">full</option><option value="last-k">last-k</option><option value="none">none</option>
+                      </select>
+                    </Field>
+                    {b.history === "last-k" && (
+                      <Field label="Turns kept">
+                        <input type="number" min={1} value={b.maxTurns} onChange={(e) => updateBlock(b.key, { maxTurns: String(Math.max(1, Number(e.target.value))) })} />
+                      </Field>
+                    )}
+                  </div>
+                  {!sampling && b.model !== LOCAL && <p className="xp-note">This model takes no temperature or top_p, so neither is sent.</p>}
+                  <div className="xp-mono xp-dim">{c ? pText(c) : "prompt missing"}</div>
                 </div>
-              </div>
-            )}
-            {!local && (
-              <Field label={<>Temperatures <em>LLM_TEMPERATURE</em></>} help="Comma-separated numbers, sent as given">
-                <input id="temps" type="text" value={temps} onChange={(e) => setTemps(e.target.value)} spellCheck={false} />
-              </Field>
-            )}
-            {!local && (() => {
-              const fixed = chosenModels.filter((m) => fixedSampling(m.provider, m.model)).map((m) => m.model);
-              return fixed.length > 0 && (
-                <p className="xp-note">
-                  {fixed.join(" and ")} {fixed.length === 1 ? "takes" : "take"} no temperature or top_p, so {fixed.length === 1 ? "it runs" : "they run"} once
-                  per prompt with neither sent. The temperatures and top_p here apply to the other models.
-                </p>
               );
-            })()}
-            <div className="xp-factor">
-              <div className="xp-label">History policy <em>HISTORY_POLICY</em><Help>How much of the conversation reaches the mediator. full sends every turn. last-k sends the last k turns. none sends nothing, which seeds the display-only-history fault.</Help></div>
-              <div className="xp-chips">
-                {["full", "last-k", "none"].map((v) => (
-                  <label key={v} className={`xp-chip ${history.includes(v) ? "on" : ""}`}><input type="checkbox" checked={history.includes(v)} onChange={() => toggle(history, setHistory, v)} />{v}</label>
-                ))}
-              </div>
-            </div>
-            <div className="xp-grid">
-              {history.includes("last-k") && (
-                <Field label="Turns kept (last-k)"><input id="max-turns" type="number" min={1} value={maxTurns} onChange={(e) => setMaxTurns(Math.max(1, Number(e.target.value)))} /></Field>
-              )}
-
-              {!local && (
-                <Field label="top_p" help="Leave empty to send no top_p, so the provider's default applies.">
-                  <input id="top-p" type="text" placeholder="provider default" value={topP} onChange={(e) => setTopP(e.target.value)} />
-                </Field>
-              )}
-            </div>
-            <div className="xp-scroll">
-              <table className="xp-table">
-                <thead><tr><th>Use</th><th>Condition</th><th>P, as the server resolves it</th></tr></thead>
-                <tbody>
-                  {allConditions.map((c) => (
-                    <tr key={c.id} className={condOff.has(c.id) ? "off" : ""}>
-                      <td><input type="checkbox" aria-label={`Include ${c.id}`} checked={!condOff.has(c.id)} onChange={() => {
-                        const next = new Set(condOff);
-                        if (next.has(c.id)) next.delete(c.id);
-                        else next.add(c.id);
-                        setCondOff(next);
-                      }} /></td>
-                      <td className="xp-mono">{c.id}</td>
-                      <td className="xp-mono xp-dim">{pText(c)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            })}
+            <div className="xp-row">
+              <button type="button" onClick={() => setBlocks((bs) => [...bs, newBlock(keyOf(MODELS[0]), "default")])}>+ Add configuration</button>
             </div>
           </div>
         </section>

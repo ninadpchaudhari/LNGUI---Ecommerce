@@ -772,6 +772,7 @@ body {
 /* ── Experiments workbench ─────────────────────────────────────────────── */
 .xp { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 20px; padding: 20px 24px; max-width: 1320px; margin: 0 auto; align-items: start; }
 .xp-main { display: grid; gap: 16px; min-width: 0; }
+.xp-config { border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 12px; display: grid; gap: 8px; min-width: 0; }
 .xp-block { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; min-width: 0; }
 .xp-block > h2 { font-size: 1rem; padding: 12px 16px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
 .xp-block > h2 small { font-weight: 400; color: #777; font-size: 0.78rem; }

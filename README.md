@@ -294,8 +294,9 @@ npm run report -- runs/pilot-<time> --by case       # one row per case
   page shows each condition's P as the server resolves it.
 - **Providers.** `LLM_PROVIDER` selects `openrouter`, `openai` or `ollama` per
   condition, and `LLM_MODEL` names the model. Ollama runs on the server's
-  machine at `OLLAMA_BASE_URL` (default `http://localhost:11434/v1`), and the
-  page's "Load installed models" asks it for its model list.
+  machine at `OLLAMA_BASE_URL` (default `http://localhost:11434/v1`). The
+  page and the chat offer the models in `shared/models.ts`; the page builds one
+  condition per configuration block, exactly as written, with no combining.
 - **Langfuse** is off during sweeps unless you pass `--langfuse` or tick
   "Trace every call to Langfuse" on the page. Both send the same
   `x-lngui-langfuse` header.
