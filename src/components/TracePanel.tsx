@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CONTROL_IDS } from "../../shared/surface.generated.ts";
 import type { AttemptRecord, TurnRecord } from "../utils/types.ts";
 import { downloadFile, exportTurnsCsv } from "../utils/logging.ts";
+import { promptNameOf } from "../utils/prompts.ts";
 
 interface Props {
   turns: readonly TurnRecord[];
@@ -119,6 +120,17 @@ export function TurnDetail({ turn }: { turn: TurnRecord }) {
         )}
       </div>
 
+      {m && m.attempts.length > 0 && (
+        <div className="trace-attempt-meta">
+          sent: system prompt <code>{promptNameOf(m.P.systemPromptHash) ?? m.P.systemPromptHash}</code>
+          {" + "}
+          {m.historyTurnsEffective === 0
+            ? "no earlier turns"
+            : `${m.historyTurnsEffective} earlier turn${m.historyTurnsEffective === 1 ? "" : "s"} (each as the message and the command returned)`}
+          {m.historyTurnsEffective < m.historyTurnsDisplayed && ` of ${m.historyTurnsDisplayed} on screen`}
+          {" + this message"}
+        </div>
+      )}
       {m?.attempts.map((a) => <Attempt key={`${a.name}-${a.attempt}`} a={a} />)}
       {m && m.attempts.length === 0 && (
         <div className="trace-attempt-meta">
@@ -185,7 +197,7 @@ export function TurnDetail({ turn }: { turn: TurnRecord }) {
           <div className="trace-stage-body trace-p">
             <span>temp {m.P.temperature ?? "provider default"}</span>
             <span>top_p {m.P.topP ?? "provider default"}</span>
-            <span>prompt {m.P.systemPromptHash}</span>
+            <span>prompt {promptNameOf(m.P.systemPromptHash) ?? "custom"} {m.P.systemPromptHash}</span>
             <span>schema {m.P.commandSchemaHash}</span>
             <span>
               history {m.P.historyPolicy}

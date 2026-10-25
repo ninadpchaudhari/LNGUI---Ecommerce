@@ -161,7 +161,9 @@ export function ChatPanel(props: Props) {
       <StatusLine turn={lastTurn} />
 
       <p className="chat-context-line">
-        H: {props.historyTurns} turn{props.historyTurns === 1 ? "" : "s"}
+        next message is sent with {props.historyTurns === 0
+          ? "no earlier turns"
+          : `the ${props.historyTurns} earlier turn${props.historyTurns === 1 ? "" : "s"} of this session`}
       </p>
 
       <button className="debug-toggle" onClick={() => setDebugOpen((v) => !v)}>
