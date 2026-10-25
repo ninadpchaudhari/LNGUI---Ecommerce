@@ -48,7 +48,7 @@ function changed(before: Valuation, after: Valuation) {
   return CONTROL_IDS.filter((c) => before[c] !== after[c]).map((c) => ({ c, before: before[c], after: after[c] }));
 }
 
-function TurnLine({ turn }: { turn: TurnRecord }) {
+function TurnLine({ turn, earlier }: { turn: TurnRecord; earlier: readonly TurnRecord[] }) {
   const [open, setOpen] = useState(false);
   const moves = changed(turn.vBefore, turn.vAfter);
   return (
@@ -73,7 +73,7 @@ function TurnLine({ turn }: { turn: TurnRecord }) {
           <div className="ci-bad">Rejected: {turn.rejected.map((r) => `${r.control} = ${bottom(r.value)} (${r.reason})`).join(", ")}</div>
         )}
         {turn.error && <div className="ci-bad">Error: {turn.error}</div>}
-        {open && <TurnDetail turn={turn} />}
+        {open && <TurnDetail turn={turn} earlier={earlier} />}
       </div>
     </li>
   );
@@ -84,7 +84,7 @@ function Trace({ title, turns, fallback }: { title: string; turns: TurnRecord[] 
     <div className="ci-trace">
       <h5>{title}</h5>
       {turns !== null ? (
-        turns.length ? <ol>{turns.map((t) => <TurnLine key={t.id} turn={t} />)}</ol> : <p className="xp-dim">Initial state (σ₀), no requests.</p>
+        turns.length ? <ol>{turns.map((t, i) => <TurnLine key={t.id} turn={t} earlier={turns.slice(0, i)} />)}</ol> : <p className="xp-dim">Initial state (σ₀), no requests.</p>
       ) : fallback ? (
         fallback.length ? <ol>{fallback.map((u, i) => <li key={i} className="ci-turn"><span className="ci-u">“{u}”</span></li>)}</ol> : <p className="xp-dim">Initial state (σ₀), no requests.</p>
       ) : (

@@ -659,6 +659,21 @@ body {
 }
 
 .trace-attempt-head,
+.trace-sent > summary {
+  cursor: pointer;
+}
+
+.trace-sent-msg {
+  margin: 4px 0 0 12px;
+}
+
+.trace-sent-role {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #666;
+}
+
 .trace-attempt-meta {
   font-size: 0.74rem;
   color: #444;

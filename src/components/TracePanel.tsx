@@ -3,6 +3,7 @@ import { CONTROL_IDS } from "../../shared/surface.generated.ts";
 import type { AttemptRecord, TurnRecord } from "../utils/types.ts";
 import { downloadFile, exportTurnsCsv } from "../utils/logging.ts";
 import { promptNameOf } from "../utils/prompts.ts";
+import { earlierTurns, sentContext } from "../utils/context.ts";
 
 interface Props {
   turns: readonly TurnRecord[];
@@ -91,9 +92,13 @@ function ValuationDiff({ turn }: { turn: TurnRecord }) {
   );
 }
 
-/** One turn as u → q → V′ → D′, with its P. Also used by the case inspector. */
-export function TurnDetail({ turn }: { turn: TurnRecord }) {
+/**
+ * One turn as u → q → V′ → D′, with its P. Also used by the case inspector.
+ * `earlier` is the trace's previous turns, from which the messages sent are rebuilt.
+ */
+export function TurnDetail({ turn, earlier }: { turn: TurnRecord; earlier: readonly TurnRecord[] }) {
   const m = turn.meta;
+  const sent = sentContext(turn, earlier);
   const added = turn.dAfter.productIds.filter((id) => !turn.dBefore.productIds.includes(id));
   const removed = turn.dBefore.productIds.filter((id) => !turn.dAfter.productIds.includes(id));
   const sameSet = added.length === 0 && removed.length === 0;
@@ -120,16 +125,25 @@ export function TurnDetail({ turn }: { turn: TurnRecord }) {
         )}
       </div>
 
-      {m && m.attempts.length > 0 && (
-        <div className="trace-attempt-meta">
-          sent: system prompt <code>{promptNameOf(m.P.systemPromptHash) ?? m.P.systemPromptHash}</code>
-          {" + "}
-          {m.historyTurnsEffective === 0
-            ? "no earlier turns"
-            : `${m.historyTurnsEffective} earlier turn${m.historyTurnsEffective === 1 ? "" : "s"} (each as the message and the command returned)`}
-          {m.historyTurnsEffective < m.historyTurnsDisplayed && ` of ${m.historyTurnsDisplayed} on screen`}
-          {" + this message"}
-        </div>
+      {sent && m && (
+        <details className="trace-sent">
+          <summary className="trace-attempt-meta">
+            sent: system prompt <code>{promptNameOf(m.P.systemPromptHash) ?? m.P.systemPromptHash}</code>
+            {" + "}
+            {m.historyTurnsEffective === 0
+              ? "no earlier turns"
+              : `${m.historyTurnsEffective} earlier turn${m.historyTurnsEffective === 1 ? "" : "s"}`}
+            {m.historyTurnsEffective < m.historyTurnsDisplayed && ` of ${m.historyTurnsDisplayed} on screen`}
+            {" + this message"} · {sent.messages.length} messages
+          </summary>
+          {sent.problem && <div className="trace-flag trace-flag-bad">{sent.problem}</div>}
+          {sent.messages.map((msg, i) => (
+            <div key={i} className="trace-sent-msg">
+              <div className="trace-sent-role">{msg.role}</div>
+              <pre className="meta-modal-pre">{msg.content}</pre>
+            </div>
+          ))}
+        </details>
       )}
       {m?.attempts.map((a) => <Attempt key={`${a.name}-${a.attempt}`} a={a} />)}
       {m && m.attempts.length === 0 && (
@@ -328,7 +342,7 @@ export function TracePanel(props: Props) {
                 </tr>,
                 open ? (
                   <tr key={t.id + "-detail"}>
-                    <td colSpan={8}><TurnDetail turn={t} /></td>
+                    <td colSpan={8}><TurnDetail turn={t} earlier={earlierTurns(t, turns)} /></td>
                   </tr>
                 ) : null,
               ];
