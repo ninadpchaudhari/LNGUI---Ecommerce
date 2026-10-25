@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { AppConfig, ChatMessage, Command, TurnRecord } from "../utils/types.ts";
 import { COMMITTED_PROMPTS, describeP, promptNameOf } from "../utils/prompts.ts";
-import { CHAT_MODELS, settingsFor, type ChatSettings } from "../utils/chat-models.ts";
+import { CHAT_MODELS, settingsFor, takesNoSampling, type ChatSettings } from "../utils/chat-models.ts";
 
 interface Props {
   messages: ChatMessage[];
@@ -48,6 +48,7 @@ function Settings({ settings: s, onChange, locked }: {
   locked: boolean;
 }) {
   const set = (patch: Partial<ChatSettings>) => onChange({ ...s, ...patch });
+  const fixed = takesNoSampling(s);
   return (
     <fieldset className="chat-settings" disabled={locked}>
       <label className="model-picker-label">
@@ -68,13 +69,14 @@ function Settings({ settings: s, onChange, locked }: {
       <div className="chat-settings-row">
         <label className="model-picker-label">
           temperature
-          <input className="model-picker-input" value={s.temperature} placeholder="not sent" onChange={(e) => set({ temperature: e.target.value })} />
+          <input className="model-picker-input" value={s.temperature} disabled={fixed} placeholder={fixed ? "not accepted" : "not sent"} onChange={(e) => set({ temperature: e.target.value })} />
         </label>
         <label className="model-picker-label">
           top_p
-          <input className="model-picker-input" value={s.topP} placeholder="not sent" onChange={(e) => set({ topP: e.target.value })} />
+          <input className="model-picker-input" value={s.topP} disabled={fixed} placeholder={fixed ? "not accepted" : "not sent"} onChange={(e) => set({ topP: e.target.value })} />
         </label>
       </div>
+      {fixed && <p className="chat-hint">This model does not accept temperature or top_p, so neither is sent.</p>}
       {locked && <p className="chat-hint">Settings are fixed for the session. Reset the session to change them.</p>}
     </fieldset>
   );

@@ -20,7 +20,7 @@ import { runTurn } from "./utils/mediator.ts";
 import { FilterPanel } from "./components/FilterPanel.tsx";
 import { ProductGrid } from "./components/ProductGrid.tsx";
 import { ChatPanel } from "./components/ChatPanel.tsx";
-import { CHAT_MODELS, settingsFor, type ChatSettings } from "./utils/chat-models.ts";
+import { CHAT_MODELS, settingsFor, takesNoSampling, type ChatSettings } from "./utils/chat-models.ts";
 import { TracePanel } from "./components/TracePanel.tsx";
 import { ExperimentsPage } from "./components/ExperimentsPage.tsx";
 
@@ -92,8 +92,9 @@ export default function App() {
   const overrides = useMemo((): Overrides => {
     const p = COMMITTED_PROMPTS.find((x) => x.name === settings.prompt) ?? COMMITTED_PROMPTS[0];
     const base: Overrides = { SYSTEM_PROMPT: normalizePrompt(p.text), LNGUI_COMMAND_MODE: p.implementation, HISTORY_POLICY: "full" };
-    const t = settings.temperature.trim();
-    const topP = settings.topP.trim();
+    // A model that takes no sampling settings gets none, so the record shows "not sent".
+    const t = takesNoSampling(settings) ? "" : settings.temperature.trim();
+    const topP = takesNoSampling(settings) ? "" : settings.topP.trim();
     return {
       ...base,
       LLM_PROVIDER: settings.provider,
@@ -103,7 +104,9 @@ export default function App() {
     };
   }, [settings]);
   // The same rule as an experiment condition (shared/experiment.ts).
-  const settingsProblem = !settings.temperature.trim() && !settings.topP.trim() ? "Set a temperature or a top_p." : null;
+  const settingsProblem = !takesNoSampling(settings) && !settings.temperature.trim() && !settings.topP.trim()
+    ? "Set a temperature or a top_p."
+    : null;
 
   // P as the server resolves these settings: what the next turn will run under.
   useEffect(() => {
@@ -225,7 +228,7 @@ export default function App() {
       </header>
 
       {view === "experiments" ? (
-        <ExperimentsPage config={config} />
+        <ExperimentsPage />
       ) : (
       <>
       <div className="layout">

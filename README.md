@@ -336,7 +336,7 @@ would swallow `/api/*`.
 | `OLLAMA_BASE_URL` / `OLLAMA_MODEL` | `http://localhost:11434/v1` / `llama3.1:8b` | local models through Ollama |
 | `OPENROUTER_MODELS` | — | comma-separated allowlist for the UI dropdown |
 | `OPENROUTER_MODEL_ALLOW_ANY` | `false` | permits arbitrary client model ids |
-| `LLM_TEMPERATURE` / `LLM_TOP_P` | unset | unset means not sent: the provider's default applies and P records null. Every experiment condition that calls a model must set at least one. Figure 1.2 was recorded at `0` |
+| `LLM_TEMPERATURE` / `LLM_TOP_P` | unset | unset means not sent: the provider's default applies and P records null. Every experiment condition that calls a model must set at least one, except for models that accept neither (`sampling: null` in `shared/models.ts`, e.g. GPT-5 nano and Claude Haiku 5.5), which must set neither. Figure 1.2 was recorded at `0` |
 | `LLM_TIMEOUT_MS` | `30000` | |
 | `HISTORY_POLICY` | `full` | `full` \| `last-k` \| `none` |
 | `HISTORY_MAX_TURNS` | `3` | with `last-k` |

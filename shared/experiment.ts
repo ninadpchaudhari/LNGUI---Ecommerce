@@ -5,6 +5,7 @@
  */
 import { z } from "zod";
 import { checkOverrides } from "./overrides.ts";
+import { fixedSampling } from "./models.ts";
 
 /**
  * The system prompt of a condition: a text file in the repo and the SHA-256 of
@@ -27,8 +28,14 @@ const conditionSchema = z
     if ("SYSTEM_PROMPT" in c.env) {
       ctx.addIssue({ code: "custom", message: `${c.id}: put the prompt in "prompt", not in env` });
     }
-    // Unset, the provider's own default applies, and providers differ (Ollama 0.8, OpenAI 1).
-    if (c.env.LOCAL_TEST_MODE !== "true" && !c.env.LLM_TEMPERATURE?.trim() && !c.env.LLM_TOP_P?.trim()) {
+    const sampled = Boolean(c.env.LLM_TEMPERATURE?.trim() || c.env.LLM_TOP_P?.trim());
+    if (c.env.LOCAL_TEST_MODE === "true") {
+      // The local parser does not sample.
+    } else if (fixedSampling(c.env.LLM_PROVIDER, c.env.LLM_MODEL)) {
+      // The provider drops them unsent, so the record would state a sampling never used.
+      if (sampled) ctx.addIssue({ code: "custom", message: `${c.id}: ${c.env.LLM_MODEL} takes no temperature or top_p; leave both unset` });
+    } else if (!sampled) {
+      // Unset, the provider's own default applies, and providers differ (Ollama 0.8, OpenAI 1).
       ctx.addIssue({ code: "custom", message: `${c.id}: set LLM_TEMPERATURE or LLM_TOP_P, so the sampling is stated rather than left to the provider` });
     }
     for (const p of checkOverrides(c.env).problems) ctx.addIssue({ code: "custom", message: `${c.id}: ${p}` });

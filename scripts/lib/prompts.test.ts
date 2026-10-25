@@ -36,6 +36,14 @@ describe("experiment schema: the prompt is part of every condition", () => {
     assert.ok(experimentSchema.safeParse(cond({ LOCAL_TEST_MODE: "true" })).success);
   });
 
+  test("a model that takes no sampling settings must not be given any", () => {
+    const cond = (env: Record<string, string>) => base([{ id: "c", prompt: { file: "prompts/x.txt", sha256: SHA }, env }]);
+    const nano = { LLM_PROVIDER: "openrouter", LLM_MODEL: "openai/gpt-5-nano" };
+    assert.ok(experimentSchema.safeParse(cond(nano)).success);
+    assert.equal(experimentSchema.safeParse(cond({ ...nano, LLM_TEMPERATURE: "0" })).success, false);
+    assert.equal(experimentSchema.safeParse(cond({ ...nano, LLM_TOP_P: "1" })).success, false);
+  });
+
   test("prompt text is never put in env", () => {
     const r = experimentSchema.safeParse(base([{ id: "c", prompt: { file: "prompts/x.txt", sha256: SHA }, env: { SYSTEM_PROMPT: "hi" } }]));
     assert.equal(r.success, false);

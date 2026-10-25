@@ -25,6 +25,7 @@ import { LANGFUSE_HEADER, type Overrides } from "../../shared/overrides.ts";
 import { PROMPT_NAME_RE, formatPromptFile, normalizePrompt, parsePromptFile, promptHash, promptSha256 } from "../../shared/prompt-text.ts";
 import { adhocCases } from "../utils/relations.ts";
 import { COMMITTED_PROMPTS, describeP, type PromptEntry } from "../utils/prompts.ts";
+import { MODELS, fixedSampling } from "../../shared/models.ts";
 import { saveTurn } from "../utils/api.ts";
 import { downloadFile } from "../utils/logging.ts";
 import {
@@ -316,11 +317,7 @@ const PILOT_UTTERANCE_SET = new Set(PILOT_UTTERANCES);
 
 type Source = "bundled" | "adhoc";
 
-interface Props {
-  config: AppConfig | null;
-}
-
-export function ExperimentsPage({ config }: Props) {
+export function ExperimentsPage() {
   const [status, setStatus] = useState("");
   const say = (msg: string) => {
     setStatus(msg);
@@ -398,16 +395,9 @@ export function ExperimentsPage({ config }: Props) {
   });
 
   // ── 2. Conditions ─────────────────────────────────────────────────────────
-  const openRouterList = config?.models?.length ? config.models : ["openai/gpt-4o-mini"];
-  const [models, setModels] = useState<ModelChoice[]>(() => openRouterList.map((model) => ({ provider: "openrouter", model })));
-  const [modelsOn, setModelsOn] = useState<string[]>(() => [`openrouter:${openRouterList[0]}`]);
-  useEffect(() => {
-    setModels((m) => {
-      const known = new Set(m.map(keyOf));
-      return [...m, ...openRouterList.map((model) => ({ provider: "openrouter" as const, model })).filter((c) => !known.has(keyOf(c)))];
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config]);
+  // The shared list (shared/models.ts), not the server's: the page and the chat offer the same models.
+  const [models, setModels] = useState<ModelChoice[]>(() => MODELS.map(({ provider, model }) => ({ provider, model })));
+  const [modelsOn, setModelsOn] = useState<string[]>(() => [keyOf(MODELS[0])]);
   const [ollama, setOllama] = useState<{ loading: boolean; error: string }>({ loading: false, error: "" });
   const loadOllama = async () => {
     setOllama({ loading: true, error: "" });
@@ -458,9 +448,11 @@ export function ExperimentsPage({ config }: Props) {
   const chosenPrompts = prompts.filter((p) => promptsOn.includes(p.name));
   const allConditions: PageCondition[] = useMemo(() => {
     const ms: (ModelChoice | null)[] = local ? [null] : chosenModels;
-    const ts = local ? ["default"] : parseList(temps);
     const out: PageCondition[] = [];
-    for (const m of ms)
+    for (const m of ms) {
+      // A model that takes no temperature or top_p gets one condition per prompt, with neither set.
+      const fixed = !local && fixedSampling(m!.provider, m!.model);
+      const ts = local ? ["default"] : fixed ? ["fixed"] : parseList(temps);
       for (const pr of chosenPrompts)
         for (const t of ts)
           for (const h of history) {
@@ -471,8 +463,8 @@ export function ExperimentsPage({ config }: Props) {
               env.LLM_PROVIDER = m!.provider;
               env.LLM_MODEL = m!.model;
             }
-            if (!local && t !== "default") env.LLM_TEMPERATURE = t;
-            if (!local && topP.trim()) env.LLM_TOP_P = topP.trim();
+            if (!local && !fixed && t !== "default") env.LLM_TEMPERATURE = t;
+            if (!local && !fixed && topP.trim()) env.LLM_TOP_P = topP.trim();
             env.HISTORY_POLICY = h;
             if (h === "last-k") env.HISTORY_MAX_TURNS = String(maxTurns);
             env.LNGUI_COMMAND_MODE = impl;
@@ -480,11 +472,12 @@ export function ExperimentsPage({ config }: Props) {
             if (local) parts.push("local");
             else if (ms.length > 1) parts.push(`${m!.provider === "ollama" ? "ollama-" : ""}${shortModel(m!.model)}`);
             if (chosenPrompts.length > 1 || pr.name !== "default") parts.push(pr.name);
-            if (!local) parts.push(t === "default" ? "tdefault" : `t${t}`);
+            if (!local) parts.push(t === "fixed" ? "tfixed" : t === "default" ? "tdefault" : `t${t}`);
             if (history.length > 1 || h !== "full") parts.push(h === "last-k" ? `last${maxTurns}` : h);
             const id = loadedIds.get(conditionKey(pr.name, env)) ?? parts.join("-");
             out.push({ id, env, prompt: { name: pr.name, text: normalizePrompt(pr.text) } });
           }
+    }
     return out;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [local, modelsOn, models, temps, prompts, promptsOn, history, maxTurns, topP, loadedIds]);
