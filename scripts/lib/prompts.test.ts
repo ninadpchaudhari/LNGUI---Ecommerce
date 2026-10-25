@@ -38,9 +38,19 @@ describe("experiment schema: the prompt is part of every condition", () => {
 
   test("a model that takes no sampling settings needs none, and may be given some", () => {
     const cond = (env: Record<string, string>) => base([{ id: "c", prompt: { file: "prompts/x.txt", sha256: SHA }, env }]);
-    const nano = { LLM_PROVIDER: "openrouter", LLM_MODEL: "openai/gpt-5-nano" };
+    const nano = { LLM_PROVIDER: "openrouter", LLM_MODEL: "openai/gpt-5-nano", LLM_REASONING_EFFORT: "minimal" };
     assert.ok(experimentSchema.safeParse(cond(nano)).success);
     assert.ok(experimentSchema.safeParse(cond({ ...nano, LLM_TEMPERATURE: "0" })).success, "dropped on loading, not refused");
+  });
+
+  test("a reasoning model states an effort it takes; other models take none", () => {
+    const cond = (env: Record<string, string>) => base([{ id: "c", prompt: { file: "prompts/x.txt", sha256: SHA }, env }]);
+    const nano = { LLM_PROVIDER: "openrouter", LLM_MODEL: "openai/gpt-5-nano" };
+    assert.equal(experimentSchema.safeParse(cond(nano)).success, false, "effort required");
+    assert.equal(experimentSchema.safeParse(cond({ ...nano, LLM_REASONING_EFFORT: "none" })).success, false, "nano cannot turn reasoning off");
+    assert.ok(experimentSchema.safeParse(cond({ ...nano, LLM_REASONING_EFFORT: "minimal" })).success);
+    const mini = { LLM_PROVIDER: "openrouter", LLM_MODEL: "openai/gpt-4o-mini", ...T };
+    assert.equal(experimentSchema.safeParse(cond({ ...mini, LLM_REASONING_EFFORT: "low" })).success, false, "no reasoning to set");
   });
 
   test("prompt text is never put in env", () => {
@@ -79,7 +89,7 @@ describe("loadConditions", () => {
     await inTempDir(async () => {
       await writeFile("prompts/a.txt", "Hi");
       const sha256 = await promptSha256("Hi");
-      const haiku = { LLM_PROVIDER: "openrouter", LLM_MODEL: "anthropic/claude-haiku-5.5", HISTORY_POLICY: "full" };
+      const haiku = { LLM_PROVIDER: "openrouter", LLM_MODEL: "anthropic/claude-haiku-5.5", LLM_REASONING_EFFORT: "none", HISTORY_POLICY: "full" };
       const one = experimentSchema.parse(base([{ id: "h", prompt: { file: "prompts/a.txt", sha256 }, env: { ...haiku, LLM_TEMPERATURE: "0", LLM_TOP_P: "1" } }]));
       const loaded = await loadConditions(one.conditions);
       assert.equal(loaded.conditions[0].env.LLM_TEMPERATURE, undefined);

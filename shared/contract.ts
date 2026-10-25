@@ -75,6 +75,8 @@ export interface PromptConfig {
   /** Null: not sent, so the provider's default for the model applied. */
   temperature: number | null;
   topP: number | null;
+  /** OpenRouter's reasoning.effort. Null: not sent. Absent on records from before it was recorded. */
+  reasoningEffort?: string | null;
   systemPromptHash: string;
   commandSchemaHash: string;
   historyPolicy: HistoryPolicy;
@@ -338,6 +340,7 @@ export interface AppConfig {
   allowAnyModel: boolean;
   temperature: number | null;
   topP: number | null;
+  reasoningEffort?: string | null;
   systemPromptHash: string;
   commandSchemaHash: string;
   historyPolicy: HistoryPolicy;
@@ -361,6 +364,7 @@ export function promptConfigFrom(config: AppConfig, model: string): PromptConfig
     resolvedModel: null,
     temperature: config.temperature,
     topP: config.topP,
+    reasoningEffort: config.reasoningEffort ?? null,
     systemPromptHash: config.systemPromptHash,
     commandSchemaHash: config.commandSchemaHash,
     historyPolicy: config.historyPolicy,

@@ -211,6 +211,7 @@ export function TurnDetail({ turn, earlier }: { turn: TurnRecord; earlier: reado
           <div className="trace-stage-body trace-p">
             <span>temp {m.P.temperature ?? "provider default"}</span>
             <span>top_p {m.P.topP ?? "provider default"}</span>
+            {m.P.reasoningEffort && <span>reasoning {m.P.reasoningEffort}</span>}
             <span>prompt {promptNameOf(m.P.systemPromptHash) ?? "custom"} {m.P.systemPromptHash}</span>
             <span>schema {m.P.commandSchemaHash}</span>
             <span>

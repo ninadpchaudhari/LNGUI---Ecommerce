@@ -59,6 +59,7 @@ function buildConfig(env: RuntimeEnv, persistence: AppConfig["persistence"]): Ap
     allowAnyModel: policy.allowAnyModel,
     temperature: llm.temperature,
     topP: llm.topP,
+    reasoningEffort: llm.reasoningEffort,
     systemPromptHash: hashes.systemPromptHash,
     commandSchemaHash: hashes.commandSchemaHash,
     historyPolicy: history.policy,

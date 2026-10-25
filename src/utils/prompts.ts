@@ -36,6 +36,7 @@ export function describeP(P: AppConfig, prompt: string): string {
     `prompt ${prompt}`,
     `T ${P.temperature ?? "provider default"}`,
     `top_p ${P.topP ?? "provider default"}`,
+    ...(P.reasoningEffort ? [`reasoning ${P.reasoningEffort}`] : []),
     history,
     update,
   ].join(" · ");

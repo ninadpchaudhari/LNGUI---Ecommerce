@@ -39,6 +39,8 @@ export type CommandRuntimeEnv = {
   OPENAI_MODEL?: string;
   LLM_TEMPERATURE?: string;
   LLM_TOP_P?: string;
+  /** OpenRouter's reasoning.effort, e.g. minimal or none. Sent only to OpenRouter. */
+  LLM_REASONING_EFFORT?: string;
   LLM_TIMEOUT_MS?: string;
   /** full | last-k | none. "none" seeds the display-only-history fault. */
   HISTORY_POLICY?: string;
@@ -119,6 +121,8 @@ export interface LLMConfig {
   /** Null means "not sent": the provider's default for the model applies. */
   temperature: number | null;
   topP: number | null;
+  /** Null means "not sent". Only OpenRouter takes it; other providers resolve it to null. */
+  reasoningEffort: string | null;
   timeoutMs: number;
 }
 
@@ -139,6 +143,7 @@ export function resolveLLMConfig(env: RuntimeEnv): LLMConfig {
   const sampling = {
     temperature: optNum(env, "LLM_TEMPERATURE"),
     topP: optNum(env, "LLM_TOP_P"),
+    reasoningEffort: str(env, "LLM_REASONING_EFFORT") ?? null,
     timeoutMs: num(env, "LLM_TIMEOUT_MS", DEFAULT_TIMEOUT_MS),
   };
   const explicit = str(env, "LLM_PROVIDER")?.toLowerCase();
@@ -150,6 +155,7 @@ export function resolveLLMConfig(env: RuntimeEnv): LLMConfig {
     // a request can never point the server at another host.
     return {
       ...sampling,
+      reasoningEffort: null,
       provider: "ollama",
       apiKey: str(env, "OLLAMA_API_KEY") || "ollama",
       baseURL: str(env, "OLLAMA_BASE_URL") || DEFAULT_OLLAMA_BASE_URL,
@@ -185,6 +191,7 @@ export function resolveLLMConfig(env: RuntimeEnv): LLMConfig {
   const openAIBaseURL = str(env, "OPENAI_BASE_URL");
   return {
     ...sampling,
+    reasoningEffort: null,
     provider: openAIApiKey ? "openai" : "none",
     apiKey: openAIApiKey ?? "",
     ...(openAIBaseURL ? { baseURL: openAIBaseURL } : {}),

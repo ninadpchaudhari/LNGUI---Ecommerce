@@ -20,7 +20,7 @@ import { runTurn } from "./utils/mediator.ts";
 import { FilterPanel } from "./components/FilterPanel.tsx";
 import { ProductGrid } from "./components/ProductGrid.tsx";
 import { ChatPanel } from "./components/ChatPanel.tsx";
-import { CHAT_MODELS, settingsFor, takesNoSampling, type ChatSettings } from "./utils/chat-models.ts";
+import { CHAT_MODELS, chatEfforts, settingsFor, takesNoSampling, type ChatSettings } from "./utils/chat-models.ts";
 import { TracePanel } from "./components/TracePanel.tsx";
 import { ExperimentsPage } from "./components/ExperimentsPage.tsx";
 
@@ -101,6 +101,7 @@ export default function App() {
       LLM_MODEL: settings.model,
       ...(t ? { LLM_TEMPERATURE: t } : {}),
       ...(topP ? { LLM_TOP_P: topP } : {}),
+      ...(chatEfforts(settings) && settings.reasoning ? { LLM_REASONING_EFFORT: settings.reasoning } : {}),
     };
   }, [settings]);
   // The same rule as an experiment condition (shared/experiment.ts).

@@ -121,7 +121,7 @@ async function callLLM(
   client: OpenAI,
   model: string,
   messages: ChatMessage[],
-  sampling: { temperature: number | null; topP: number | null; timeoutMs: number },
+  sampling: { temperature: number | null; topP: number | null; reasoningEffort: string | null; timeoutMs: number },
 ): Promise<LLMCallResult> {
   const started = Date.now();
   const res = await client.chat.completions.create(
@@ -131,6 +131,8 @@ async function callLLM(
       // this model applies. P records them as null.
       ...(sampling.temperature !== null ? { temperature: sampling.temperature } : {}),
       ...(sampling.topP !== null ? { top_p: sampling.topP } : {}),
+      // OpenRouter's reasoning parameter; the SDK passes fields it does not type through.
+      ...(sampling.reasoningEffort !== null ? ({ reasoning: { effort: sampling.reasoningEffort } } as object) : {}),
       messages,
     },
     { timeout: sampling.timeoutMs },
@@ -331,6 +333,7 @@ export async function handleCommandRequest(
             resolvedModel: null,
             temperature: llm.temperature,
             topP: llm.topP,
+            reasoningEffort: llm.reasoningEffort,
             systemPromptHash: hashes.systemPromptHash,
             commandSchemaHash: hashes.commandSchemaHash,
             historyPolicy: historyConfig.policy,
@@ -364,6 +367,7 @@ export async function handleCommandRequest(
     resolvedModel,
     temperature: llm.temperature,
     topP: llm.topP,
+    reasoningEffort: llm.reasoningEffort,
     systemPromptHash: hashes.systemPromptHash,
     commandSchemaHash: hashes.commandSchemaHash,
     historyPolicy: historyConfig.policy,

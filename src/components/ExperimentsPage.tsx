@@ -27,7 +27,7 @@ import { adhocCases } from "../utils/relations.ts";
 import { COMMITTED_PROMPTS, describeP, type PromptEntry } from "../utils/prompts.ts";
 import { MODELS } from "../../shared/models.ts";
 import {
-  LOCAL, autoId, blockCondition, blocksFromConditions, copyBlock, keyOf, newBlock, shortModel, slug, takesSampling, toEngine,
+  LOCAL, autoId, blockCondition, blockEfforts, blocksFromConditions, copyBlock, keyOf, newBlock, shortModel, slug, takesSampling, toEngine,
   type Block, type PageCondition,
 } from "../utils/blocks.ts";
 import { saveTurn } from "../utils/api.ts";
@@ -866,7 +866,7 @@ export function ExperimentsPage() {
                       <select value={b.model} onChange={(e) => {
                         // A new model starts from its own recommended sampling.
                         const fresh = newBlock(e.target.value, b.prompt);
-                        updateBlock(b.key, { model: e.target.value, temperature: fresh.temperature, topP: fresh.topP });
+                        updateBlock(b.key, { model: e.target.value, temperature: fresh.temperature, topP: fresh.topP, reasoning: fresh.reasoning });
                       }}>
                         {MODELS.map((m) => <option key={keyOf(m)} value={keyOf(m)}>{m.label}</option>)}
                         <option value={LOCAL}>Local parser (no model)</option>
@@ -884,6 +884,13 @@ export function ExperimentsPage() {
                     <Field label="top_p" help="Sent as given. Empty: not sent.">
                       <input type="text" value={sampling ? b.topP : ""} disabled={!sampling} placeholder={sampling ? "not sent" : "not accepted"} onChange={(e) => updateBlock(b.key, { topP: e.target.value })} />
                     </Field>
+                    {blockEfforts(b.model) && (
+                      <Field label="Reasoning" help="OpenRouter's reasoning effort. Starts at the lowest the model takes.">
+                        <select value={b.reasoning} onChange={(e) => updateBlock(b.key, { reasoning: e.target.value })}>
+                          {blockEfforts(b.model)!.map((r) => <option key={r} value={r}>{r}</option>)}
+                        </select>
+                      </Field>
+                    )}
                     <Field label="History" help="How much of the conversation reaches the model. full sends every earlier turn, last-k the last k, none nothing.">
                       <select value={b.history} onChange={(e) => updateBlock(b.key, { history: e.target.value as Block["history"] })}>
                         <option value="full">full</option><option value="last-k">last-k</option><option value="none">none</option>

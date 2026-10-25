@@ -104,7 +104,7 @@ for (const rt of runtimes) {
   console.log(
     `  ${rt.condition.id.padEnd(22)} mode=${c.mode} model=${rt.model} provider=${c.provider} ` +
       `prompt=${file} ${c.systemPromptHash.replace("fnv1a32:", "#")} ` +
-      `T=${c.temperature ?? "default"} top_p=${c.topP ?? "default"} history=${c.historyPolicy}`,
+      `T=${c.temperature ?? "default"} top_p=${c.topP ?? "default"}${c.reasoningEffort ? ` reasoning=${c.reasoningEffort}` : ""} history=${c.historyPolicy}`,
   );
 }
 console.log(`≈${planned} mediator calls before retries (judge calls not included)`);

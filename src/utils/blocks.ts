@@ -6,7 +6,7 @@
  */
 import type { ExperimentCondition } from "../../shared/experiment.ts";
 import { effectiveEnv } from "../../shared/experiment.ts";
-import { MODELS, fixedSampling } from "../../shared/models.ts";
+import { MODELS, fixedSampling, reasoningEfforts } from "../../shared/models.ts";
 import type { Overrides } from "../../shared/overrides.ts";
 import { normalizePrompt, type PromptEntry } from "../../shared/prompt-text.ts";
 import type { Condition } from "./sweep.ts";
@@ -46,17 +46,22 @@ export interface Block {
   /** Empty: not sent. */
   temperature: string;
   topP: string;
+  /** Empty for a model without reasoning. */
+  reasoning: string;
   history: "full" | "last-k" | "none";
   maxTurns: string;
 }
 
 /** The condition keys a block sets; anything else in a loaded file is dropped. */
-export const BLOCK_KEYS = new Set(["LLM_PROVIDER", "LLM_MODEL", "LLM_TEMPERATURE", "LLM_TOP_P", "HISTORY_POLICY", "HISTORY_MAX_TURNS", "LOCAL_TEST_MODE", "LNGUI_COMMAND_MODE"]);
+export const BLOCK_KEYS = new Set(["LLM_PROVIDER", "LLM_MODEL", "LLM_TEMPERATURE", "LLM_TOP_P", "LLM_REASONING_EFFORT", "HISTORY_POLICY", "HISTORY_MAX_TURNS", "LOCAL_TEST_MODE", "LNGUI_COMMAND_MODE"]);
 
 export const splitModel = (value: string) => {
   const i = value.indexOf(":");
   return { provider: value.slice(0, i), model: value.slice(i + 1) };
 };
+
+/** The reasoning efforts the block's model takes, lowest first, or null. */
+export const blockEfforts = (model: string) => (model === LOCAL ? null : reasoningEfforts(splitModel(model).provider, splitModel(model).model));
 
 /** Whether the block's model takes temperature and top_p. */
 export const takesSampling = (model: string) => model !== LOCAL && !fixedSampling(splitModel(model).provider, splitModel(model).model);
@@ -68,6 +73,8 @@ export function newBlock(model: string, prompt: string): Block {
   return {
     key: nextBlockKey++, id: "", model, prompt,
     temperature: entry?.sampling?.temperature ?? "", topP: entry?.sampling?.topP ?? "",
+    // The lowest effort the model takes: a search bar has to answer fast.
+    reasoning: entry?.reasoning?.[0] ?? "",
     history: "full", maxTurns: "3",
   };
 }
@@ -82,6 +89,7 @@ export function autoId(b: Block): string {
     if (b.temperature.trim()) parts.push(`t${b.temperature.trim()}`);
     if (b.topP.trim()) parts.push(`p${b.topP.trim()}`);
   }
+  if (blockEfforts(b.model) && b.reasoning) parts.push(`r${b.reasoning}`);
   if (b.history === "last-k") parts.push(`last${b.maxTurns}`);
   if (b.history === "none") parts.push("nohistory");
   return slug(parts.join("-"));
@@ -98,6 +106,7 @@ export function blockCondition(b: Block, prompt: PromptEntry | null): PageCondit
     env.LLM_MODEL = model;
     if (takesSampling(b.model) && b.temperature.trim()) env.LLM_TEMPERATURE = b.temperature.trim();
     if (takesSampling(b.model) && b.topP.trim()) env.LLM_TOP_P = b.topP.trim();
+    if (blockEfforts(b.model) && b.reasoning) env.LLM_REASONING_EFFORT = b.reasoning;
   }
   env.HISTORY_POLICY = b.history;
   if (b.history === "last-k") env.HISTORY_MAX_TURNS = b.maxTurns;
@@ -124,6 +133,7 @@ export function blocksFromConditions(conditions: readonly ExperimentCondition[],
       id: c.id,
       temperature: c.env.LLM_TEMPERATURE ?? "",
       topP: c.env.LLM_TOP_P ?? "",
+      reasoning: c.env.LLM_REASONING_EFFORT ?? "",
       history: (c.env.HISTORY_POLICY as Block["history"]) ?? "full",
       maxTurns: c.env.HISTORY_MAX_TURNS ?? "3",
     });

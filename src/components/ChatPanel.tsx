@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { AppConfig, ChatMessage, Command, TurnRecord } from "../utils/types.ts";
 import { COMMITTED_PROMPTS, describeP, promptNameOf } from "../utils/prompts.ts";
-import { CHAT_MODELS, settingsFor, takesNoSampling, type ChatSettings } from "../utils/chat-models.ts";
+import { CHAT_MODELS, chatEfforts, settingsFor, takesNoSampling, type ChatSettings } from "../utils/chat-models.ts";
 
 interface Props {
   messages: ChatMessage[];
@@ -76,6 +76,14 @@ function Settings({ settings: s, onChange, locked }: {
           <input className="model-picker-input" value={s.topP} disabled={fixed} placeholder={fixed ? "not accepted" : "not sent"} onChange={(e) => set({ topP: e.target.value })} />
         </label>
       </div>
+      {chatEfforts(s) && (
+        <label className="model-picker-label">
+          reasoning
+          <select value={s.reasoning} onChange={(e) => set({ reasoning: e.target.value })}>
+            {chatEfforts(s)!.map((r) => <option key={r} value={r}>{r}</option>)}
+          </select>
+        </label>
+      )}
       {locked && <p className="chat-hint">Settings are fixed for the session. Reset the session to change them.</p>}
     </fieldset>
   );

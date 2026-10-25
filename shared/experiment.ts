@@ -5,7 +5,7 @@
  */
 import { z } from "zod";
 import { checkOverrides } from "./overrides.ts";
-import { fixedSampling } from "./models.ts";
+import { fixedSampling, reasoningEfforts } from "./models.ts";
 
 /**
  * The system prompt of a condition: a text file in the repo and the SHA-256 of
@@ -36,6 +36,14 @@ const conditionSchema = z
     } else if (!sampled) {
       // Unset, the provider's own default applies, and providers differ (Ollama 0.8, OpenAI 1).
       ctx.addIssue({ code: "custom", message: `${c.id}: set LLM_TEMPERATURE or LLM_TOP_P, so the sampling is stated rather than left to the provider` });
+    }
+    // A reasoning model states its effort, like sampling; any other model takes none.
+    if (c.env.LOCAL_TEST_MODE !== "true") {
+      const efforts = reasoningEfforts(c.env.LLM_PROVIDER, c.env.LLM_MODEL);
+      const effort = c.env.LLM_REASONING_EFFORT?.trim();
+      if (efforts && !effort) ctx.addIssue({ code: "custom", message: `${c.id}: set LLM_REASONING_EFFORT (${efforts.join(", ")})` });
+      else if (efforts && effort && !efforts.includes(effort)) ctx.addIssue({ code: "custom", message: `${c.id}: ${c.env.LLM_MODEL} takes reasoning effort ${efforts.join(", ")}, not ${effort}` });
+      else if (!efforts && effort) ctx.addIssue({ code: "custom", message: `${c.id}: ${c.env.LLM_MODEL ?? "this model"} takes no reasoning effort` });
     }
     for (const [key, max] of [["LLM_TEMPERATURE", 2], ["LLM_TOP_P", 1]] as const) {
       const v = c.env[key]?.trim();
