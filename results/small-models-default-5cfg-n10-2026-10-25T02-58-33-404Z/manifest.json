@@ -1,0 +1,196 @@
+{
+  "runId": "small-models-default-5cfg-n10-2026-10-25T02-58-33-404Z",
+  "runner": "cli",
+  "langfuse": true,
+  "experimentPath": "experiments/small-models-default-5cfg-n10.json",
+  "experiment": {
+    "name": "small-models-default-5cfg-n10",
+    "cases": "cases/pilot.jsonl",
+    "casesSha256": "a3c32eae2d7edeaf753290944f231f5488d0d4e52fc09706c7ca43aab1331d67",
+    "n": 10,
+    "seed": 406269,
+    "concurrency": 10,
+    "maxInfraRetries": 2,
+    "conditions": [
+      {
+        "id": "gpt-5-nano-default-rminimal",
+        "prompt": {
+          "file": "prompts/default.txt",
+          "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151"
+        },
+        "env": {
+          "LLM_PROVIDER": "openrouter",
+          "LLM_MODEL": "openai/gpt-5-nano",
+          "LLM_REASONING_EFFORT": "minimal",
+          "HISTORY_POLICY": "full"
+        }
+      },
+      {
+        "id": "claude-haiku-5.5-default-rnone",
+        "prompt": {
+          "file": "prompts/default.txt",
+          "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151"
+        },
+        "env": {
+          "LLM_PROVIDER": "openrouter",
+          "LLM_MODEL": "anthropic/claude-haiku-5.5",
+          "LLM_REASONING_EFFORT": "none",
+          "HISTORY_POLICY": "full"
+        }
+      },
+      {
+        "id": "llama-3.2-3b-instruct-default-t0.6-p0.9",
+        "prompt": {
+          "file": "prompts/default.txt",
+          "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151"
+        },
+        "env": {
+          "LLM_PROVIDER": "openrouter",
+          "LLM_MODEL": "meta-llama/llama-3.2-3b-instruct",
+          "LLM_TEMPERATURE": "0.6",
+          "LLM_TOP_P": "0.9",
+          "HISTORY_POLICY": "full"
+        }
+      },
+      {
+        "id": "qwen3.5-9b-default-t1-p0.95-rnone",
+        "prompt": {
+          "file": "prompts/default.txt",
+          "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151"
+        },
+        "env": {
+          "LLM_PROVIDER": "openrouter",
+          "LLM_MODEL": "qwen/qwen3.5-9b",
+          "LLM_TEMPERATURE": "1",
+          "LLM_TOP_P": "0.95",
+          "LLM_REASONING_EFFORT": "none",
+          "HISTORY_POLICY": "full"
+        }
+      },
+      {
+        "id": "qwen3.5-9b-default-t0-rnone",
+        "prompt": {
+          "file": "prompts/default.txt",
+          "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151"
+        },
+        "env": {
+          "LLM_PROVIDER": "openrouter",
+          "LLM_MODEL": "qwen/qwen3.5-9b",
+          "LLM_TEMPERATURE": "0",
+          "LLM_REASONING_EFFORT": "none",
+          "HISTORY_POLICY": "full"
+        }
+      }
+    ]
+  },
+  "casesSha256": "a3c32eae2d7edeaf753290944f231f5488d0d4e52fc09706c7ca43aab1331d67",
+  "caseCount": 100,
+  "plannedInvocations": 13950,
+  "git": {
+    "commit": "f3bcc9860e69b00d4bc40df612526f2c7a2e378b",
+    "branch": "master",
+    "dirty": true
+  },
+  "node": "v24.22.1",
+  "startedAt": "2026-10-25T02:58:33.456Z",
+  "prompts": {
+    "fnv1a32:2c40daf0": {
+      "file": "prompts/default.txt",
+      "sha256": "a810f8c747b3360241f4e195b41e3f3c98d874423df40d28e98ecb31fd9f7151",
+      "text": "You are a product filter assistant. Given a user's natural language requests, output ONLY a JSON object matching this schema:\n\n{\n  \"filters\": {\n    \"category\": <one of [\"electronics\",\"books\",\"clothing\",\"home\",\"sports\"] or null>,\n    \"maxPrice\": <number or null>,\n    \"minRating\": <number or null>,\n    \"inStockOnly\": <boolean or null>\n  },\n  \"sort\": <one of [\"price_asc\",\"price_desc\",\"rating_desc\",\"name_asc\"] or null>,\n  \"explanation\": \"<short summary of what you set>\"\n}\n\nOutput ONLY the JSON object. No markdown fences, no extra text."
+    }
+  },
+  "conditions": [
+    {
+      "id": "gpt-5-nano-default-rminimal",
+      "model": "openai/gpt-5-nano",
+      "P": {
+        "commandMode": "full",
+        "requestedModel": "openai/gpt-5-nano",
+        "resolvedModel": null,
+        "temperature": null,
+        "topP": null,
+        "reasoningEffort": "minimal",
+        "systemPromptHash": "fnv1a32:2c40daf0",
+        "commandSchemaHash": "fnv1a32:50ca4ace",
+        "historyPolicy": "full",
+        "historyMaxTurns": null
+      },
+      "mode": "llm",
+      "provider": "openrouter"
+    },
+    {
+      "id": "claude-haiku-5.5-default-rnone",
+      "model": "anthropic/claude-haiku-5.5",
+      "P": {
+        "commandMode": "full",
+        "requestedModel": "anthropic/claude-haiku-5.5",
+        "resolvedModel": null,
+        "temperature": null,
+        "topP": null,
+        "reasoningEffort": "none",
+        "systemPromptHash": "fnv1a32:2c40daf0",
+        "commandSchemaHash": "fnv1a32:50ca4ace",
+        "historyPolicy": "full",
+        "historyMaxTurns": null
+      },
+      "mode": "llm",
+      "provider": "openrouter"
+    },
+    {
+      "id": "llama-3.2-3b-instruct-default-t0.6-p0.9",
+      "model": "meta-llama/llama-3.2-3b-instruct",
+      "P": {
+        "commandMode": "full",
+        "requestedModel": "meta-llama/llama-3.2-3b-instruct",
+        "resolvedModel": null,
+        "temperature": 0.6,
+        "topP": 0.9,
+        "reasoningEffort": null,
+        "systemPromptHash": "fnv1a32:2c40daf0",
+        "commandSchemaHash": "fnv1a32:50ca4ace",
+        "historyPolicy": "full",
+        "historyMaxTurns": null
+      },
+      "mode": "llm",
+      "provider": "openrouter"
+    },
+    {
+      "id": "qwen3.5-9b-default-t1-p0.95-rnone",
+      "model": "qwen/qwen3.5-9b",
+      "P": {
+        "commandMode": "full",
+        "requestedModel": "qwen/qwen3.5-9b",
+        "resolvedModel": null,
+        "temperature": 1,
+        "topP": 0.95,
+        "reasoningEffort": "none",
+        "systemPromptHash": "fnv1a32:2c40daf0",
+        "commandSchemaHash": "fnv1a32:50ca4ace",
+        "historyPolicy": "full",
+        "historyMaxTurns": null
+      },
+      "mode": "llm",
+      "provider": "openrouter"
+    },
+    {
+      "id": "qwen3.5-9b-default-t0-rnone",
+      "model": "qwen/qwen3.5-9b",
+      "P": {
+        "commandMode": "full",
+        "requestedModel": "qwen/qwen3.5-9b",
+        "resolvedModel": null,
+        "temperature": 0,
+        "topP": null,
+        "reasoningEffort": "none",
+        "systemPromptHash": "fnv1a32:2c40daf0",
+        "commandSchemaHash": "fnv1a32:50ca4ace",
+        "historyPolicy": "full",
+        "historyMaxTurns": null
+      },
+      "mode": "llm",
+      "provider": "openrouter"
+    }
+  ],
+  "finishedAt": "2026-10-25T03:26:15.202Z"
+}
