@@ -21,11 +21,15 @@ import { experimentSchema, type CasesManifest } from "../../shared/experiment.ts
 import { caseTable, render, reportGroup, reportTitle, runModeLabel, summaryTable, type Format, type Table } from "../../shared/report.ts";
 import { parseTrialsJsonl, type TrialRow } from "../../shared/trials.ts";
 import { summarizeSuite, type SuiteRow } from "../../shared/suite-summary.ts";
-import { LANGFUSE_HEADER, type Overrides } from "../../shared/overrides.ts";
+import { LANGFUSE_HEADER } from "../../shared/overrides.ts";
 import { PROMPT_NAME_RE, formatPromptFile, normalizePrompt, parsePromptFile, promptHash, promptSha256 } from "../../shared/prompt-text.ts";
 import { adhocCases } from "../utils/relations.ts";
 import { COMMITTED_PROMPTS, describeP, type PromptEntry } from "../utils/prompts.ts";
-import { MODELS, fixedSampling } from "../../shared/models.ts";
+import { MODELS } from "../../shared/models.ts";
+import {
+  LOCAL, autoId, blockCondition, blocksFromConditions, copyBlock, keyOf, newBlock, shortModel, slug, takesSampling, toEngine,
+  type Block, type PageCondition,
+} from "../utils/blocks.ts";
 import { saveTurn } from "../utils/api.ts";
 import { downloadFile } from "../utils/logging.ts";
 import {
@@ -33,7 +37,6 @@ import {
   openCondition,
   plannedInvocations,
   runSweep,
-  type Condition,
   type ConditionRuntime,
   type Transport,
 } from "../utils/sweep.ts";
@@ -48,16 +51,7 @@ async function sha256Hex(text: string): Promise<string> {
 }
 
 const fmt = (n: number) => n.toLocaleString("en-US");
-const slug = (s: string) => s.replace(/[^\w.-]+/g, "-").replace(/^-+|-+$/g, "");
-const shortModel = (m: string) => slug(m.split("/").pop()!.replace(/:/g, "-"));
 const newSeed = () => 100000 + Math.floor(Math.random() * 900000);
-
-/** A model choice: which provider serves it, and the provider's model id. */
-interface ModelChoice {
-  provider: "openrouter" | "ollama";
-  model: string;
-}
-const keyOf = (m: ModelChoice) => `${m.provider}:${m.model}`;
 
 function countByGroup(cases: readonly MrCase[]): Record<string, number> {
   const out: Record<string, number> = {};
@@ -271,87 +265,6 @@ const IMPLEMENTATION_LABEL: Record<CommandMode, string> = {
   full: "LLM rebuilds state",
 };
 
-/** A condition as the page holds it: settings plus the prompt it runs under. */
-interface PageCondition {
-  id: string;
-  env: Overrides;
-  prompt: { name: string; text: string };
-}
-
-/** What the sweep engine and the server see: the prompt text rides in the overrides. */
-const toEngine = (c: PageCondition): Condition => ({ id: c.id, env: { ...c.env, SYSTEM_PROMPT: c.prompt.text } });
-
-/** The model select's value for the local parser; model values are `${provider}:${model}`. */
-const LOCAL = "local";
-
-/** One configuration as the page shows it: exactly one condition of the experiment file. */
-interface Block {
-  /** React key; stable while the block is edited. */
-  key: number;
-  /** Empty: use autoId(block). */
-  id: string;
-  /** LOCAL or `${provider}:${model}`. */
-  model: string;
-  prompt: string;
-  /** Empty: not sent. */
-  temperature: string;
-  topP: string;
-  history: "full" | "last-k" | "none";
-  maxTurns: string;
-}
-
-/** The condition keys a block sets; anything else in a loaded file is dropped. */
-const BLOCK_KEYS = new Set(["LLM_PROVIDER", "LLM_MODEL", "LLM_TEMPERATURE", "LLM_TOP_P", "HISTORY_POLICY", "HISTORY_MAX_TURNS", "LOCAL_TEST_MODE", "LNGUI_COMMAND_MODE"]);
-
-const splitModel = (value: string) => {
-  const i = value.indexOf(":");
-  return { provider: value.slice(0, i), model: value.slice(i + 1) };
-};
-
-/** Whether the block's model takes temperature and top_p. */
-const takesSampling = (model: string) => model !== LOCAL && !fixedSampling(splitModel(model).provider, splitModel(model).model);
-
-let nextBlockKey = 1;
-/** A block for a model, with that model's recommended sampling. */
-function newBlock(model: string, prompt: string): Block {
-  const entry = MODELS.find((m) => keyOf(m) === model);
-  return {
-    key: nextBlockKey++, id: "", model, prompt,
-    temperature: entry?.sampling?.temperature ?? "", topP: entry?.sampling?.topP ?? "",
-    history: "full", maxTurns: "3",
-  };
-}
-
-/** The id a block gets until one is typed: what it runs, in a few words. */
-function autoId(b: Block): string {
-  const parts = [b.model === LOCAL ? "local" : shortModel(splitModel(b.model).model), b.prompt];
-  if (takesSampling(b.model)) {
-    if (b.temperature.trim()) parts.push(`t${b.temperature.trim()}`);
-    if (b.topP.trim()) parts.push(`p${b.topP.trim()}`);
-  }
-  if (b.history === "last-k") parts.push(`last${b.maxTurns}`);
-  if (b.history === "none") parts.push("nohistory");
-  return slug(parts.join("-"));
-}
-
-/** The condition a block runs. Sampling is sent only to a model that takes it. Null: its prompt is gone. */
-function blockCondition(b: Block, prompt: PromptEntry | null): PageCondition | null {
-  if (!prompt) return null;
-  const env: Overrides = {};
-  if (b.model === LOCAL) env.LOCAL_TEST_MODE = "true";
-  else {
-    const { provider, model } = splitModel(b.model);
-    env.LLM_PROVIDER = provider;
-    env.LLM_MODEL = model;
-    if (takesSampling(b.model) && b.temperature.trim()) env.LLM_TEMPERATURE = b.temperature.trim();
-    if (takesSampling(b.model) && b.topP.trim()) env.LLM_TOP_P = b.topP.trim();
-  }
-  env.HISTORY_POLICY = b.history;
-  if (b.history === "last-k") env.HISTORY_MAX_TURNS = b.maxTurns;
-  env.LNGUI_COMMAND_MODE = prompt.implementation;
-  return { id: b.id.trim() || autoId(b), env, prompt: { name: prompt.name, text: normalizePrompt(prompt.text) } };
-}
-
 /** Lines added and removed against another text, ignoring order. */
 function lineDiff(base: string, text: string): { added: number; removed: number } {
   const count = (t: string) => t.split("\n").reduce<Map<string, number>>((m, l) => m.set(l, (m.get(l) ?? 0) + 1), new Map());
@@ -551,28 +464,14 @@ export function ExperimentsPage() {
     setSource("bundled");
     setExcluded(new Set());
 
-    const loaded: Block[] = [];
     for (const c of e.conditions) {
-      const pname = c.prompt.file.replace(/^prompts\//, "").replace(/\.txt$/, "");
-      const p = prompts.find((x) => x.name === pname);
-      if (!p) {
-        notes.push(["bad", `${c.id}: ${c.prompt.file} is not in prompts/, so this configuration is left out.`]);
-        continue;
-      }
-      if ((await promptSha256(p.text)) !== c.prompt.sha256) {
+      const p = prompts.find((x) => x.name === c.prompt.file.replace(/^prompts\//, "").replace(/\.txt$/, ""));
+      if (p && (await promptSha256(p.text)) !== c.prompt.sha256) {
         notes.push(["bad", `${c.id}: ${c.prompt.file} has changed since this experiment was written; the CLI will refuse to run it.`]);
       }
-      const unused = Object.keys(c.env).filter((k) => !BLOCK_KEYS.has(k));
-      if (unused.length) notes.push(["warn", `${c.id}: ${unused.join(", ")} cannot be set on this page and is dropped.`]);
-      loaded.push({
-        ...newBlock(c.env.LOCAL_TEST_MODE === "true" ? LOCAL : `${c.env.LLM_PROVIDER ?? "openrouter"}:${c.env.LLM_MODEL ?? ""}`, pname),
-        id: c.id,
-        temperature: c.env.LLM_TEMPERATURE ?? "",
-        topP: c.env.LLM_TOP_P ?? "",
-        history: (c.env.HISTORY_POLICY as Block["history"]) ?? "full",
-        maxTurns: c.env.HISTORY_MAX_TURNS ?? "3",
-      });
     }
+    const { blocks: loaded, notes: blockNotes } = blocksFromConditions(e.conditions, prompts);
+    for (const n of blockNotes) notes.push([n.includes("left out") ? "bad" : "warn", n]);
     setBlocks(loaded);
     setExp({ n: e.n, seed: e.seed, concurrency: e.concurrency, maxInfraRetries: e.maxInfraRetries });
     setCustomName(e.name);
@@ -604,17 +503,6 @@ export function ExperimentsPage() {
   if (blocks.length === 0) issues.push(["bad", "Add at least one configuration."]);
   for (const b of blocks) {
     if (!prompts.some((p) => p.name === b.prompt)) issues.push(["bad", `${b.id || autoId(b)}: prompt ${b.prompt} no longer exists.`]);
-    for (const [label, v] of [["temperature", b.temperature], ["top_p", b.topP]] as const) {
-      if (v.trim() && !(Number(v) >= 0 && Number(v) <= 2)) issues.push(["bad", `${b.id || autoId(b)}: ${label} must be a number from 0 to 2.`]);
-    }
-  }
-  // Two configurations that send the same thing are the same run, paid for twice.
-  const runKeys = new Map<string, string>();
-  for (const c of conditions) {
-    const k = JSON.stringify([c.prompt.text, Object.entries(c.env).sort(([x], [y]) => x.localeCompare(y))]);
-    const twin = runKeys.get(k);
-    if (twin) issues.push(["bad", `${twin} and ${c.id} are the same run; change or remove one.`]);
-    else runKeys.set(k, c.id);
   }
   for (const pr of prompts.filter((p) => blocks.some((b) => b.prompt === p.name))) {
     if (!PROMPT_NAME_RE.test(pr.name)) issues.push(["bad", `Prompt name "${pr.name}" may use only letters, digits, dot, dash and underscore.`]);
@@ -969,7 +857,7 @@ export function ExperimentsPage() {
                     </Field>
                     <button type="button" onClick={() => setBlocks((bs) => {
                       const i = bs.findIndex((x) => x.key === b.key);
-                      return [...bs.slice(0, i + 1), { ...b, key: nextBlockKey++, id: "" }, ...bs.slice(i + 1)];
+                      return [...bs.slice(0, i + 1), copyBlock(b), ...bs.slice(i + 1)];
                     })}>Duplicate</button>
                     <button type="button" onClick={() => setBlocks((bs) => bs.filter((x) => x.key !== b.key))}>Remove</button>
                   </div>

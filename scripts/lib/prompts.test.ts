@@ -75,7 +75,7 @@ describe("loadConditions", () => {
     });
   });
 
-  test("drops sampling settings a model does not take, and refuses conditions that become the same run", async () => {
+  test("drops sampling settings a model does not take; the schema refuses conditions that become the same run", async () => {
     await inTempDir(async () => {
       await writeFile("prompts/a.txt", "Hi");
       const sha256 = await promptSha256("Hi");
@@ -86,11 +86,12 @@ describe("loadConditions", () => {
       assert.equal(loaded.conditions[0].env.LLM_TOP_P, undefined);
       assert.equal(loaded.warnings.length, 1);
 
-      const two = experimentSchema.parse(base([
+      const two = experimentSchema.safeParse(base([
         { id: "h-t0", prompt: { file: "prompts/a.txt", sha256 }, env: { ...haiku, LLM_TEMPERATURE: "0" } },
         { id: "h-t1", prompt: { file: "prompts/a.txt", sha256 }, env: { ...haiku, LLM_TEMPERATURE: "1" } },
       ]));
-      await assert.rejects(loadConditions(two.conditions), /h-t0 and h-t1 are the same run/);
+      assert.equal(two.success, false);
+      assert.match(two.error!.issues.map((i) => i.message).join(), /h-t0 and h-t1 are the same run/);
     });
   });
 

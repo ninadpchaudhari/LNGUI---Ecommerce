@@ -3,16 +3,10 @@
  * chat panel and the Experiments page alike. Each declares its implementation
  * in a header (shared/prompt-text.ts). The default comes first.
  */
-import type { AppConfig, CommandMode } from "../../shared/contract.ts";
-import { parsePromptFile, promptHash } from "../../shared/prompt-text.ts";
+import type { AppConfig } from "../../shared/contract.ts";
+import { parsePromptFile, promptHash, type PromptEntry } from "../../shared/prompt-text.ts";
 
-/** A system prompt a condition can use. The text is sent exactly as written. */
-export interface PromptEntry {
-  name: string;
-  text: string;
-  /** The reply format the prompt asks for, which sets LNGUI_COMMAND_MODE. */
-  implementation: CommandMode;
-}
+export type { PromptEntry } from "../../shared/prompt-text.ts";
 
 export const COMMITTED_PROMPTS: PromptEntry[] = Object.entries(
   import.meta.glob("../../prompts/*.txt", { query: "?raw", import: "default", eager: true }) as Record<string, string>,

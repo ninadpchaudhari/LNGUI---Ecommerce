@@ -70,3 +70,11 @@ export function formatPromptFile(p: PromptFile): string {
 
 /** Lowercase letters, digits, dot, dash and underscore: safe in a file name and a condition id. */
 export const PROMPT_NAME_RE = /^[\w.-]+$/;
+
+/** A prompts/*.txt file as the Experiments page and the chat use it. The text is sent exactly as written. */
+export interface PromptEntry {
+  name: string;
+  text: string;
+  /** The reply format the prompt asks for, which sets LNGUI_COMMAND_MODE. */
+  implementation: CommandMode;
+}

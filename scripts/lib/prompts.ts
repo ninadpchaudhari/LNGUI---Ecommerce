@@ -4,11 +4,10 @@
  * prompt text and the implementation the prompt file declares.
  */
 import { readFile } from "node:fs/promises";
-import type { ExperimentCondition } from "../../shared/experiment.ts";
+import { effectiveEnv, type ExperimentCondition } from "../../shared/experiment.ts";
 import type { CommandMode } from "../../shared/contract.ts";
 import { parsePromptFile, promptHash, promptSha256 } from "../../shared/prompt-text.ts";
 import type { Condition } from "../../src/utils/sweep.ts";
-import { fixedSampling } from "../../shared/models.ts";
 
 export interface LoadedPrompt {
   file: string;
@@ -64,25 +63,13 @@ export async function loadConditions(experimentConditions: readonly ExperimentCo
           `but the condition sets LNGUI_COMMAND_MODE=${c.env.LNGUI_COMMAND_MODE}`,
       );
     }
-    // A model that takes no temperature or top_p gets neither, so the record says "not sent".
-    const env = { ...c.env };
-    if (fixedSampling(env.LLM_PROVIDER, env.LLM_MODEL) && (env.LLM_TEMPERATURE || env.LLM_TOP_P)) {
-      delete env.LLM_TEMPERATURE;
-      delete env.LLM_TOP_P;
-      warnings.push(`condition ${c.id}: ${env.LLM_MODEL} takes no temperature or top_p; ignoring them`);
-    }
+    // The same function the Experiments page uses, so a file sends the same thing from either.
+    const { env, dropped } = effectiveEnv(c.env);
+    if (dropped.length) warnings.push(`condition ${c.id}: ${env.LLM_MODEL} takes no temperature or top_p; ignoring ${dropped.join(" and ")}`);
     conditions.push({
       id: c.id,
       env: { ...env, ...(declared ? { LNGUI_COMMAND_MODE: declared } : {}), SYSTEM_PROMPT: p.text },
     });
-  }
-  // Ignoring a setting can leave two conditions the same run; paying for both is a mistake.
-  const seen = new Map<string, string>();
-  for (const c of conditions) {
-    const key = JSON.stringify(Object.entries(c.env).sort(([a], [b]) => a.localeCompare(b)));
-    const twin = seen.get(key);
-    if (twin) throw new Error(`conditions ${twin} and ${c.id} are the same run once ignored settings are dropped; keep one`);
-    seen.set(key, c.id);
   }
   return { conditions, prompts: [...byFile.values()], warnings };
 }

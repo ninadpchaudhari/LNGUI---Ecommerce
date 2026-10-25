@@ -37,8 +37,32 @@ const conditionSchema = z
       // Unset, the provider's own default applies, and providers differ (Ollama 0.8, OpenAI 1).
       ctx.addIssue({ code: "custom", message: `${c.id}: set LLM_TEMPERATURE or LLM_TOP_P, so the sampling is stated rather than left to the provider` });
     }
+    for (const [key, max] of [["LLM_TEMPERATURE", 2], ["LLM_TOP_P", 1]] as const) {
+      const v = c.env[key]?.trim();
+      if (v && !(Number(v) >= 0 && Number(v) <= max)) ctx.addIssue({ code: "custom", message: `${c.id}: ${key} must be a number from 0 to ${max}` });
+    }
     for (const p of checkOverrides(c.env).problems) ctx.addIssue({ code: "custom", message: `${c.id}: ${p}` });
   });
+
+/**
+ * What a condition sends, apart from the prompt text: its env with the history
+ * default stated (as the Experiments page states it) and, for a model that
+ * takes no temperature or top_p, those removed. The page and the CLI both run
+ * conditions through this, so one file sends the same thing from either.
+ */
+export function effectiveEnv(env: Readonly<Record<string, string>>): { env: Record<string, string>; dropped: string[] } {
+  const out: Record<string, string> = { HISTORY_POLICY: "full", ...env };
+  const dropped: string[] = [];
+  if (out.LOCAL_TEST_MODE !== "true" && fixedSampling(out.LLM_PROVIDER, out.LLM_MODEL)) {
+    for (const k of ["LLM_TEMPERATURE", "LLM_TOP_P"] as const) {
+      if (k in out) {
+        dropped.push(k);
+        delete out[k];
+      }
+    }
+  }
+  return { env: out, dropped };
+}
 
 export const experimentSchema = z
   .object({
@@ -59,6 +83,16 @@ export const experimentSchema = z
     const ids = e.conditions.map((c) => c.id);
     const dupes = [...new Set(ids.filter((x, i) => ids.indexOf(x) !== i))];
     if (dupes.length > 0) ctx.addIssue({ code: "custom", message: `duplicate condition ids: ${dupes.join(", ")}` });
+    // Two conditions that send the same thing are the same run, paid for twice.
+    const seen = new Map<string, string>();
+    for (const c of e.conditions) {
+      const { env } = effectiveEnv(c.env);
+      delete env.LNGUI_COMMAND_MODE; // set by the prompt's header
+      const key = JSON.stringify([c.prompt.sha256, Object.entries(env).sort(([a], [b]) => a.localeCompare(b))]);
+      const twin = seen.get(key);
+      if (twin) ctx.addIssue({ code: "custom", message: `conditions ${twin} and ${c.id} are the same run; change or remove one` });
+      else seen.set(key, c.id);
+    }
   });
 
 export type Experiment = z.infer<typeof experimentSchema>;
