@@ -45,9 +45,6 @@ export type CommandRuntimeEnv = {
   /** full | last-k | none. "none" seeds the display-only-history fault. */
   HISTORY_POLICY?: string;
   HISTORY_MAX_TURNS?: string;
-  /** "false" removes clearFilters from Q and from the system prompt. */
-  /** "true" lets Q accept clearFilters. On by default. */
-  /** baseline | extended. See api/prompt.ts — the two are not interchangeable. */
   /** The system prompt text. Unset: prompts/default.txt. Set per request by experiment conditions. */
   SYSTEM_PROMPT?: string;
   LANGFUSE_PUBLIC_KEY?: string;
@@ -174,10 +171,7 @@ export function resolveLLMConfig(env: RuntimeEnv): LLMConfig {
       ...sampling,
       provider: "openrouter",
       apiKey: openRouterApiKey,
-      baseURL:
-        str(env, "OPENROUTER_BASE_URL") ||
-        str(env, "OPENAI_BASE_URL") ||
-        DEFAULT_OPENROUTER_BASE_URL,
+      baseURL: str(env, "OPENROUTER_BASE_URL") || DEFAULT_OPENROUTER_BASE_URL,
       model: model || str(env, "OPENROUTER_MODEL") || str(env, "OPENAI_MODEL") || DEFAULT_OPENROUTER_MODEL,
       defaultHeaders: {
         "HTTP-Referer": str(env, "OPENROUTER_SITE_URL") || "http://localhost:5173",

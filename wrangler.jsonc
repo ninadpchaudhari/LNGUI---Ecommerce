@@ -28,16 +28,14 @@
   // these changes the experiment; secrets go through `wrangler secret put`.
   "vars": {
     "OPENROUTER_MODEL": "openai/gpt-4o-mini",
-    "OPENROUTER_MODELS": "openai/gpt-4o-mini,anthropic/claude-3.5-haiku,google/gemini-2.0-flash-001",
     // Deliberately false on the deployed instance: the URL is cited publicly in
     // the dissertation, and allow-any would let a stranger invoke an arbitrarily
     // expensive model on the account key. Local dev can still set it true.
     "OPENROUTER_MODEL_ALLOW_ANY": "false",
     "OPENROUTER_APP_TITLE": "LNGUI Ecommerce Case Study",
-    // Temperature, top_p, history policy and command mode are left unset on
-    // purpose: the chat app shows default behaviour (provider defaults, full
-    // history, and prompts/default.txt, the schema-only prompt, with the
-    // implementation its header declares). Experiments set them per condition.
+    // Temperature, top_p, reasoning, history policy and the prompt are not set
+    // here: the chat and each experiment configuration send them with every
+    // request (shared/models.ts holds each model's cited values).
     "LANGFUSE_BASE_URL": "https://us.cloud.langfuse.com",
     "LOCAL_TEST_MODE": "false"
   },

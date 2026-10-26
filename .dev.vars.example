@@ -6,6 +6,3 @@ OPEN_ROUTER_API_KEY=sk-or-v1-...
 LANGFUSE_PUBLIC_KEY=
 LANGFUSE_SECRET_KEY=
 LANGFUSE_BASE_URL=https://cloud.langfuse.com
-
-# Start here: exercises the whole stack with no LLM spend.
-LOCAL_TEST_MODE=true
