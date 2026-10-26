@@ -1,6 +1,7 @@
 /**
- * Reasoning effort on the wire: sent to OpenRouter as reasoning.effort and
- * recorded in P; not sent to other providers, and recorded there as null. A
+ * Reasoning effort on the wire: sent to OpenRouter and Ollama as
+ * reasoning.effort and recorded in P; not sent to direct OpenAI, and recorded
+ * there as null. A
  * local server stands in for the provider and captures the request body.
  */
 import { test } from "node:test";
@@ -66,9 +67,17 @@ test("without the setting nothing is sent, and P records null", async () => {
   });
 });
 
-test("another provider never receives it, and P says so", async () => {
+test("Ollama receives reasoning.effort too, and P records it", async () => {
   await withFakeProvider(async (baseURL, sent) => {
     const meta = await command({ LLM_PROVIDER: "ollama", OLLAMA_BASE_URL: baseURL, LLM_MODEL: "qwen3.5:4b", LLM_REASONING_EFFORT: "none", LNGUI_COMMAND_MODE: "full" });
+    assert.deepEqual(sent[0].reasoning, { effort: "none" });
+    assert.equal(meta.P.reasoningEffort, "none");
+  });
+});
+
+test("direct OpenAI never receives it, and P says so", async () => {
+  await withFakeProvider(async (baseURL, sent) => {
+    const meta = await command({ LLM_PROVIDER: "openai", OPENAI_API_KEY: "test", OPENAI_BASE_URL: baseURL, LLM_MODEL: "gpt-4o-mini", LLM_REASONING_EFFORT: "none", LNGUI_COMMAND_MODE: "full" });
     assert.equal("reasoning" in sent[0], false);
     assert.equal(meta.P.reasoningEffort, null);
   });

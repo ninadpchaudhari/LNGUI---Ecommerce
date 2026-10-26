@@ -131,7 +131,7 @@ async function callLLM(
       // this model applies. P records them as null.
       ...(sampling.temperature !== null ? { temperature: sampling.temperature } : {}),
       ...(sampling.topP !== null ? { top_p: sampling.topP } : {}),
-      // OpenRouter's reasoning parameter; the SDK passes fields it does not type through.
+      // OpenRouter's and Ollama's reasoning parameter; the SDK passes fields it does not type through.
       ...(sampling.reasoningEffort !== null ? ({ reasoning: { effort: sampling.reasoningEffort } } as object) : {}),
       messages,
     },

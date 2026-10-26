@@ -49,7 +49,7 @@ test("so do the awkward cases: local parser, sampling a model ignores, reasoning
       { id: "local", prompt: await ref("student-x"), env: { LOCAL_TEST_MODE: "true", HISTORY_POLICY: "full" } },
       { id: "haiku", prompt: await ref("default"), env: { LLM_PROVIDER: "openrouter", LLM_MODEL: "anthropic/claude-haiku-5.5", LLM_TEMPERATURE: "0.5", LLM_REASONING_EFFORT: "none", HISTORY_POLICY: "full" } },
       { id: "mini-last2", prompt: await ref("default"), env: { LLM_PROVIDER: "openrouter", LLM_MODEL: "openai/gpt-4o-mini", LLM_TOP_P: "0.9", HISTORY_POLICY: "last-k", HISTORY_MAX_TURNS: "2" } },
-      { id: "qwen-nohistory-key", prompt: await ref("default"), env: { LLM_PROVIDER: "ollama", LLM_MODEL: "qwen3.5:4b", LLM_TEMPERATURE: "1", LLM_TOP_P: "0.95" } },
+      { id: "qwen-nohistory-key", prompt: await ref("default"), env: { LLM_PROVIDER: "ollama", LLM_MODEL: "qwen3.5:4b", LLM_TEMPERATURE: "0.7", LLM_TOP_P: "0.8", LLM_REASONING_EFFORT: "none" } },
     ],
   });
   const { cli, page } = await both(e);

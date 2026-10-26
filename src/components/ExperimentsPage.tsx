@@ -885,7 +885,7 @@ export function ExperimentsPage() {
                       <input type="text" value={sampling ? b.topP : ""} disabled={!sampling} placeholder={sampling ? "not sent" : "not accepted"} onChange={(e) => updateBlock(b.key, { topP: e.target.value })} />
                     </Field>
                     {blockEfforts(b.model) && (
-                      <Field label="Reasoning" help="OpenRouter's reasoning effort. Starts at the lowest the model takes.">
+                      <Field label="Reasoning" help="The reasoning effort sent to OpenRouter or Ollama. Starts at the lowest the model takes.">
                         <select value={b.reasoning} onChange={(e) => updateBlock(b.key, { reasoning: e.target.value })}>
                           {blockEfforts(b.model)!.map((r) => <option key={r} value={r}>{r}</option>)}
                         </select>

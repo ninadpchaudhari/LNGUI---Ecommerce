@@ -75,7 +75,7 @@ export interface PromptConfig {
   /** Null: not sent, so the provider's default for the model applied. */
   temperature: number | null;
   topP: number | null;
-  /** OpenRouter's reasoning.effort. Null: not sent. Absent on records from before it was recorded. */
+  /** reasoning.effort, sent to OpenRouter and (from 2026-10-25) Ollama. Null: not sent. Absent on records from before it was recorded. */
   reasoningEffort?: string | null;
   systemPromptHash: string;
   commandSchemaHash: string;

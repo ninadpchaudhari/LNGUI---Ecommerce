@@ -39,7 +39,7 @@ export type CommandRuntimeEnv = {
   OPENAI_MODEL?: string;
   LLM_TEMPERATURE?: string;
   LLM_TOP_P?: string;
-  /** OpenRouter's reasoning.effort, e.g. minimal or none. Sent only to OpenRouter. */
+  /** reasoning.effort, e.g. minimal or none. Sent to OpenRouter and Ollama, not to direct OpenAI. */
   LLM_REASONING_EFFORT?: string;
   LLM_TIMEOUT_MS?: string;
   /** full | last-k | none. "none" seeds the display-only-history fault. */
@@ -121,7 +121,7 @@ export interface LLMConfig {
   /** Null means "not sent": the provider's default for the model applies. */
   temperature: number | null;
   topP: number | null;
-  /** Null means "not sent". Only OpenRouter takes it; other providers resolve it to null. */
+  /** Null means "not sent". OpenRouter and Ollama take it; direct OpenAI resolves it to null. */
   reasoningEffort: string | null;
   timeoutMs: number;
 }
@@ -155,7 +155,6 @@ export function resolveLLMConfig(env: RuntimeEnv): LLMConfig {
     // a request can never point the server at another host.
     return {
       ...sampling,
-      reasoningEffort: null,
       provider: "ollama",
       apiKey: str(env, "OLLAMA_API_KEY") || "ollama",
       baseURL: str(env, "OLLAMA_BASE_URL") || DEFAULT_OLLAMA_BASE_URL,
