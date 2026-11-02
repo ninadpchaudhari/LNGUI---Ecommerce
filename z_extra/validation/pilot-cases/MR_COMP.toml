@@ -1,0 +1,189 @@
+relation = "MR_COMP"
+
+[[case]]
+id = "MR_COMP-001"
+source = ["show clothing items", "that are in stock", "sort by name"]
+followup = "show clothing items that are in stock sorted by name"
+
+[case.writes]
+"show clothing items" = ["category"]
+"that are in stock" = ["inStockOnly"]
+"sort by name" = ["sort"]
+"show clothing items that are in stock sorted by name" = ["category", "inStockOnly", "sort"]
+
+[[case]]
+id = "MR_COMP-002"
+source = ["show sports gear items", "that are in stock", "sort by rating"]
+followup = "show sports gear items that are in stock sorted by rating"
+
+[case.writes]
+"show sports gear items" = ["category"]
+"that are in stock" = ["inStockOnly"]
+"sort by rating" = ["sort"]
+"show sports gear items that are in stock sorted by rating" = ["category", "inStockOnly", "sort"]
+
+[[case]]
+id = "MR_COMP-003"
+source = ["show home goods items", "under $200", "sort by rating"]
+followup = "show home goods items under $200 sorted by rating"
+
+[case.writes]
+"show home goods items" = ["category"]
+"under $200" = ["maxPrice"]
+"sort by rating" = ["sort"]
+"show home goods items under $200 sorted by rating" = ["category", "maxPrice", "sort"]
+
+[[case]]
+id = "MR_COMP-004"
+source = ["filter to clothing only", "under $100", "sort by lowest price first"]
+followup = "filter to clothing only under $100 sorted by lowest price first"
+
+[case.writes]
+"filter to clothing only" = ["category"]
+"under $100" = ["maxPrice"]
+"sort by lowest price first" = ["sort"]
+"filter to clothing only under $100 sorted by lowest price first" = ["category", "maxPrice", "sort"]
+
+[[case]]
+id = "MR_COMP-005"
+source = ["filter to clothing only", "under $25"]
+followup = "filter to clothing only under $25"
+
+[case.writes]
+"filter to clothing only" = ["category"]
+"under $25" = ["maxPrice"]
+"filter to clothing only under $25" = ["category", "maxPrice"]
+
+[[case]]
+id = "MR_COMP-006"
+source = ["filter to clothing only", "under $100"]
+followup = "filter to clothing only under $100"
+
+[case.writes]
+"filter to clothing only" = ["category"]
+"under $100" = ["maxPrice"]
+"filter to clothing only under $100" = ["category", "maxPrice"]
+
+[[case]]
+id = "MR_COMP-007"
+source = ["hide out-of-stock items", "hide out-of-stock items"]
+followup = "hide out-of-stock items"
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+
+[[case]]
+id = "MR_COMP-008"
+source = ["show items cheaper than $50", "show items cheaper than $50"]
+followup = "show items cheaper than $50"
+
+[case.writes]
+"show items cheaper than $50" = ["maxPrice"]
+
+[[case]]
+id = "MR_COMP-009"
+source = ["show items under $200", "show items under $200"]
+followup = "show items under $200"
+
+[case.writes]
+"show items under $200" = ["maxPrice"]
+
+[[case]]
+id = "MR_COMP-010"
+source = ["show items rated 3 stars and up", "show items rated 3 stars and up"]
+followup = "show items rated 3 stars and up"
+
+[case.writes]
+"show items rated 3 stars and up" = ["minRating"]
+
+[[case]]
+id = "MR_COMP-011"
+source = ["show items rated 3.5 stars and up", "show items rated 3.5 stars and up"]
+followup = "show items rated 3.5 stars and up"
+
+[case.writes]
+"show items rated 3.5 stars and up" = ["minRating"]
+
+[[case]]
+id = "MR_COMP-012"
+source = ["show items cheaper than $25", "in books", "sort by lowest price first"]
+followup = "show items cheaper than $25 in books sorted by lowest price first"
+
+[case.writes]
+"show items cheaper than $25" = ["maxPrice"]
+"in books" = ["category"]
+"sort by lowest price first" = ["sort"]
+"show items cheaper than $25 in books sorted by lowest price first" = ["maxPrice", "category", "sort"]
+
+[[case]]
+id = "MR_COMP-013"
+source = ["show items under $100", "in books", "sort by highest price first"]
+followup = "show items under $100 in books sorted by highest price first"
+
+[case.writes]
+"show items under $100" = ["maxPrice"]
+"in books" = ["category"]
+"sort by highest price first" = ["sort"]
+"show items under $100 in books sorted by highest price first" = ["maxPrice", "category", "sort"]
+
+[[case]]
+id = "MR_COMP-014"
+source = ["show items cheaper than $25", "that are in stock", "sort by lowest price first"]
+followup = "show items cheaper than $25 that are in stock sorted by lowest price first"
+
+[case.writes]
+"show items cheaper than $25" = ["maxPrice"]
+"that are in stock" = ["inStockOnly"]
+"sort by lowest price first" = ["sort"]
+"show items cheaper than $25 that are in stock sorted by lowest price first" = ["maxPrice", "inStockOnly", "sort"]
+
+[[case]]
+id = "MR_COMP-015"
+source = ["show items under $25", "that are in stock", "sort by rating"]
+followup = "show items under $25 that are in stock sorted by rating"
+
+[case.writes]
+"show items under $25" = ["maxPrice"]
+"that are in stock" = ["inStockOnly"]
+"sort by rating" = ["sort"]
+"show items under $25 that are in stock sorted by rating" = ["maxPrice", "inStockOnly", "sort"]
+
+[[case]]
+id = "MR_COMP-016"
+source = ["show items under $200", "that are in stock"]
+followup = "show items under $200 that are in stock"
+
+[case.writes]
+"show items under $200" = ["maxPrice"]
+"that are in stock" = ["inStockOnly"]
+"show items under $200 that are in stock" = ["maxPrice", "inStockOnly"]
+
+[[case]]
+id = "MR_COMP-017"
+source = ["show items cheaper than $50", "that are in stock"]
+followup = "show items cheaper than $50 that are in stock"
+
+[case.writes]
+"show items cheaper than $50" = ["maxPrice"]
+"that are in stock" = ["inStockOnly"]
+"show items cheaper than $50 that are in stock" = ["maxPrice", "inStockOnly"]
+
+[[case]]
+id = "MR_COMP-018"
+source = ["show items rated 3 stars and up", "under $25"]
+followup = "show items rated 3 stars and up under $25"
+
+[case.writes]
+"show items rated 3 stars and up" = ["minRating"]
+"under $25" = ["maxPrice"]
+"show items rated 3 stars and up under $25" = ["minRating", "maxPrice"]
+
+[[case]]
+id = "MR_COMP-019"
+source = ["show items rated 3.5 stars and up", "under $100"]
+followup = "show items rated 3.5 stars and up under $100"
+
+[case.writes]
+"show items rated 3.5 stars and up" = ["minRating"]
+"under $100" = ["maxPrice"]
+"show items rated 3.5 stars and up under $100" = ["minRating", "maxPrice"]

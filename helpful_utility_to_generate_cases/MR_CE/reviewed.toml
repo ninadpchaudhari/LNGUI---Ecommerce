@@ -1,0 +1,17 @@
+# MR_CE, reviewed pairs: the app's Gold_Syn (app/control-surface.yaml), paraphrases whose equivalence the templates do not
+# guarantee, accepted on human review. Taken as they are, with their own values.
+
+[[pair]]
+u1 = "show electronics under $100 sorted by rating"
+u2 = "list the tech products below $100, best rated first"   # the mediator must map "tech" onto electronics
+writes = ["category", "maxPrice", "sort"]
+
+[[pair]]
+u1 = "hide out-of-stock items"
+u2 = "only show me things that are available right now"
+writes = ["inStockOnly"]
+
+[[pair]]
+u1 = "show books"
+u2 = "I'm looking for something to read"                     # indirect, but the target is unambiguous
+writes = ["category"]

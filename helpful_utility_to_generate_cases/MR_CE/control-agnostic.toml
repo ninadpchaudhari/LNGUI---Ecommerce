@@ -1,0 +1,8 @@
+# MR_CE, control-agnostic macros: other ways to say any sentence {u} that ask for exactly the same thing.
+# make.py applies each one to every sentence it fits: a macro whose filter does not fit u (display on a sentence that
+# does not start with "show") is skipped for that sentence.
+
+uppercase = "{u|upper}"               # Figure 1.2: on this app, uppercasing once set a minRating no one asked for
+display = "display {u|after show}"    # "show electronics items" → "display electronics items"
+table = "{u} in a table"              # asks for a layout the app has no control for: must change nothing
+sort_first = "{u|sort clause first}"  # "show electronics under $100 sorted by rating" → "sorted by rating show electronics under $100"

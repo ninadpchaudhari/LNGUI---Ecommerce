@@ -1,0 +1,181 @@
+relation = "MR_CA"
+
+[[case]]
+id = "MR_CA-001"
+source = ["show home goods items", "hide out-of-stock items"]
+followup = ["hide out-of-stock items", "show home goods items"]
+
+[case.writes]
+"show home goods items" = ["category"]
+"hide out-of-stock items" = ["inStockOnly"]
+
+[[case]]
+id = "MR_CA-002"
+source = ["show books items", "hide out-of-stock items"]
+followup = ["hide out-of-stock items", "show books items"]
+
+[case.writes]
+"show books items" = ["category"]
+"hide out-of-stock items" = ["inStockOnly"]
+
+[[case]]
+id = "MR_CA-003"
+source = ["show home goods items", "show items cheaper than $200"]
+followup = ["show items cheaper than $200", "show home goods items"]
+
+[case.writes]
+"show home goods items" = ["category"]
+"show items cheaper than $200" = ["maxPrice"]
+
+[[case]]
+id = "MR_CA-004"
+source = ["filter to home goods only", "show items cheaper than $50"]
+followup = ["show items cheaper than $50", "filter to home goods only"]
+
+[case.writes]
+"filter to home goods only" = ["category"]
+"show items cheaper than $50" = ["maxPrice"]
+
+[[case]]
+id = "MR_CA-005"
+source = ["filter to sports gear only", "show items rated 4.5 stars and up"]
+followup = ["show items rated 4.5 stars and up", "filter to sports gear only"]
+
+[case.writes]
+"filter to sports gear only" = ["category"]
+"show items rated 4.5 stars and up" = ["minRating"]
+
+[[case]]
+id = "MR_CA-006"
+source = ["filter to clothing only", "show items rated 4 stars and up"]
+followup = ["show items rated 4 stars and up", "filter to clothing only"]
+
+[case.writes]
+"filter to clothing only" = ["category"]
+"show items rated 4 stars and up" = ["minRating"]
+
+[[case]]
+id = "MR_CA-007"
+source = ["filter to sports gear only", "sort by name"]
+followup = ["sort by name", "filter to sports gear only"]
+
+[case.writes]
+"filter to sports gear only" = ["category"]
+"sort by name" = ["sort"]
+
+[[case]]
+id = "MR_CA-008"
+source = ["show electronics items", "sort by name"]
+followup = ["sort by name", "show electronics items"]
+
+[case.writes]
+"show electronics items" = ["category"]
+"sort by name" = ["sort"]
+
+[[case]]
+id = "MR_CA-009"
+source = ["show items cheaper than $200", "hide out-of-stock items"]
+followup = ["hide out-of-stock items", "show items cheaper than $200"]
+
+[case.writes]
+"show items cheaper than $200" = ["maxPrice"]
+"hide out-of-stock items" = ["inStockOnly"]
+
+[[case]]
+id = "MR_CA-010"
+source = ["show items under $200", "hide out-of-stock items"]
+followup = ["hide out-of-stock items", "show items under $200"]
+
+[case.writes]
+"show items under $200" = ["maxPrice"]
+"hide out-of-stock items" = ["inStockOnly"]
+
+[[case]]
+id = "MR_CA-011"
+source = ["show items rated 4.5 stars and up", "hide out-of-stock items"]
+followup = ["hide out-of-stock items", "show items rated 4.5 stars and up"]
+
+[case.writes]
+"show items rated 4.5 stars and up" = ["minRating"]
+"hide out-of-stock items" = ["inStockOnly"]
+
+[[case]]
+id = "MR_CA-012"
+source = ["show items rated 3 stars and up", "hide out-of-stock items"]
+followup = ["hide out-of-stock items", "show items rated 3 stars and up"]
+
+[case.writes]
+"show items rated 3 stars and up" = ["minRating"]
+"hide out-of-stock items" = ["inStockOnly"]
+
+[[case]]
+id = "MR_CA-013"
+source = ["hide out-of-stock items", "sort by lowest price first"]
+followup = ["sort by lowest price first", "hide out-of-stock items"]
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"sort by lowest price first" = ["sort"]
+
+[[case]]
+id = "MR_CA-014"
+source = ["hide out-of-stock items", "sort by rating"]
+followup = ["sort by rating", "hide out-of-stock items"]
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"sort by rating" = ["sort"]
+
+[[case]]
+id = "MR_CA-015"
+source = ["show items under $200", "show items rated 4 stars and up"]
+followup = ["show items rated 4 stars and up", "show items under $200"]
+
+[case.writes]
+"show items under $200" = ["maxPrice"]
+"show items rated 4 stars and up" = ["minRating"]
+
+[[case]]
+id = "MR_CA-016"
+source = ["show items cheaper than $100", "show items rated 3.5 stars and up"]
+followup = ["show items rated 3.5 stars and up", "show items cheaper than $100"]
+
+[case.writes]
+"show items cheaper than $100" = ["maxPrice"]
+"show items rated 3.5 stars and up" = ["minRating"]
+
+[[case]]
+id = "MR_CA-017"
+source = ["show items under $50", "sort by highest price first"]
+followup = ["sort by highest price first", "show items under $50"]
+
+[case.writes]
+"show items under $50" = ["maxPrice"]
+"sort by highest price first" = ["sort"]
+
+[[case]]
+id = "MR_CA-018"
+source = ["show items cheaper than $50", "order the results by rating"]
+followup = ["order the results by rating", "show items cheaper than $50"]
+
+[case.writes]
+"show items cheaper than $50" = ["maxPrice"]
+"order the results by rating" = ["sort"]
+
+[[case]]
+id = "MR_CA-019"
+source = ["show items rated 4 stars and up", "sort by rating"]
+followup = ["sort by rating", "show items rated 4 stars and up"]
+
+[case.writes]
+"show items rated 4 stars and up" = ["minRating"]
+"sort by rating" = ["sort"]
+
+[[case]]
+id = "MR_CA-020"
+source = ["show items rated 4 stars and up", "order the results by highest price first"]
+followup = ["order the results by highest price first", "show items rated 4 stars and up"]
+
+[case.writes]
+"show items rated 4 stars and up" = ["minRating"]
+"order the results by highest price first" = ["sort"]

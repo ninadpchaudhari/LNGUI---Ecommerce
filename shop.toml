@@ -1,0 +1,41 @@
+# The shop's controls: the filters and sort the "ask" bar can set, their values, and each one's start value (σ0).
+# run.py reads σ0 and the control names from here; the cases use these names in [case.writes].
+# The app itself is built from app/control-surface.yaml. setup.py checks that the running app has exactly these controls
+# and start values, so the two cannot drift apart.
+#
+# A control is a choice (values = [...]) or a number (min, max). No `start`: it starts unset (⊥), e.g. no category.
+# constraining: it narrows the products shown. MR_AC's δ may only set one of these.
+# reversible:   a sentence can set it back. MR_REV may only use these.
+
+[control.category]
+values = ["electronics", "books", "clothing", "home", "sports"]
+constraining = true
+reversible = true
+
+[control.maxPrice]
+min = 0
+max = 500
+start = 500
+constraining = true
+reversible = true
+
+[control.minRating]
+values = [3, 3.5, 4, 4.5]
+constraining = true
+reversible = true
+
+[control.inStockOnly]
+values = [true, false]
+start = false
+constraining = true
+reversible = true
+
+[control.sort]
+values = ["price_asc", "price_desc", "rating_desc", "name_asc"]
+constraining = false          # reorders the products, never removes one
+reversible = true
+
+[control.clearFilters]
+values = ["invoked"]          # "clear all filters": puts every filter back to its start; stays "invoked" until reset
+constraining = false
+reversible = false            # what was cleared cannot be asked back in one sentence

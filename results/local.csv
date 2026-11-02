@@ -1,0 +1,187 @@
+﻿config,case,relation,trial,verdict,reason,source_changed,followup_changed
+local,MR_CA-001,MR_CA,1,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100","category=""electronics"" maxPrice=100"
+local,MR_COMP-014,MR_COMP,1,pass,O(σ′) = O(σ″),inStockOnly=true minRating=4,inStockOnly=true minRating=4
+local,MR_AC-004,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,"category=""electronics"" maxPrice=100"
+local,MR_CE-006,MR_CE,1,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_AC-011,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,inStockOnly=true,inStockOnly=true maxPrice=100
+local,MR_COMP-005,MR_COMP,1,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_CE-031,MR_CE,1,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_COMP-002,MR_COMP,1,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_COMP-025,MR_COMP,1,pass,O(σ′) = O(σ″),"maxPrice=100 minRating=4 sort=""rating_desc""","maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_CE-022,MR_CE,1,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_CA-010,MR_CA,1,pass,O(σ′) = O(σ″),"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+local,MR_AC-008,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,minRating=4,maxPrice=100 minRating=4
+local,MR_COMP-004,MR_COMP,1,pass,O(σ′) = O(σ″),inStockOnly=true,inStockOnly=true
+local,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,1,pass,what u1 set survived,inStockOnly=true,"category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_CE-023,MR_CE,1,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_CE-029,MR_CE,1,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,1,pass,what u1 set survived,"category=""electronics""","category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_COMP-028,MR_COMP,1,pass,O(σ′) = O(σ″),"inStockOnly=true maxPrice=100 sort=""rating_desc""","inStockOnly=true maxPrice=100 sort=""rating_desc"""
+local,MR_CE-008,MR_CE,1,fail,V′ ≠ V″ on: category,"category=""books""",
+local,MR_CE-003,MR_CE,1,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_AC-009,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,minRating=4,inStockOnly=true minRating=4
+local,MR_CE-014,MR_CE,1,pass,O(σ′) = O(σ″),inStockOnly=true,inStockOnly=true
+local,MR_COMP-021,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,1,pass,what u1 set survived,minRating=4,"category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_COMP-012,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics"" minRating=4","category=""electronics"" minRating=4"
+local,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,1,pass,what u1 set survived,maxPrice=100,"category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_COMP-026,MR_COMP,1,pass,O(σ′) = O(σ″),"inStockOnly=true minRating=4 sort=""rating_desc""","inStockOnly=true minRating=4 sort=""rating_desc"""
+local,MR_CE-001,MR_CE,1,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_CE-028,MR_CE,1,pass,O(σ′) = O(σ″),inStockOnly=true,inStockOnly=true
+local,MR_COMP-010,MR_COMP,1,pass,O(σ′) = O(σ″),maxPrice=100 minRating=4,maxPrice=100 minRating=4
+local,MR_CE-007,MR_CE,1,pass,O(σ′) = O(σ″),inStockOnly=true,inStockOnly=true
+local,MR_AC-010,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+local,MR_COMP-008,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+local,MR_CE-002,MR_CE,1,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_CE-005,MR_CE,1,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_CE-009,MR_CE,1,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_COMP-003,MR_COMP,1,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+local,MR_CA-006,MR_CA,1,pass,O(σ′) = O(σ″),inStockOnly=true maxPrice=100,inStockOnly=true maxPrice=100
+local,MR_CE-030,MR_CE,1,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_CE-017,MR_CE,1,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_COMP-006,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100","category=""electronics"" maxPrice=100"
+local,MR_COMP-027,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics"" inStockOnly=true sort=""rating_desc""","category=""electronics"" inStockOnly=true sort=""rating_desc"""
+local,MR_COMP-015,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+local,MR_CA-002,MR_CA,1,pass,O(σ′) = O(σ″),"category=""electronics"" minRating=4","category=""electronics"" minRating=4"
+local,MR_COMP-009,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100","category=""electronics"" maxPrice=100"
+local,MR_COMP-024,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics"" minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4 sort=""rating_desc"""
+local,MR_COMP-017,MR_COMP,1,pass,O(σ′) = O(σ″),inStockOnly=true minRating=4,inStockOnly=true minRating=4
+local,MR_CE-015,MR_CE,1,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_AC-002,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,"category=""electronics""","category=""electronics"" minRating=4"
+local,MR_AC-007,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,minRating=4,"category=""electronics"" minRating=4"
+local,MR_COMP-013,MR_COMP,1,pass,O(σ′) = O(σ″),maxPrice=100 minRating=4,maxPrice=100 minRating=4
+local,MR_COMP-020,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics"" inStockOnly=true sort=""rating_desc""","category=""electronics"" inStockOnly=true sort=""rating_desc"""
+local,MR_AC-003,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,"category=""electronics""","category=""electronics"" inStockOnly=true"
+local,MR_CA-005,MR_CA,1,pass,O(σ′) = O(σ″),maxPrice=100 minRating=4,maxPrice=100 minRating=4
+local,MR_REV-002,MR_REV,1,pass,O(σ″) = O(σ0),,
+local,MR_COMP-007,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics"" minRating=4","category=""electronics"" minRating=4"
+local,MR_CE-012,MR_CE,1,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_COMP-023,MR_COMP,1,pass,O(σ′) = O(σ″),"inStockOnly=true maxPrice=100 sort=""rating_desc""","inStockOnly=true maxPrice=100 sort=""rating_desc"""
+local,MR_CA-003,MR_CA,1,pass,O(σ′) = O(σ″),"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+local,MR_CE-019,MR_CE,1,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_CE-032,MR_CE,1,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_CA-009,MR_CA,1,pass,O(σ′) = O(σ″),"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+local,MR_COMP-022,MR_COMP,1,pass,O(σ′) = O(σ″),"maxPrice=100 minRating=4 sort=""rating_desc""","maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_CE-011,MR_CE,1,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_CE-025,MR_CE,1,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_REV-001,MR_REV,1,pass,O(σ″) = O(σ0),,
+local,MR_CE-016,MR_CE,1,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_CA-007,MR_CA,1,pass,O(σ′) = O(σ″),"maxPrice=100 sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+local,MR_CE-020,MR_CE,1,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_REV-004,MR_REV,1,pass,O(σ″) = O(σ0),,
+local,MR_CE-013,MR_CE,1,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+local,MR_AC-001,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,"category=""electronics""","category=""electronics"" maxPrice=100"
+local,MR_CE-027,MR_CE,1,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+local,MR_REV-005,MR_REV,1,pass,O(σ″) = O(σ0),,
+local,MR_CA-004,MR_CA,1,pass,O(σ′) = O(σ″),"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+local,MR_COMP-011,MR_COMP,1,pass,O(σ′) = O(σ″),inStockOnly=true maxPrice=100,inStockOnly=true maxPrice=100
+local,MR_CE-026,MR_CE,1,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_COMP-029,MR_COMP,1,pass,O(σ′) = O(σ″),"inStockOnly=true minRating=4 sort=""rating_desc""","inStockOnly=true minRating=4 sort=""rating_desc"""
+local,MR_CA-008,MR_CA,1,pass,O(σ′) = O(σ″),inStockOnly=true minRating=4,inStockOnly=true minRating=4
+local,MR_COMP-016,MR_COMP,1,pass,O(σ′) = O(σ″),inStockOnly=true maxPrice=100,inStockOnly=true maxPrice=100
+local,MR_REV-003,MR_REV,1,fail,V″ ≠ σ0 on: sort,,"sort=""rating_desc"""
+local,MR_CE-018,MR_CE,1,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_COMP-019,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics"" minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4 sort=""rating_desc"""
+local,MR_CE-021,MR_CE,1,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+local,MR_COMP-018,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_AC-005,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,maxPrice=100 minRating=4
+local,MR_AC-012,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,inStockOnly=true,inStockOnly=true minRating=4
+local,MR_CE-010,MR_CE,1,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,1,pass,what u1 set survived,"sort=""rating_desc""","category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_CE-024,MR_CE,1,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_AC-006,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,inStockOnly=true maxPrice=100
+local,MR_CE-004,MR_CE,1,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_COMP-001,MR_COMP,1,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_COMP-006,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100","category=""electronics"" maxPrice=100"
+local,MR_CE-003,MR_CE,2,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,2,pass,what u1 set survived,maxPrice=100,"category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_CA-009,MR_CA,2,pass,O(σ′) = O(σ″),"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+local,MR_COMP-011,MR_COMP,2,pass,O(σ′) = O(σ″),inStockOnly=true maxPrice=100,inStockOnly=true maxPrice=100
+local,MR_COMP-012,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics"" minRating=4","category=""electronics"" minRating=4"
+local,MR_REV-004,MR_REV,2,pass,O(σ″) = O(σ0),,
+local,MR_CE-025,MR_CE,2,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_COMP-007,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics"" minRating=4","category=""electronics"" minRating=4"
+local,MR_CE-018,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_COMP-015,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+local,MR_CE-019,MR_CE,2,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_CE-032,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_CE-008,MR_CE,2,fail,V′ ≠ V″ on: category,"category=""books""",
+local,MR_COMP-029,MR_COMP,2,pass,O(σ′) = O(σ″),"inStockOnly=true minRating=4 sort=""rating_desc""","inStockOnly=true minRating=4 sort=""rating_desc"""
+local,MR_COMP-019,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics"" minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4 sort=""rating_desc"""
+local,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,2,pass,what u1 set survived,"category=""electronics""","category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_CE-023,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_COMP-026,MR_COMP,2,pass,O(σ′) = O(σ″),"inStockOnly=true minRating=4 sort=""rating_desc""","inStockOnly=true minRating=4 sort=""rating_desc"""
+local,MR_AC-012,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,inStockOnly=true,inStockOnly=true minRating=4
+local,MR_COMP-008,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+local,MR_COMP-013,MR_COMP,2,pass,O(σ′) = O(σ″),maxPrice=100 minRating=4,maxPrice=100 minRating=4
+local,MR_CA-010,MR_CA,2,pass,O(σ′) = O(σ″),"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+local,MR_CE-028,MR_CE,2,pass,O(σ′) = O(σ″),inStockOnly=true,inStockOnly=true
+local,MR_AC-003,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,"category=""electronics""","category=""electronics"" inStockOnly=true"
+local,MR_COMP-003,MR_COMP,2,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+local,MR_CE-020,MR_CE,2,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_REV-002,MR_REV,2,pass,O(σ″) = O(σ0),,
+local,MR_REV-005,MR_REV,2,pass,O(σ″) = O(σ0),,
+local,MR_CE-026,MR_CE,2,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_CE-005,MR_CE,2,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_COMP-005,MR_COMP,2,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_CA-006,MR_CA,2,pass,O(σ′) = O(σ″),inStockOnly=true maxPrice=100,inStockOnly=true maxPrice=100
+local,MR_COMP-020,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics"" inStockOnly=true sort=""rating_desc""","category=""electronics"" inStockOnly=true sort=""rating_desc"""
+local,MR_COMP-002,MR_COMP,2,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_COMP-018,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_COMP-021,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_CE-030,MR_CE,2,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_CE-013,MR_CE,2,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+local,MR_CE-024,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_REV-001,MR_REV,2,pass,O(σ″) = O(σ0),,
+local,MR_CA-005,MR_CA,2,pass,O(σ′) = O(σ″),maxPrice=100 minRating=4,maxPrice=100 minRating=4
+local,MR_COMP-028,MR_COMP,2,pass,O(σ′) = O(σ″),"inStockOnly=true maxPrice=100 sort=""rating_desc""","inStockOnly=true maxPrice=100 sort=""rating_desc"""
+local,MR_CE-012,MR_CE,2,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_REV-003,MR_REV,2,fail,V″ ≠ σ0 on: sort,,"sort=""rating_desc"""
+local,MR_AC-010,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+local,MR_CE-014,MR_CE,2,pass,O(σ′) = O(σ″),inStockOnly=true,inStockOnly=true
+local,MR_AC-007,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,minRating=4,"category=""electronics"" minRating=4"
+local,MR_CE-009,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_CE-011,MR_CE,2,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_COMP-023,MR_COMP,2,pass,O(σ′) = O(σ″),"inStockOnly=true maxPrice=100 sort=""rating_desc""","inStockOnly=true maxPrice=100 sort=""rating_desc"""
+local,MR_AC-001,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,"category=""electronics""","category=""electronics"" maxPrice=100"
+local,MR_COMP-025,MR_COMP,2,pass,O(σ′) = O(σ″),"maxPrice=100 minRating=4 sort=""rating_desc""","maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_COMP-024,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics"" minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4 sort=""rating_desc"""
+local,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,2,pass,what u1 set survived,minRating=4,"category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+local,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,2,pass,what u1 set survived,"sort=""rating_desc""","category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_CE-015,MR_CE,2,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_CE-022,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_CE-002,MR_CE,2,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+local,MR_CE-031,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_CA-001,MR_CA,2,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100","category=""electronics"" maxPrice=100"
+local,MR_AC-011,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,inStockOnly=true,inStockOnly=true maxPrice=100
+local,MR_AC-004,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,"category=""electronics"" maxPrice=100"
+local,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,2,pass,what u1 set survived,inStockOnly=true,"category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_COMP-016,MR_COMP,2,pass,O(σ′) = O(σ″),inStockOnly=true maxPrice=100,inStockOnly=true maxPrice=100
+local,MR_CA-003,MR_CA,2,pass,O(σ′) = O(σ″),"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+local,MR_CE-010,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_CE-016,MR_CE,2,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_AC-005,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,maxPrice=100 minRating=4
+local,MR_COMP-017,MR_COMP,2,pass,O(σ′) = O(σ″),inStockOnly=true minRating=4,inStockOnly=true minRating=4
+local,MR_COMP-001,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_COMP-022,MR_COMP,2,pass,O(σ′) = O(σ″),"maxPrice=100 minRating=4 sort=""rating_desc""","maxPrice=100 minRating=4 sort=""rating_desc"""
+local,MR_CE-004,MR_CE,2,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_COMP-009,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100","category=""electronics"" maxPrice=100"
+local,MR_COMP-027,MR_COMP,2,pass,O(σ′) = O(σ″),"category=""electronics"" inStockOnly=true sort=""rating_desc""","category=""electronics"" inStockOnly=true sort=""rating_desc"""
+local,MR_CA-004,MR_CA,2,pass,O(σ′) = O(σ″),"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+local,MR_CA-008,MR_CA,2,pass,O(σ′) = O(σ″),inStockOnly=true minRating=4,inStockOnly=true minRating=4
+local,MR_CE-021,MR_CE,2,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+local,MR_CE-029,MR_CE,2,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+local,MR_CA-002,MR_CA,2,pass,O(σ′) = O(σ″),"category=""electronics"" minRating=4","category=""electronics"" minRating=4"
+local,MR_COMP-010,MR_COMP,2,pass,O(σ′) = O(σ″),maxPrice=100 minRating=4,maxPrice=100 minRating=4
+local,MR_AC-008,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,minRating=4,maxPrice=100 minRating=4
+local,MR_COMP-014,MR_COMP,2,pass,O(σ′) = O(σ″),inStockOnly=true minRating=4,inStockOnly=true minRating=4
+local,MR_CE-007,MR_CE,2,pass,O(σ′) = O(σ″),inStockOnly=true,inStockOnly=true
+local,MR_CE-017,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_AC-002,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,"category=""electronics""","category=""electronics"" minRating=4"
+local,MR_CA-007,MR_CA,2,pass,O(σ′) = O(σ″),"maxPrice=100 sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+local,MR_CE-027,MR_CE,2,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+local,MR_AC-006,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,inStockOnly=true maxPrice=100
+local,MR_COMP-004,MR_COMP,2,pass,O(σ′) = O(σ″),inStockOnly=true,inStockOnly=true
+local,MR_CE-001,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+local,MR_CE-006,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+local,MR_AC-009,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,minRating=4,inStockOnly=true minRating=4

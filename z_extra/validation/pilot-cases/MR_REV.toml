@@ -1,0 +1,10 @@
+relation = "MR_REV"
+
+[[case]]
+id = "MR_REV-001"
+source = []
+followup = ["hide out-of-stock items", "show out-of-stock items again"]
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"show out-of-stock items again" = ["inStockOnly"]

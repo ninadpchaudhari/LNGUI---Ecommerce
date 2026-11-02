@@ -1,0 +1,201 @@
+relation = "MR_AC"
+
+[[case]]
+id = "MR_AC-001"
+source = "filter to electronics only"
+followup = "filter to electronics only that are in stock"
+refine = {control = "inStockOnly", value = true}
+
+[case.writes]
+"filter to electronics only" = ["category"]
+"filter to electronics only that are in stock" = ["category", "inStockOnly"]
+
+[[case]]
+id = "MR_AC-002"
+source = "show sports gear items"
+followup = "show sports gear items that are in stock"
+refine = {control = "inStockOnly", value = true}
+
+[case.writes]
+"show sports gear items" = ["category"]
+"show sports gear items that are in stock" = ["category", "inStockOnly"]
+
+[[case]]
+id = "MR_AC-003"
+source = "filter to electronics only"
+followup = "filter to electronics only rated 4 stars and up"
+refine = {control = "minRating", value = 4}
+
+[case.writes]
+"filter to electronics only" = ["category"]
+"filter to electronics only rated 4 stars and up" = ["category", "minRating"]
+
+[[case]]
+id = "MR_AC-004"
+source = "filter to sports gear only"
+followup = "filter to sports gear only rated 4 stars and up"
+refine = {control = "minRating", value = 4}
+
+[case.writes]
+"filter to sports gear only" = ["category"]
+"filter to sports gear only rated 4 stars and up" = ["category", "minRating"]
+
+[[case]]
+id = "MR_AC-005"
+source = "hide out-of-stock items"
+followup = "hide out-of-stock items in clothing"
+refine = {control = "category", value = "clothing"}
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"hide out-of-stock items in clothing" = ["inStockOnly", "category"]
+
+[[case]]
+id = "MR_AC-006"
+source = "hide out-of-stock items"
+followup = "hide out-of-stock items in books"
+refine = {control = "category", value = "books"}
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"hide out-of-stock items in books" = ["inStockOnly", "category"]
+
+[[case]]
+id = "MR_AC-007"
+source = "hide out-of-stock items"
+followup = "hide out-of-stock items rated 4 stars and up"
+refine = {control = "minRating", value = 4}
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"hide out-of-stock items rated 4 stars and up" = ["inStockOnly", "minRating"]
+
+[[case]]
+id = "MR_AC-008"
+source = "hide out-of-stock items"
+followup = "hide out-of-stock items rated 4.5 stars and up"
+refine = {control = "minRating", value = 4.5}
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"hide out-of-stock items rated 4.5 stars and up" = ["inStockOnly", "minRating"]
+
+[[case]]
+id = "MR_AC-009"
+source = "show items under $100"
+followup = "show items under $100 in home goods"
+refine = {control = "category", value = "home"}
+
+[case.writes]
+"show items under $100" = ["maxPrice"]
+"show items under $100 in home goods" = ["maxPrice", "category"]
+
+[[case]]
+id = "MR_AC-010"
+source = "show items cheaper than $25"
+followup = "show items cheaper than $25 in home goods"
+refine = {control = "category", value = "home"}
+
+[case.writes]
+"show items cheaper than $25" = ["maxPrice"]
+"show items cheaper than $25 in home goods" = ["maxPrice", "category"]
+
+[[case]]
+id = "MR_AC-011"
+source = "show items under $200"
+followup = "show items under $200 that are in stock"
+refine = {control = "inStockOnly", value = true}
+
+[case.writes]
+"show items under $200" = ["maxPrice"]
+"show items under $200 that are in stock" = ["maxPrice", "inStockOnly"]
+
+[[case]]
+id = "MR_AC-012"
+source = "show items under $100"
+followup = "show items under $100 that are in stock"
+refine = {control = "inStockOnly", value = true}
+
+[case.writes]
+"show items under $100" = ["maxPrice"]
+"show items under $100 that are in stock" = ["maxPrice", "inStockOnly"]
+
+[[case]]
+id = "MR_AC-013"
+source = "show items under $50"
+followup = "show items under $50 rated 4 stars and up"
+refine = {control = "minRating", value = 4}
+
+[case.writes]
+"show items under $50" = ["maxPrice"]
+"show items under $50 rated 4 stars and up" = ["maxPrice", "minRating"]
+
+[[case]]
+id = "MR_AC-014"
+source = "show items under $25"
+followup = "show items under $25 rated 4.5 stars and up"
+refine = {control = "minRating", value = 4.5}
+
+[case.writes]
+"show items under $25" = ["maxPrice"]
+"show items under $25 rated 4.5 stars and up" = ["maxPrice", "minRating"]
+
+[[case]]
+id = "MR_AC-015"
+source = "show items rated 4.5 stars and up"
+followup = "show items rated 4.5 stars and up in home goods"
+refine = {control = "category", value = "home"}
+
+[case.writes]
+"show items rated 4.5 stars and up" = ["minRating"]
+"show items rated 4.5 stars and up in home goods" = ["minRating", "category"]
+
+[[case]]
+id = "MR_AC-016"
+source = "show items rated 3.5 stars and up"
+followup = "show items rated 3.5 stars and up in clothing"
+refine = {control = "category", value = "clothing"}
+
+[case.writes]
+"show items rated 3.5 stars and up" = ["minRating"]
+"show items rated 3.5 stars and up in clothing" = ["minRating", "category"]
+
+[[case]]
+id = "MR_AC-017"
+source = "show items rated 3.5 stars and up"
+followup = "show items rated 3.5 stars and up that are in stock"
+refine = {control = "inStockOnly", value = true}
+
+[case.writes]
+"show items rated 3.5 stars and up" = ["minRating"]
+"show items rated 3.5 stars and up that are in stock" = ["minRating", "inStockOnly"]
+
+[[case]]
+id = "MR_AC-018"
+source = "show items rated 4 stars and up"
+followup = "show items rated 4 stars and up that are in stock"
+refine = {control = "inStockOnly", value = true}
+
+[case.writes]
+"show items rated 4 stars and up" = ["minRating"]
+"show items rated 4 stars and up that are in stock" = ["minRating", "inStockOnly"]
+
+[[case]]
+id = "MR_AC-019"
+source = "show items rated 4 stars and up"
+followup = "show items rated 4 stars and up under $100"
+refine = {control = "maxPrice", value = 100}
+
+[case.writes]
+"show items rated 4 stars and up" = ["minRating"]
+"show items rated 4 stars and up under $100" = ["minRating", "maxPrice"]
+
+[[case]]
+id = "MR_AC-020"
+source = "show items rated 3.5 stars and up"
+followup = "show items rated 3.5 stars and up under $100"
+refine = {control = "maxPrice", value = 100}
+
+[case.writes]
+"show items rated 3.5 stars and up" = ["minRating"]
+"show items rated 3.5 stars and up under $100" = ["minRating", "maxPrice"]

@@ -39,3 +39,8 @@ runs/
 
 # Claude Code worktrees
 .claude/worktrees/
+
+# The harness
+.venv/
+__pycache__/
+servers/

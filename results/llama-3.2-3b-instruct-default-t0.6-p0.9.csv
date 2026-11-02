@@ -1,0 +1,931 @@
+﻿config,case,relation,trial,verdict,reason,source_changed,followup_changed
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-001,MR_CA,1,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-014,MR_COMP,1,fail,"mediator error on ""show items rated 4 stars and up that are in stock"": Invalid command",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-004,MR_AC,1,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-006,MR_CE,1,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-011,MR_AC,1,fail,u_ref did not keep what u_base set: V_ref ≠ V_base[d ↦ w] on: inStockOnly,inStockOnly=true,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-005,MR_COMP,1,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-031,MR_CE,1,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-002,MR_COMP,1,fail,"mediator error on ""show items under $100"": Invalid command",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-025,MR_COMP,1,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command","maxPrice=100 minRating=4 sort=""rating_desc""","maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-022,MR_CE,1,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-010,MR_CA,1,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON","sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-008,MR_AC,1,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-004,MR_COMP,1,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,1,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-023,MR_CE,1,fail,"mediator error on ""show electronics items in a table"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-029,MR_CE,1,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,1,fail,lost what u1 set: category,"category=""electronics""","inStockOnly=true sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-028,MR_COMP,1,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON","inStockOnly=true maxPrice=100 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-008,MR_CE,1,fail,"mediator error on ""I'm looking for something to read"": Invalid command","category=""books""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-003,MR_CE,1,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-009,MR_AC,1,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-014,MR_CE,1,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-021,MR_COMP,1,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,1,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-012,MR_COMP,1,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,1,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",maxPrice=100,"inStockOnly=true sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-026,MR_COMP,1,fail,"mediator error on ""that are in stock"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-001,MR_CE,1,fail,"mediator error on ""filter to electronics only"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-028,MR_CE,1,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-010,MR_COMP,1,fail,"mediator error on ""rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-007,MR_CE,1,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-010,MR_AC,1,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-008,MR_COMP,1,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-002,MR_CE,1,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-005,MR_CE,1,fail,"V′ ≠ V″ on: category, inStockOnly, maxPrice, minRating","sort=""rating_desc""","category=""electronics"" inStockOnly=true maxPrice=200 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-009,MR_CE,1,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-003,MR_COMP,1,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-006,MR_CA,1,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-030,MR_CE,1,fail,"mediator error on ""order the results by rating"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-017,MR_CE,1,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-006,MR_COMP,1,fail,"mediator error on ""show electronics items under $100"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-027,MR_COMP,1,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-015,MR_COMP,1,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-002,MR_CA,1,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-009,MR_COMP,1,fail,"mediator error on ""in electronics"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-024,MR_COMP,1,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-017,MR_COMP,1,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-015,MR_CE,1,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-002,MR_AC,1,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-007,MR_AC,1,fail,"mediator error on ""show items rated 4 stars and up in electronics"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-013,MR_COMP,1,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-020,MR_COMP,1,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-003,MR_AC,1,fail,"mediator error on ""show electronics items that are in stock"": Invalid command","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-005,MR_CA,1,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-002,MR_REV,1,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-007,MR_COMP,1,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-012,MR_CE,1,fail,"mediator error on ""show items cheaper than $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-023,MR_COMP,1,fail,"mediator error on ""show items under $100"": Invalid command","inStockOnly=true sort=""rating_desc""","inStockOnly=true maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-003,MR_CA,1,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-019,MR_CE,1,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-032,MR_CE,1,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-009,MR_CA,1,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,"minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-022,MR_COMP,1,fail,"mediator error on ""show items under $100 rated 4 stars and up sorted by rating"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-011,MR_CE,1,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-025,MR_CE,1,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-001,MR_REV,1,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-016,MR_CE,1,fail,"mediator error on ""ORDER THE RESULTS BY RATING"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-007,MR_CA,1,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-020,MR_CE,1,fail,"mediator error on ""show items cheaper than $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-004,MR_REV,1,fail,"mediator error on ""show out-of-stock items again"": Could not parse LLM response as JSON",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-013,MR_CE,1,fail,"mediator error on ""SHOW ITEMS RATED 4 STARS AND UP"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-001,MR_AC,1,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,"category=""electronics""","category=""electronics"" maxPrice=100"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-027,MR_CE,1,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-005,MR_REV,1,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-004,MR_CA,1,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-011,MR_COMP,1,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-026,MR_CE,1,fail,"mediator error on ""show items cheaper than $100"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-029,MR_COMP,1,fail,"mediator error on ""hide out-of-stock items"": Invalid command",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-008,MR_CA,1,fail,"mediator error on ""hide out-of-stock items"": Invalid command",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-016,MR_COMP,1,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-003,MR_REV,1,pass,O(σ″) = O(σ0),,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-018,MR_CE,1,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-019,MR_COMP,1,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-021,MR_CE,1,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-018,MR_COMP,1,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-005,MR_AC,1,fail,"mediator error on ""show items under $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-012,MR_AC,1,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-010,MR_CE,1,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,1,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,"inStockOnly=true sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-024,MR_CE,1,fail,"mediator error on ""filter to electronics only in a table"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-006,MR_AC,1,fail,"mediator error on ""show items under $100 that are in stock"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-004,MR_CE,1,fail,"mediator error on ""sort by rating"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-001,MR_COMP,1,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-006,MR_COMP,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100","category=""electronics"" maxPrice=100"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-003,MR_CE,2,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,2,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-009,MR_CA,2,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-011,MR_COMP,2,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-012,MR_COMP,2,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-004,MR_REV,2,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-025,MR_CE,2,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-007,MR_COMP,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-018,MR_CE,2,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-015,MR_COMP,2,fail,"mediator error on ""hide out-of-stock items in electronics"": Could not parse LLM response as JSON","category=""electronics"" inStockOnly=true",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-019,MR_CE,2,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-032,MR_CE,2,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-008,MR_CE,2,fail,"mediator error on ""show books"": Could not parse LLM response as JSON",,"category=""books"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-029,MR_COMP,2,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-019,MR_COMP,2,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-023,MR_CE,2,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-026,MR_COMP,2,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-012,MR_AC,2,fail,"mediator error on ""hide out-of-stock items rated 4 stars and up"": Could not parse LLM response as JSON",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-008,MR_COMP,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-013,MR_COMP,2,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-010,MR_CA,2,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",inStockOnly=true,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-028,MR_CE,2,fail,"mediator error on ""hide out-of-stock items in a table"": Invalid command",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-003,MR_AC,2,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-003,MR_COMP,2,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-020,MR_CE,2,fail,"mediator error on ""display items cheaper than $100"": Invalid command",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-002,MR_REV,2,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-005,MR_REV,2,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-026,MR_CE,2,fail,"mediator error on ""show items cheaper than $100 in a table"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-005,MR_CE,2,fail,"V′ ≠ V″ on: category, inStockOnly, minRating","sort=""rating_desc""","category=""electronics"" inStockOnly=true minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-005,MR_COMP,2,fail,"mediator error on ""sort by rating"": Invalid command","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-006,MR_CA,2,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-020,MR_COMP,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-002,MR_COMP,2,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-018,MR_COMP,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-021,MR_COMP,2,fail,V′ ≠ V″ on: maxPrice,"category=""electronics"" sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-030,MR_CE,2,fail,"V′ ≠ V″ on: category, inStockOnly, maxPrice, minRating","sort=""rating_desc""","category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-013,MR_CE,2,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-024,MR_CE,2,fail,"mediator error on ""filter to electronics only"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-001,MR_REV,2,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-005,MR_CA,2,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-028,MR_COMP,2,fail,"mediator error on ""hide out-of-stock items"": Invalid command","maxPrice=100 sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-012,MR_CE,2,fail,"mediator error on ""SHOW ITEMS CHEAPER THAN $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-003,MR_REV,2,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-010,MR_AC,2,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-014,MR_CE,2,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-007,MR_AC,2,fail,"mediator error on ""show items rated 4 stars and up in electronics"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-009,MR_CE,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-011,MR_CE,2,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-023,MR_COMP,2,fail,"mediator error on ""show items under $100"": Invalid command","inStockOnly=true sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-001,MR_AC,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-025,MR_COMP,2,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-024,MR_COMP,2,fail,"mediator error on ""in electronics"": Could not parse LLM response as JSON","category=""electronics"" sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,2,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,2,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-015,MR_CE,2,fail,"mediator error on ""SORT BY RATING"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-022,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-002,MR_CE,2,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-031,MR_CE,2,fail,"mediator error on ""show electronics under $100 sorted by rating in a table"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-001,MR_CA,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-011,MR_AC,2,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-004,MR_AC,2,fail,"mediator error on ""show items under $100"": Invalid command",,"category=""electronics"" maxPrice=100"
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,2,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,"category=""electronics"" maxPrice=100 minRating=4"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-016,MR_COMP,2,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-003,MR_CA,2,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-010,MR_CE,2,fail,"mediator error on ""FILTER TO ELECTRONICS ONLY"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-016,MR_CE,2,fail,"V′ ≠ V″ on: category, inStockOnly, maxPrice, minRating","category=""electronics"" inStockOnly=true maxPrice=200 minRating=4 sort=""rating_desc""","sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-005,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-017,MR_COMP,2,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-001,MR_COMP,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-022,MR_COMP,2,fail,"mediator error on ""rated 4 stars and up"": Could not parse LLM response as JSON","minRating=4 sort=""rating_desc""","maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-004,MR_CE,2,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-009,MR_COMP,2,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-027,MR_COMP,2,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-004,MR_CA,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-008,MR_CA,2,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-021,MR_CE,2,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-029,MR_CE,2,fail,"mediator error on ""sort by rating"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-002,MR_CA,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-010,MR_COMP,2,fail,"mediator error on ""show items under $100 rated 4 stars and up"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-008,MR_AC,2,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-014,MR_COMP,2,fail,"mediator error on ""show items rated 4 stars and up that are in stock"": Invalid command",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-007,MR_CE,2,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-017,MR_CE,2,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-002,MR_AC,2,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-007,MR_CA,2,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-027,MR_CE,2,fail,"mediator error on ""show items rated 4 stars and up in a table"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-006,MR_AC,2,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-004,MR_COMP,2,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-001,MR_CE,2,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-006,MR_CE,2,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-009,MR_AC,2,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-019,MR_COMP,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-029,MR_CE,3,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-002,MR_CE,3,fail,"mediator error on ""show items cheaper than $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-003,MR_REV,3,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-024,MR_CE,3,fail,"mediator error on ""filter to electronics only in a table"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-002,MR_CA,3,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,3,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-004,MR_CA,3,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-031,MR_CE,3,fail,"mediator error on ""show electronics under $100 sorted by rating in a table"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-006,MR_COMP,3,fail,"mediator error on ""under $100"": Could not parse LLM response as JSON","category=""electronics""","category=""electronics"" maxPrice=100"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-028,MR_CE,3,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-011,MR_COMP,3,fail,"mediator error on ""show items under $100"": Invalid command",,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-002,MR_REV,3,pass,O(σ″) = O(σ0),,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-008,MR_COMP,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-025,MR_COMP,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,"maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-021,MR_COMP,3,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-009,MR_COMP,3,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,3,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-029,MR_COMP,3,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-015,MR_CE,3,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-023,MR_COMP,3,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",inStockOnly=true,"inStockOnly=true maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-003,MR_AC,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-012,MR_CE,3,fail,"mediator error on ""show items cheaper than $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-012,MR_AC,3,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-001,MR_CE,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-002,MR_AC,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-013,MR_CE,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-005,MR_AC,3,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-024,MR_COMP,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-003,MR_CA,3,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON","category=""electronics""","category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-032,MR_CE,3,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-002,MR_COMP,3,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-004,MR_COMP,3,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-021,MR_CE,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-006,MR_AC,3,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-010,MR_CA,3,fail,"mediator error on ""hide out-of-stock items"": Invalid command","inStockOnly=true sort=""rating_desc""",inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-010,MR_CE,3,fail,"mediator error on ""filter to electronics only"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-010,MR_COMP,3,fail,"mediator error on ""rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-004,MR_AC,3,fail,"mediator error on ""show items under $100 in electronics"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-009,MR_CE,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-001,MR_REV,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-011,MR_CE,3,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-009,MR_AC,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-004,MR_REV,3,fail,"mediator error on ""show out-of-stock items again"": Could not parse LLM response as JSON",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-003,MR_CE,3,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-005,MR_REV,3,pass,O(σ″) = O(σ0),,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-007,MR_COMP,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-006,MR_CE,3,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-015,MR_COMP,3,fail,"mediator error on ""hide out-of-stock items"": Invalid command","category=""electronics"" inStockOnly=true",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-008,MR_CA,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-008,MR_AC,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-006,MR_CA,3,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",inStockOnly=true maxPrice=100,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-020,MR_COMP,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"" inStockOnly=true sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-022,MR_CE,3,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-003,MR_COMP,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",minRating=4,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-017,MR_COMP,3,fail,"mediator error on ""hide out-of-stock items"": Invalid command",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-014,MR_CE,3,fail,"mediator error on ""HIDE OUT-OF-STOCK ITEMS"": Invalid command",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-005,MR_CE,3,fail,"mediator error on ""order the results by best rated first"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-022,MR_COMP,3,fail,"mediator error on ""show items under $100 rated 4 stars and up sorted by rating"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-014,MR_COMP,3,fail,"mediator error on ""that are in stock"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-005,MR_COMP,3,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-013,MR_COMP,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-011,MR_AC,3,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-026,MR_CE,3,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-019,MR_CE,3,fail,"mediator error on ""display items under $100"": Invalid command",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-001,MR_COMP,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-008,MR_CE,3,fail,"mediator error on ""I'm looking for something to read"": Could not parse LLM response as JSON","category=""books""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-004,MR_CE,3,fail,"mediator error on ""sort by best rated first"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-025,MR_CE,3,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-001,MR_AC,3,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-017,MR_CE,3,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-030,MR_CE,3,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,"category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-028,MR_COMP,3,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,"inStockOnly=true maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-027,MR_COMP,3,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,"category=""electronics"" sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-009,MR_CA,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-023,MR_CE,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-016,MR_COMP,3,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-001,MR_CA,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-020,MR_CE,3,fail,"mediator error on ""show items cheaper than $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,3,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-026,MR_COMP,3,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-027,MR_CE,3,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-005,MR_CA,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-012,MR_COMP,3,fail,"mediator error on ""show items rated 4 stars and up in electronics"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-007,MR_CE,3,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-018,MR_COMP,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-007,MR_AC,3,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-018,MR_CE,3,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-016,MR_CE,3,fail,"mediator error on ""ORDER THE RESULTS BY RATING"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-010,MR_AC,3,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-007,MR_CA,3,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-001,MR_CA,4,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-005,MR_CA,4,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-004,MR_REV,4,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-010,MR_COMP,4,fail,"mediator error on ""show items under $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-001,MR_CE,4,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-008,MR_CE,4,fail,"mediator error on ""show books"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-016,MR_CE,4,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-018,MR_COMP,4,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-006,MR_COMP,4,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100","category=""electronics"" maxPrice=100"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-006,MR_CE,4,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-021,MR_CE,4,fail,"mediator error on ""display items rated 4 stars and up"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-017,MR_CE,4,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-023,MR_COMP,4,fail,"mediator error on ""that are in stock"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-010,MR_AC,4,fail,"mediator error on ""hide out-of-stock items in electronics"": Could not parse LLM response as JSON",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-011,MR_CE,4,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-004,MR_CE,4,fail,"mediator error on ""sort by best rated first"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-004,MR_COMP,4,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-005,MR_REV,4,fail,"mediator error on ""use the default order"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-016,MR_COMP,4,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-012,MR_COMP,4,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-009,MR_AC,4,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-015,MR_CE,4,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-001,MR_AC,4,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-026,MR_CE,4,fail,"mediator error on ""show items cheaper than $100 in a table"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-005,MR_AC,4,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-022,MR_CE,4,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-002,MR_CA,4,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-012,MR_AC,4,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-022,MR_COMP,4,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-021,MR_COMP,4,fail,"mediator error on ""in electronics"": Could not parse LLM response as JSON","category=""electronics"" sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-013,MR_CE,4,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-020,MR_COMP,4,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-024,MR_CE,4,fail,"mediator error on ""filter to electronics only in a table"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-001,MR_COMP,4,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-008,MR_CA,4,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,4,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON","sort=""rating_desc""",inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-010,MR_CE,4,fail,"mediator error on ""filter to electronics only"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-009,MR_CE,4,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-005,MR_COMP,4,fail,"mediator error on ""sort by rating"": Invalid command","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-030,MR_CE,4,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,"category=""electronics"" inStockOnly=true minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-015,MR_COMP,4,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-017,MR_COMP,4,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-007,MR_CA,4,fail,"mediator error on ""show items under $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-008,MR_COMP,4,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-027,MR_CE,4,fail,"mediator error on ""show items rated 4 stars and up in a table"": Invalid command",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-029,MR_COMP,4,fail,"mediator error on ""hide out-of-stock items rated 4 stars and up sorted by rating"": Invalid command","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-003,MR_AC,4,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-003,MR_CE,4,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-025,MR_CE,4,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-002,MR_AC,4,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,4,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-023,MR_CE,4,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,4,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-027,MR_COMP,4,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-014,MR_CE,4,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-011,MR_COMP,4,fail,"mediator error on ""that are in stock"": Could not parse LLM response as JSON",maxPrice=100,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-010,MR_CA,4,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON","inStockOnly=true sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-020,MR_CE,4,fail,"mediator error on ""show items cheaper than $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-028,MR_COMP,4,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,"maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-008,MR_AC,4,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-011,MR_AC,4,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-009,MR_COMP,4,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-003,MR_COMP,4,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,4,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-028,MR_CE,4,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-019,MR_COMP,4,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-003,MR_REV,4,fail,"mediator error on ""remove the rating filter"": Could not parse LLM response as JSON",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-029,MR_CE,4,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-001,MR_REV,4,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-002,MR_COMP,4,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-019,MR_CE,4,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-014,MR_COMP,4,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",inStockOnly=true minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-007,MR_CE,4,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-018,MR_CE,4,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-002,MR_REV,4,fail,"mediator error on ""remove the price limit"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-003,MR_CA,4,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-004,MR_AC,4,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-025,MR_COMP,4,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON","minRating=4 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-032,MR_CE,4,fail,"mediator error on ""sorted by rating show electronics under $100"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,4,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",maxPrice=100,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-006,MR_CA,4,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-006,MR_AC,4,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-002,MR_CE,4,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-012,MR_CE,4,fail,"mediator error on ""show items cheaper than $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-013,MR_COMP,4,fail,V′ ≠ V″ on: minRating,maxPrice=100,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-007,MR_COMP,4,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-026,MR_COMP,4,fail,"mediator error on ""that are in stock"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-024,MR_COMP,4,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-031,MR_CE,4,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-007,MR_AC,4,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-005,MR_CE,4,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-004,MR_CA,4,fail,"mediator error on ""show electronics items"": Invalid command",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-009,MR_CA,4,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-025,MR_CE,5,fail,"mediator error on ""show items under $100 in a table"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-004,MR_AC,5,fail,"mediator error on ""show items under $100 in electronics"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-004,MR_REV,5,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-014,MR_CE,5,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-018,MR_COMP,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-032,MR_CE,5,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-010,MR_AC,5,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-006,MR_CE,5,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-001,MR_CE,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-021,MR_COMP,5,fail,"mediator error on ""sort by rating"": Invalid command","category=""electronics"" maxPrice=100",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-011,MR_COMP,5,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-002,MR_COMP,5,fail,"mediator error on ""show items under $100"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-019,MR_CE,5,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-007,MR_CE,5,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-007,MR_CA,5,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,"maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-024,MR_COMP,5,fail,"mediator error on ""in electronics"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-010,MR_CA,5,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-013,MR_CE,5,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-009,MR_CA,5,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-005,MR_CE,5,fail,"V′ ≠ V″ on: category, inStockOnly, maxPrice, minRating","sort=""rating_desc""","category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-020,MR_CE,5,fail,"mediator error on ""show items cheaper than $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-006,MR_AC,5,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-009,MR_CE,5,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-007,MR_AC,5,fail,"mediator error on ""show items rated 4 stars and up in electronics"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-031,MR_CE,5,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-019,MR_COMP,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-017,MR_CE,5,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-003,MR_CE,5,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-023,MR_CE,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-017,MR_COMP,5,fail,"mediator error on ""hide out-of-stock items"": Invalid command",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,5,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-004,MR_CA,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-009,MR_COMP,5,fail,"mediator error on ""show items under $100 in electronics"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-003,MR_COMP,5,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-024,MR_CE,5,fail,"mediator error on ""filter to electronics only"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-028,MR_CE,5,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-011,MR_CE,5,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-003,MR_CA,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-011,MR_AC,5,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-005,MR_CA,5,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-002,MR_AC,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-008,MR_CE,5,fail,"mediator error on ""show books"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-005,MR_COMP,5,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-030,MR_CE,5,fail,"mediator error on ""order the results by rating in a table"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-012,MR_CE,5,fail,"mediator error on ""show items cheaper than $100"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-001,MR_AC,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-010,MR_COMP,5,fail,"mediator error on ""show items under $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-028,MR_COMP,5,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON","inStockOnly=true sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,5,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-014,MR_COMP,5,fail,"mediator error on ""show items rated 4 stars and up that are in stock"": Could not parse LLM response as JSON",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-016,MR_COMP,5,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,5,fail,"mediator error on ""sort by rating"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-001,MR_CA,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-012,MR_COMP,5,fail,"mediator error on ""in electronics"": Could not parse LLM response as JSON",minRating=4,"category=""electronics"" minRating=4"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-015,MR_CE,5,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-022,MR_CE,5,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-018,MR_CE,5,fail,"mediator error on ""display electronics items"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100 minRating=4"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-002,MR_CA,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-006,MR_CA,5,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",inStockOnly=true,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-015,MR_COMP,5,fail,"mediator error on ""hide out-of-stock items in electronics"": Could not parse LLM response as JSON","category=""electronics"" inStockOnly=true",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-004,MR_CE,5,fail,"mediator error on ""sort by best rated first"": Invalid command","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-026,MR_COMP,5,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,"inStockOnly=true minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-027,MR_COMP,5,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,"category=""electronics"" inStockOnly=true sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-006,MR_COMP,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,5,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-012,MR_AC,5,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-008,MR_CA,5,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-013,MR_COMP,5,fail,"mediator error on ""show items rated 4 stars and up under $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-004,MR_COMP,5,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-001,MR_REV,5,pass,O(σ″) = O(σ0),,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-027,MR_CE,5,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-021,MR_CE,5,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-001,MR_COMP,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-002,MR_CE,5,fail,"mediator error on ""show items cheaper than $100"": Invalid command",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-005,MR_REV,5,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-016,MR_CE,5,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-005,MR_AC,5,fail,"mediator error on ""show items under $100 rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-010,MR_CE,5,pass,O(σ′) = O(σ″),"category=""electronics""","category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-023,MR_COMP,5,fail,"mediator error on ""show items under $100"": Invalid command","inStockOnly=true maxPrice=100 sort=""rating_desc""","inStockOnly=true maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-003,MR_REV,5,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-008,MR_COMP,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-002,MR_REV,5,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-020,MR_COMP,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"" inStockOnly=true sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-007,MR_COMP,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-009,MR_AC,5,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-025,MR_COMP,5,fail,"mediator error on ""under $100"": Could not parse LLM response as JSON",minRating=4,"maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-029,MR_CE,5,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-029,MR_COMP,5,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-003,MR_AC,5,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-008,MR_AC,5,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-026,MR_CE,5,fail,"mediator error on ""show items cheaper than $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-022,MR_COMP,5,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",maxPrice=100 minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-012,MR_CE,6,fail,"mediator error on ""SHOW ITEMS CHEAPER THAN $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-029,MR_CE,6,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-010,MR_COMP,6,fail,"mediator error on ""rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-004,MR_CA,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-002,MR_AC,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-027,MR_COMP,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-005,MR_CE,6,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-006,MR_CE,6,fail,"mediator error on ""list the tech products below $100, best rated first"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-004,MR_AC,6,fail,"mediator error on ""show items under $100 in electronics"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-031,MR_CE,6,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-004,MR_REV,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-012,MR_COMP,6,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-029,MR_COMP,6,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-011,MR_COMP,6,fail,"mediator error on ""that are in stock"": Could not parse LLM response as JSON",maxPrice=100,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-030,MR_CE,6,fail,"mediator error on ""order the results by rating in a table"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-003,MR_REV,6,fail,"mediator error on ""remove the rating filter"": Invalid command",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-032,MR_CE,6,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,6,fail,"mediator error on ""show items under $100"": Invalid command",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-024,MR_CE,6,fail,"mediator error on ""filter to electronics only in a table"": Invalid command","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-017,MR_CE,6,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-005,MR_CA,6,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-007,MR_CE,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-004,MR_COMP,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-027,MR_CE,6,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,6,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-003,MR_AC,6,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-019,MR_CE,6,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-001,MR_CA,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-012,MR_AC,6,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-026,MR_COMP,6,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-005,MR_COMP,6,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-019,MR_COMP,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-006,MR_COMP,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-009,MR_CA,6,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",minRating=4,"minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-010,MR_CE,6,fail,"mediator error on ""filter to electronics only"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-018,MR_COMP,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-007,MR_AC,6,fail,"mediator error on ""show items rated 4 stars and up in electronics"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-013,MR_CE,6,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-001,MR_AC,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-010,MR_AC,6,fail,"mediator error on ""hide out-of-stock items in electronics"": Could not parse LLM response as JSON",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-028,MR_COMP,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command","maxPrice=100 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-024,MR_COMP,6,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-013,MR_COMP,6,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",maxPrice=100 minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-002,MR_REV,6,pass,O(σ″) = O(σ0),,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-022,MR_COMP,6,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-015,MR_CE,6,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-002,MR_CE,6,fail,"mediator error on ""show items under $100"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-015,MR_COMP,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-014,MR_CE,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-026,MR_CE,6,fail,"mediator error on ""show items cheaper than $100"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-011,MR_AC,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-021,MR_CE,6,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-025,MR_CE,6,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-004,MR_CE,6,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-007,MR_COMP,6,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-010,MR_CA,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-014,MR_COMP,6,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-001,MR_COMP,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-025,MR_COMP,6,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-021,MR_COMP,6,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-003,MR_CE,6,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-009,MR_COMP,6,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-008,MR_CA,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-003,MR_COMP,6,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-028,MR_CE,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-023,MR_CE,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-002,MR_COMP,6,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-001,MR_CE,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-001,MR_REV,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-005,MR_AC,6,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-008,MR_CE,6,fail,"mediator error on ""show books"": Could not parse LLM response as JSON",,"category=""books"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-009,MR_CE,6,fail,"mediator error on ""SHOW ELECTRONICS ITEMS"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-022,MR_CE,6,fail,"mediator error on ""display electronics under $100 sorted by rating"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-020,MR_COMP,6,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-018,MR_CE,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-020,MR_CE,6,fail,"mediator error on ""display items cheaper than $100"": Invalid command",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-003,MR_CA,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-017,MR_COMP,6,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,inStockOnly=true minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-009,MR_AC,6,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-016,MR_CE,6,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-023,MR_COMP,6,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",inStockOnly=true,"inStockOnly=true maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-002,MR_CA,6,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-006,MR_CA,6,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-011,MR_CE,6,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-008,MR_AC,6,fail,"mediator error on ""show items rated 4 stars and up under $100"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-008,MR_COMP,6,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON","category=""electronics"" inStockOnly=true",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-005,MR_REV,6,fail,"mediator error on ""sort by rating"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-006,MR_AC,6,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-007,MR_CA,6,fail,"mediator error on ""show items under $100"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-016,MR_COMP,6,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,6,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-029,MR_COMP,7,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",minRating=4,"minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-024,MR_CE,7,fail,"mediator error on ""filter to electronics only in a table"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-023,MR_COMP,7,fail,"V′ ≠ V″ on: inStockOnly, maxPrice","sort=""rating_desc""","inStockOnly=true maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-018,MR_CE,7,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-023,MR_CE,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-007,MR_COMP,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-005,MR_CA,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-011,MR_COMP,7,fail,"mediator error on ""that are in stock"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-001,MR_AC,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-009,MR_COMP,7,fail,"mediator error on ""in electronics"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-007,MR_AC,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-006,MR_CE,7,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-022,MR_COMP,7,fail,"mediator error on ""rated 4 stars and up"": Could not parse LLM response as JSON","minRating=4 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-008,MR_AC,7,fail,"mediator error on ""show items rated 4 stars and up under $100"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-008,MR_CE,7,fail,"mediator error on ""show books"": Could not parse LLM response as JSON",,"category=""books"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-006,MR_AC,7,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-001,MR_CA,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100",maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-019,MR_COMP,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"" minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-030,MR_CE,7,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-004,MR_CE,7,fail,"mediator error on ""sort by best rated first"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-022,MR_CE,7,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-029,MR_CE,7,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-004,MR_REV,7,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-028,MR_COMP,7,fail,"mediator error on ""hide out-of-stock items"": Invalid command",inStockOnly=true maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-015,MR_CE,7,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-016,MR_COMP,7,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-012,MR_AC,7,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,inStockOnly=true minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-004,MR_COMP,7,fail,"mediator error on ""hide out-of-stock items"": Invalid command",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-001,MR_CE,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-011,MR_AC,7,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-006,MR_COMP,7,fail,"mediator error on ""show electronics items"": Invalid command","category=""electronics"" maxPrice=100",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-012,MR_CE,7,fail,"mediator error on ""SHOW ITEMS CHEAPER THAN $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-020,MR_COMP,7,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"" inStockOnly=true sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-010,MR_CA,7,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,"inStockOnly=true sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-032,MR_CE,7,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-003,MR_AC,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-016,MR_CE,7,fail,"mediator error on ""order the results by rating"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-002,MR_CA,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-018,MR_COMP,7,fail,"mediator error on ""show electronics items"": Invalid command","category=""electronics"" maxPrice=100","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-005,MR_COMP,7,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-008,MR_CA,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-021,MR_CE,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-009,MR_CE,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-021,MR_COMP,7,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON","category=""electronics""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-007,MR_CE,7,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-002,MR_CE,7,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-011,MR_CE,7,fail,"mediator error on ""show items under $100"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,7,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-002,MR_REV,7,pass,O(σ″) = O(σ0),,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-014,MR_CE,7,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-003,MR_COMP,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-027,MR_CE,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-008,MR_COMP,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-009,MR_AC,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-024,MR_COMP,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-013,MR_COMP,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100 minRating=4,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-005,MR_AC,7,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-002,MR_COMP,7,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-014,MR_COMP,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-028,MR_CE,7,fail,"mediator error on ""hide out-of-stock items in a table"": Invalid command",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-003,MR_CA,7,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-010,MR_CE,7,fail,"mediator error on ""FILTER TO ELECTRONICS ONLY"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-026,MR_CE,7,fail,"mediator error on ""show items cheaper than $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-004,MR_AC,7,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-001,MR_COMP,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-027,MR_COMP,7,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-010,MR_AC,7,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-026,MR_COMP,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-003,MR_REV,7,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-019,MR_CE,7,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-025,MR_COMP,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,"maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-010,MR_COMP,7,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,7,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-002,MR_AC,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-025,MR_CE,7,fail,"mediator error on ""show items under $100 in a table"": Invalid command",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-015,MR_COMP,7,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-012,MR_COMP,7,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-007,MR_CA,7,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-017,MR_CE,7,fail,"mediator error on ""SHOW ELECTRONICS UNDER $100 SORTED BY RATING"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-009,MR_CA,7,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-001,MR_REV,7,fail,"mediator error on ""show all categories"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-004,MR_CA,7,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-005,MR_REV,7,fail,"mediator error on ""sort by rating"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-006,MR_CA,7,fail,"mediator error on ""show items under $100"": Invalid command",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,7,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,"minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-003,MR_CE,7,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-013,MR_CE,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-017,MR_COMP,7,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-020,MR_CE,7,fail,"mediator error on ""show items cheaper than $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,7,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-031,MR_CE,7,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-005,MR_CE,7,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-029,MR_CE,8,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-006,MR_COMP,8,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-028,MR_COMP,8,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON","maxPrice=100 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-019,MR_CE,8,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-009,MR_COMP,8,fail,"mediator error on ""show items under $100 in electronics"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-015,MR_CE,8,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,8,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-011,MR_AC,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-030,MR_CE,8,fail,"mediator error on ""order the results by rating in a table"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-031,MR_CE,8,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-018,MR_CE,8,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-013,MR_CE,8,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-011,MR_COMP,8,fail,"mediator error on ""show items under $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-025,MR_CE,8,fail,"mediator error on ""show items under $100"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-017,MR_CE,8,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-015,MR_COMP,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-005,MR_COMP,8,fail,"mediator error on ""sort by rating"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-010,MR_AC,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-022,MR_CE,8,fail,"mediator error on ""display electronics under $100 sorted by rating"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-016,MR_COMP,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-010,MR_CA,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-013,MR_COMP,8,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-003,MR_REV,8,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-009,MR_CE,8,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-007,MR_COMP,8,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-009,MR_CA,8,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-001,MR_COMP,8,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-026,MR_CE,8,fail,"mediator error on ""show items cheaper than $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-023,MR_COMP,8,fail,"mediator error on ""show items under $100"": Invalid command",,"inStockOnly=true maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-005,MR_CA,8,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-002,MR_CE,8,fail,"mediator error on ""show items cheaper than $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-004,MR_REV,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-016,MR_CE,8,fail,"mediator error on ""order the results by rating"": Invalid command",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-007,MR_CE,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-008,MR_AC,8,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-007,MR_CA,8,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-008,MR_COMP,8,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON","category=""electronics"" inStockOnly=true",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-012,MR_COMP,8,fail,"mediator error on ""show items rated 4 stars and up in electronics"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-020,MR_COMP,8,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-008,MR_CA,8,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-011,MR_CE,8,fail,"mediator error on ""show items under $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-001,MR_CE,8,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-001,MR_REV,8,pass,O(σ″) = O(σ0),,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-018,MR_COMP,8,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-003,MR_COMP,8,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-010,MR_COMP,8,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",maxPrice=100 minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-020,MR_CE,8,fail,"mediator error on ""show items cheaper than $100"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-024,MR_COMP,8,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,8,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-005,MR_CE,8,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-027,MR_COMP,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-014,MR_CE,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-002,MR_CA,8,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,8,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-014,MR_COMP,8,fail,"mediator error on ""that are in stock"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-005,MR_AC,8,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-024,MR_CE,8,fail,"mediator error on ""filter to electronics only in a table"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-001,MR_CA,8,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-007,MR_AC,8,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-002,MR_REV,8,pass,O(σ″) = O(σ0),,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-005,MR_REV,8,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-006,MR_CA,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-003,MR_CE,8,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-004,MR_AC,8,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,"category=""electronics"" maxPrice=100"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-010,MR_CE,8,fail,"mediator error on ""filter to electronics only"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-028,MR_CE,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-009,MR_AC,8,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-023,MR_CE,8,fail,"mediator error on ""show electronics items in a table"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-022,MR_COMP,8,fail,"mediator error on ""rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-021,MR_CE,8,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-026,MR_COMP,8,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,"inStockOnly=true minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-017,MR_COMP,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-004,MR_CE,8,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-002,MR_COMP,8,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-001,MR_AC,8,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-004,MR_COMP,8,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-012,MR_AC,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-019,MR_COMP,8,fail,"mediator error on ""rated 4 stars and up"": Could not parse LLM response as JSON","category=""electronics""","category=""electronics"" minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-021,MR_COMP,8,fail,"mediator error on ""show items under $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-004,MR_CA,8,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-003,MR_CA,8,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-008,MR_CE,8,fail,"mediator error on ""show books"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-025,MR_COMP,8,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON","maxPrice=100 minRating=4 sort=""rating_desc""","maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-002,MR_AC,8,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-032,MR_CE,8,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-029,MR_COMP,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command","minRating=4 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-006,MR_CE,8,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,"category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-003,MR_AC,8,fail,"mediator error on ""show electronics items that are in stock"": Invalid command","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,8,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-006,MR_AC,8,fail,"mediator error on ""show items under $100"": Invalid command",,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-027,MR_CE,8,fail,"mediator error on ""show items rated 4 stars and up in a table"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,8,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-012,MR_CE,8,fail,"mediator error on ""show items cheaper than $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-025,MR_CE,9,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-023,MR_COMP,9,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",inStockOnly=true,"inStockOnly=true maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-001,MR_REV,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-009,MR_CE,9,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-019,MR_COMP,9,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-012,MR_CE,9,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-010,MR_CA,9,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-009,MR_COMP,9,fail,"mediator error on ""show items under $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-028,MR_COMP,9,fail,"mediator error on ""hide out-of-stock items"": Invalid command",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-004,MR_CE,9,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-016,MR_CE,9,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-008,MR_CE,9,fail,"mediator error on ""show books"": Could not parse LLM response as JSON",,"category=""books"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-004,MR_AC,9,pass,V_ref = V_base[d ↦ w] and D_ref ⊆ D_base,maxPrice=100,"category=""electronics"" maxPrice=100"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-005,MR_AC,9,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-008,MR_COMP,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-021,MR_CE,9,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-001,MR_COMP,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-007,MR_COMP,9,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-013,MR_COMP,9,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100 minRating=4,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-002,MR_AC,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-005,MR_CA,9,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",minRating=4,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-029,MR_COMP,9,fail,"mediator error on ""hide out-of-stock items"": Invalid command","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-004,MR_REV,9,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-019,MR_CE,9,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-003,MR_CE,9,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-024,MR_CE,9,fail,"mediator error on ""filter to electronics only"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-005,MR_REV,9,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-006,MR_CA,9,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-003,MR_COMP,9,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-007,MR_CE,9,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-029,MR_CE,9,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-013,MR_CE,9,fail,"mediator error on ""SHOW ITEMS RATED 4 STARS AND UP"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-014,MR_COMP,9,fail,"mediator error on ""that are in stock"": Could not parse LLM response as JSON",minRating=4,inStockOnly=true minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-011,MR_COMP,9,fail,"mediator error on ""that are in stock"": Could not parse LLM response as JSON",maxPrice=100,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-010,MR_AC,9,fail,"mediator error on ""hide out-of-stock items in electronics"": Could not parse LLM response as JSON",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-012,MR_AC,9,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-006,MR_COMP,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-018,MR_COMP,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-011,MR_AC,9,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-024,MR_COMP,9,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,9,fail,"mediator error on ""show items under $100"": Invalid command",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-030,MR_CE,9,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,"category=""electronics"" inStockOnly=true maxPrice=200 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-009,MR_CA,9,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-004,MR_CA,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-001,MR_CE,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-028,MR_CE,9,fail,"mediator error on ""hide out-of-stock items in a table"": Invalid command",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-001,MR_CA,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-008,MR_AC,9,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,9,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-014,MR_CE,9,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-006,MR_AC,9,fail,"mediator error on ""show items under $100 that are in stock"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-011,MR_CE,9,fail,"mediator error on ""SHOW ITEMS UNDER $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-002,MR_CE,9,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-015,MR_CE,9,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-021,MR_COMP,9,fail,"V′ ≠ V″ on: category, maxPrice","sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-031,MR_CE,9,pass,O(σ′) = O(σ″),"category=""electronics"" maxPrice=100 sort=""rating_desc""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-010,MR_COMP,9,fail,"mediator error on ""show items under $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-005,MR_COMP,9,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-027,MR_CE,9,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-022,MR_COMP,9,fail,"mediator error on ""show items under $100"": Invalid command",maxPrice=100 minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-002,MR_REV,9,pass,O(σ″) = O(σ0),,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-017,MR_CE,9,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-007,MR_AC,9,fail,"mediator error on ""show items rated 4 stars and up in electronics"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-016,MR_COMP,9,fail,"mediator error on ""hide out-of-stock items"": Invalid command",inStockOnly=true maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-008,MR_CA,9,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-004,MR_COMP,9,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-003,MR_AC,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,9,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,"sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-017,MR_COMP,9,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-015,MR_COMP,9,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-005,MR_CE,9,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-002,MR_COMP,9,fail,"mediator error on ""show items under $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-010,MR_CE,9,fail,"mediator error on ""FILTER TO ELECTRONICS ONLY"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,9,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-027,MR_COMP,9,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-026,MR_COMP,9,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-022,MR_CE,9,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-012,MR_COMP,9,fail,"mediator error on ""in electronics"": Could not parse LLM response as JSON",minRating=4,"category=""electronics"" minRating=4"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-020,MR_CE,9,fail,"mediator error on ""display items cheaper than $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-026,MR_CE,9,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-003,MR_CA,9,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"inStockOnly=true sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-025,MR_COMP,9,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,"maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-023,MR_CE,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-003,MR_REV,9,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-002,MR_CA,9,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-001,MR_AC,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-006,MR_CE,9,fail,"mediator error on ""list the tech products below $100, best rated first"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-032,MR_CE,9,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-018,MR_CE,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-009,MR_AC,9,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-020,MR_COMP,9,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-007,MR_CA,9,fail,"mediator error on ""sort by rating"": Invalid command","sort=""rating_desc""",maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-020,MR_COMP,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-001,MR_REV,10,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-006,MR_CA,10,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-008,MR_AC,10,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-002,MR_CE,10,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-025,MR_CE,10,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-003,MR_CE,10,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-005,MR_COMP,10,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON","sort=""rating_desc""","sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-031,MR_CE,10,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-022,MR_CE,10,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-005,MR_CA,10,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-028,MR_COMP,10,fail,"mediator error on ""hide out-of-stock items"": Invalid command","maxPrice=100 sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-004,MR_CE,10,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-010,MR_CE,10,fail,"mediator error on ""filter to electronics only"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-001,MR_COMP,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-012,MR_COMP,10,fail,"mediator error on ""show items rated 4 stars and up in electronics"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-016,MR_COMP,10,fail,"mediator error on ""under $100"": Could not parse LLM response as JSON",inStockOnly=true,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-023,MR_CE,10,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-001,MR_CE,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-026,MR_COMP,10,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",inStockOnly=true minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-007,MR_CE,10,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-016,MR_CE,10,pass,O(σ′) = O(σ″),"sort=""rating_desc""","sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-027,MR_COMP,10,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-010,MR_AC,10,fail,"mediator error on ""hide out-of-stock items in electronics"": Invalid command",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-018,MR_COMP,10,fail,"mediator error on ""under $100"": Could not parse LLM response as JSON","category=""electronics""","category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-006,MR_AC,10,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,inStockOnly=true maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-001,MR_AC,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,10,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"inStockOnly=true sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-003,MR_COMP,10,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-004,MR_CA,10,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON","category=""electronics""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-030,MR_CE,10,fail,"mediator error on ""order the results by rating"": Could not parse LLM response as JSON",,"category=""electronics"" inStockOnly=true maxPrice=100 minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-008,MR_CA,10,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-028,MR_CE,10,pass,O(σ′) = O(σ″),inStockOnly=true,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-011,MR_CE,10,fail,"mediator error on ""show items under $100"": Invalid command",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-002,MR_CA,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-002,MR_REV,10,fail,"mediator error on ""remove the price limit"": Could not parse LLM response as JSON",,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-009,MR_CA,10,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",minRating=4,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-009,MR_COMP,10,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-026,MR_CE,10,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-025,MR_COMP,10,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-015,MR_CE,10,fail,"mediator error on ""SORT BY RATING"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-005,MR_AC,10,fail,"mediator error on ""show items under $100 rated 4 stars and up"": Could not parse LLM response as JSON",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-007,MR_COMP,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-006,MR_COMP,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-002,MR_COMP,10,fail,"mediator error on ""show items under $100"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-024,MR_CE,10,fail,"mediator error on ""filter to electronics only"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-013,MR_COMP,10,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,maxPrice=100 minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-008,MR_CE,10,fail,"mediator error on ""I'm looking for something to read"": Could not parse LLM response as JSON","category=""books""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,10,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-021,MR_COMP,10,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-021,MR_CE,10,pass,O(σ′) = O(σ″),minRating=4,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-012,MR_AC,10,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-004,MR_AC,10,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100"
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-008,MR_COMP,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-023,MR_COMP,10,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON","inStockOnly=true maxPrice=100 sort=""rating_desc""","inStockOnly=true maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-003,MR_CA,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-027,MR_CE,10,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,minRating=4
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,10,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",minRating=4,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-017,MR_CE,10,fail,"mediator error on ""SHOW ELECTRONICS UNDER $100 SORTED BY RATING"": Could not parse LLM response as JSON","category=""electronics"" maxPrice=100 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-013,MR_CE,10,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-018,MR_CE,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-032,MR_CE,10,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-006,MR_CE,10,fail,"mediator error on ""show electronics under $100 sorted by rating"": Could not parse LLM response as JSON",,"category=""electronics"" maxPrice=100 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-029,MR_COMP,10,fail,"mediator error on ""hide out-of-stock items"": Invalid command",,"minRating=4 sort=""rating_desc"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-014,MR_COMP,10,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-009,MR_AC,10,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-005,MR_CE,10,fail,"mediator error on ""order the results by best rated first"": Could not parse LLM response as JSON","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-002,MR_AC,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-009,MR_CE,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-011,MR_AC,10,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-004,MR_COMP,10,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,10,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-022,MR_COMP,10,fail,"mediator error on ""rated 4 stars and up"": Could not parse LLM response as JSON","minRating=4 sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-004,MR_REV,10,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-011,MR_COMP,10,fail,"mediator error on ""show items under $100 that are in stock"": Could not parse LLM response as JSON",inStockOnly=true,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-019,MR_COMP,10,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-005,MR_REV,10,fail,"mediator error on ""sort by rating"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_REV-003,MR_REV,10,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-024,MR_COMP,10,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-010,MR_CA,10,fail,"mediator error on ""hide out-of-stock items"": Invalid command","inStockOnly=true sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-001,MR_CA,10,fail,"mediator error on ""show electronics items"": Could not parse LLM response as JSON",,"category=""electronics"""
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-007,MR_AC,10,fail,"mediator error on ""show items rated 4 stars and up"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-010,MR_COMP,10,fail,"mediator error on ""show items under $100"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-020,MR_CE,10,fail,"mediator error on ""display items cheaper than $100"": Invalid command",maxPrice=100,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CA-007,MR_CA,10,fail,"mediator error on ""sort by rating"": Invalid command","sort=""rating_desc""",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-014,MR_CE,10,pass,O(σ′) = O(σ″),inStockOnly=true,inStockOnly=true
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-015,MR_COMP,10,fail,"mediator error on ""hide out-of-stock items in electronics"": Could not parse LLM response as JSON","category=""electronics"" inStockOnly=true",
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_COMP-017,MR_COMP,10,fail,"mediator error on ""hide out-of-stock items"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-029,MR_CE,10,fail,"mediator error on ""sort by rating"": Could not parse LLM response as JSON",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-012,MR_CE,10,pass,O(σ′) = O(σ″),maxPrice=100,maxPrice=100
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_AC-003,MR_AC,10,fail,"mediator error on ""show electronics items"": Invalid command",,
+llama-3.2-3b-instruct-default-t0.6-p0.9,MR_CE-019,MR_CE,10,fail,"mediator error on ""display items under $100"": Invalid command",maxPrice=100,

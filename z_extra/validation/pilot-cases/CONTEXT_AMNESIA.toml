@@ -1,0 +1,61 @@
+relation = "CONTEXT_AMNESIA"
+
+[[case]]
+id = "CONTEXT_AMNESIA-001"
+source = "filter to clothing only"
+followup = ["filter to clothing only", "sort by lowest price first", "sort by highest price first"]
+
+[case.writes]
+"filter to clothing only" = ["category"]
+"sort by lowest price first" = ["sort"]
+"sort by highest price first" = ["sort"]
+
+[[case]]
+id = "CONTEXT_AMNESIA-002"
+source = "show books items"
+followup = ["show books items", "sort by highest price first", "sort by rating"]
+
+[case.writes]
+"show books items" = ["category"]
+"sort by highest price first" = ["sort"]
+"sort by rating" = ["sort"]
+
+[[case]]
+id = "CONTEXT_AMNESIA-003"
+source = "show items cheaper than $25"
+followup = ["show items cheaper than $25", "sort by rating", "sort by name"]
+
+[case.writes]
+"show items cheaper than $25" = ["maxPrice"]
+"sort by rating" = ["sort"]
+"sort by name" = ["sort"]
+
+[[case]]
+id = "CONTEXT_AMNESIA-004"
+source = "show items cheaper than $100"
+followup = ["show items cheaper than $100", "sort by rating", "sort by name"]
+
+[case.writes]
+"show items cheaper than $100" = ["maxPrice"]
+"sort by rating" = ["sort"]
+"sort by name" = ["sort"]
+
+[[case]]
+id = "CONTEXT_AMNESIA-005"
+source = "show items rated 3 stars and up"
+followup = ["show items rated 3 stars and up", "sort by highest price first", "sort by rating"]
+
+[case.writes]
+"show items rated 3 stars and up" = ["minRating"]
+"sort by highest price first" = ["sort"]
+"sort by rating" = ["sort"]
+
+[[case]]
+id = "CONTEXT_AMNESIA-006"
+source = "show items rated 3 stars and up"
+followup = ["show items rated 3 stars and up", "sort by lowest price first", "sort by highest price first"]
+
+[case.writes]
+"show items rated 3 stars and up" = ["minRating"]
+"sort by lowest price first" = ["sort"]
+"sort by highest price first" = ["sort"]

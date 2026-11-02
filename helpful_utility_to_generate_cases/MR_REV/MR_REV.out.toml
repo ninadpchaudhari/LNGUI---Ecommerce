@@ -1,0 +1,46 @@
+relation = "MR_REV"
+
+[[case]]
+id = "MR_REV-001"
+source = []
+followup = ["show electronics items", "show all categories"]
+
+[case.writes]
+"show electronics items" = ["category"]
+"show all categories" = ["category"]
+
+[[case]]
+id = "MR_REV-002"
+source = []
+followup = ["show items under $100", "remove the price limit"]
+
+[case.writes]
+"show items under $100" = ["maxPrice"]
+"remove the price limit" = ["maxPrice"]
+
+[[case]]
+id = "MR_REV-003"
+source = []
+followup = ["show items rated 4 stars and up", "remove the rating filter"]
+
+[case.writes]
+"show items rated 4 stars and up" = ["minRating"]
+"remove the rating filter" = ["minRating"]
+
+[[case]]
+id = "MR_REV-004"
+source = []
+followup = ["hide out-of-stock items", "show out-of-stock items again"]
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"show out-of-stock items again" = ["inStockOnly"]
+
+[[case]]
+id = "MR_REV-005"
+source = []
+followup = ["sort by rating", "use the default order"]
+
+[case.writes]
+"sort by rating" = ["sort"]
+"use the default order" = ["sort"]

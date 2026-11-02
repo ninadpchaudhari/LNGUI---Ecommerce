@@ -1,0 +1,307 @@
+relation = "MR_CE"
+
+[[case]]
+id = "MR_CE-001"
+source = "show books items"
+followup = "filter to books only"
+
+[case.writes]
+"show books items" = ["category"]
+"filter to books only" = ["category"]
+
+[[case]]
+id = "MR_CE-002"
+source = "show clothing items"
+followup = "filter to clothing only"
+
+[case.writes]
+"show clothing items" = ["category"]
+"filter to clothing only" = ["category"]
+
+[[case]]
+id = "MR_CE-003"
+source = "show home goods items"
+followup = "filter to home goods only"
+
+[case.writes]
+"show home goods items" = ["category"]
+"filter to home goods only" = ["category"]
+
+[[case]]
+id = "MR_CE-004"
+source = "show sports gear items"
+followup = "filter to sports gear only"
+
+[case.writes]
+"show sports gear items" = ["category"]
+"filter to sports gear only" = ["category"]
+
+[[case]]
+id = "MR_CE-005"
+source = "show electronics under $100 sorted by rating"
+followup = "list the tech products below $100, best rated first"
+
+[case.writes]
+"show electronics under $100 sorted by rating" = ["category", "maxPrice", "sort"]
+"list the tech products below $100, best rated first" = ["category", "maxPrice", "sort"]
+
+[[case]]
+id = "MR_CE-006"
+source = "show items under $100"
+followup = "show items cheaper than $100"
+
+[case.writes]
+"show items under $100" = ["maxPrice"]
+"show items cheaper than $100" = ["maxPrice"]
+
+[[case]]
+id = "MR_CE-007"
+source = "show items under $25"
+followup = "show items cheaper than $25"
+
+[case.writes]
+"show items under $25" = ["maxPrice"]
+"show items cheaper than $25" = ["maxPrice"]
+
+[[case]]
+id = "MR_CE-008"
+source = "order the results by lowest price first"
+followup = "order the results by price low to high"
+
+[case.writes]
+"order the results by lowest price first" = ["sort"]
+"order the results by price low to high" = ["sort"]
+
+[[case]]
+id = "MR_CE-009"
+source = "sort by lowest price first"
+followup = "order the results by lowest price first"
+
+[case.writes]
+"sort by lowest price first" = ["sort"]
+"order the results by lowest price first" = ["sort"]
+
+[[case]]
+id = "MR_CE-010"
+source = "sort by highest price first"
+followup = "order the results by highest price first"
+
+[case.writes]
+"sort by highest price first" = ["sort"]
+"order the results by highest price first" = ["sort"]
+
+[[case]]
+id = "MR_CE-011"
+source = "order the results by highest price first"
+followup = "order the results by price high to low"
+
+[case.writes]
+"order the results by highest price first" = ["sort"]
+"order the results by price high to low" = ["sort"]
+
+[[case]]
+id = "MR_CE-012"
+source = "sort by rating"
+followup = "sort by best rated first"
+
+[case.writes]
+"sort by rating" = ["sort"]
+"sort by best rated first" = ["sort"]
+
+[[case]]
+id = "MR_CE-013"
+source = "order the results by rating"
+followup = "order the results by best rated first"
+
+[case.writes]
+"order the results by rating" = ["sort"]
+"order the results by best rated first" = ["sort"]
+
+[[case]]
+id = "MR_CE-014"
+source = "show electronics under $100 sorted by rating"
+followup = "SHOW ELECTRONICS UNDER $100 SORTED BY RATING"
+
+[case.writes]
+"show electronics under $100 sorted by rating" = ["category", "maxPrice", "sort"]
+"SHOW ELECTRONICS UNDER $100 SORTED BY RATING" = ["category", "maxPrice", "sort"]
+
+[[case]]
+id = "MR_CE-015"
+source = "show books under $50 sorted by lowest price first"
+followup = "display books under $50 sorted by lowest price first"
+
+[case.writes]
+"show books under $50 sorted by lowest price first" = ["category", "maxPrice", "sort"]
+"display books under $50 sorted by lowest price first" = ["category", "maxPrice", "sort"]
+
+[[case]]
+id = "MR_CE-016"
+source = "show books under $50 sorted by lowest price first"
+followup = "sorted by lowest price first show books under $50"
+
+[case.writes]
+"show books under $50 sorted by lowest price first" = ["category", "maxPrice", "sort"]
+"sorted by lowest price first show books under $50" = ["category", "maxPrice", "sort"]
+
+[[case]]
+id = "MR_CE-017"
+source = "show electronics items"
+followup = "display electronics items"
+
+[case.writes]
+"show electronics items" = ["category"]
+"display electronics items" = ["category"]
+
+[[case]]
+id = "MR_CE-018"
+source = "filter to electronics only"
+followup = "filter to electronics only in a table"
+
+[case.writes]
+"filter to electronics only" = ["category"]
+"filter to electronics only in a table" = ["category"]
+
+[[case]]
+id = "MR_CE-019"
+source = "filter to home goods only"
+followup = "FILTER TO HOME GOODS ONLY"
+
+[case.writes]
+"filter to home goods only" = ["category"]
+"FILTER TO HOME GOODS ONLY" = ["category"]
+
+[[case]]
+id = "MR_CE-020"
+source = "show home goods items"
+followup = "SHOW HOME GOODS ITEMS"
+
+[case.writes]
+"show home goods items" = ["category"]
+"SHOW HOME GOODS ITEMS" = ["category"]
+
+[[case]]
+id = "MR_CE-021"
+source = "show home goods under $50 sorted by rating"
+followup = "SHOW HOME GOODS UNDER $50 SORTED BY RATING"
+
+[case.writes]
+"show home goods under $50 sorted by rating" = ["category", "maxPrice", "sort"]
+"SHOW HOME GOODS UNDER $50 SORTED BY RATING" = ["category", "maxPrice", "sort"]
+
+[[case]]
+id = "MR_CE-022"
+source = "show home goods under $50 sorted by rating"
+followup = "display home goods under $50 sorted by rating"
+
+[case.writes]
+"show home goods under $50 sorted by rating" = ["category", "maxPrice", "sort"]
+"display home goods under $50 sorted by rating" = ["category", "maxPrice", "sort"]
+
+[[case]]
+id = "MR_CE-023"
+source = "hide out-of-stock items"
+followup = "HIDE OUT-OF-STOCK ITEMS"
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"HIDE OUT-OF-STOCK ITEMS" = ["inStockOnly"]
+
+[[case]]
+id = "MR_CE-024"
+source = "hide out-of-stock items"
+followup = "hide out-of-stock items in a table"
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"hide out-of-stock items in a table" = ["inStockOnly"]
+
+[[case]]
+id = "MR_CE-025"
+source = "show items under $25"
+followup = "display items under $25"
+
+[case.writes]
+"show items under $25" = ["maxPrice"]
+"display items under $25" = ["maxPrice"]
+
+[[case]]
+id = "MR_CE-026"
+source = "show items under $25"
+followup = "show items under $25 in a table"
+
+[case.writes]
+"show items under $25" = ["maxPrice"]
+"show items under $25 in a table" = ["maxPrice"]
+
+[[case]]
+id = "MR_CE-027"
+source = "show items under $50"
+followup = "SHOW ITEMS UNDER $50"
+
+[case.writes]
+"show items under $50" = ["maxPrice"]
+"SHOW ITEMS UNDER $50" = ["maxPrice"]
+
+[[case]]
+id = "MR_CE-028"
+source = "show items under $50"
+followup = "show items under $50 in a table"
+
+[case.writes]
+"show items under $50" = ["maxPrice"]
+"show items under $50 in a table" = ["maxPrice"]
+
+[[case]]
+id = "MR_CE-029"
+source = "show items rated 4 stars and up"
+followup = "display items rated 4 stars and up"
+
+[case.writes]
+"show items rated 4 stars and up" = ["minRating"]
+"display items rated 4 stars and up" = ["minRating"]
+
+[[case]]
+id = "MR_CE-030"
+source = "show items rated 4 stars and up"
+followup = "SHOW ITEMS RATED 4 STARS AND UP"
+
+[case.writes]
+"show items rated 4 stars and up" = ["minRating"]
+"SHOW ITEMS RATED 4 STARS AND UP" = ["minRating"]
+
+[[case]]
+id = "MR_CE-031"
+source = "sort by lowest price first"
+followup = "sort by lowest price first in a table"
+
+[case.writes]
+"sort by lowest price first" = ["sort"]
+"sort by lowest price first in a table" = ["sort"]
+
+[[case]]
+id = "MR_CE-032"
+source = "sort by lowest price first"
+followup = "SORT BY LOWEST PRICE FIRST"
+
+[case.writes]
+"sort by lowest price first" = ["sort"]
+"SORT BY LOWEST PRICE FIRST" = ["sort"]
+
+[[case]]
+id = "MR_CE-033"
+source = "sort by rating"
+followup = "sort by rating in a table"
+
+[case.writes]
+"sort by rating" = ["sort"]
+"sort by rating in a table" = ["sort"]
+
+[[case]]
+id = "MR_CE-034"
+source = "order the results by rating"
+followup = "ORDER THE RESULTS BY RATING"
+
+[case.writes]
+"order the results by rating" = ["sort"]
+"ORDER THE RESULTS BY RATING" = ["sort"]
