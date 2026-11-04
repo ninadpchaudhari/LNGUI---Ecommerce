@@ -1,0 +1,721 @@
+﻿config,case,relation,trial,verdict,reason,source_changed,followup_changed
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,1,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,2,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,3,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,4,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,5,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,6,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,7,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,8,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,9,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,10,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,1,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,2,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,3,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,4,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,5,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,6,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,7,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,8,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,9,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,10,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,1,pass,u1 kept,minRating=4,"category=""electronics"" inStockOnly=true minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,2,pass,u1 kept,minRating=4,"category=""electronics"" inStockOnly=true minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,3,pass,u1 kept,minRating=4,"category=""electronics"" inStockOnly=true minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,4,pass,u1 kept,minRating=4,"category=""electronics"" inStockOnly=true minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,5,pass,u1 kept,minRating=4,"category=""electronics"" inStockOnly=true minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,6,pass,u1 kept,minRating=4,"category=""electronics"" inStockOnly=true minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,7,pass,u1 kept,minRating=4,"category=""electronics"" inStockOnly=true minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,8,pass,u1 kept,minRating=4,"category=""electronics"" inStockOnly=true minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,9,pass,u1 kept,minRating=4,"category=""electronics"" inStockOnly=true minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,10,pass,u1 kept,minRating=4,"category=""electronics"" inStockOnly=true minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,1,pass,u1 kept,inStockOnly=true,"category=""electronics"" inStockOnly=true maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,2,pass,u1 kept,inStockOnly=true,"category=""electronics"" inStockOnly=true maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,3,pass,u1 kept,inStockOnly=true,"category=""electronics"" inStockOnly=true maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,4,pass,u1 kept,inStockOnly=true,"category=""electronics"" inStockOnly=true maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,5,pass,u1 kept,inStockOnly=true,"category=""electronics"" inStockOnly=true maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,6,pass,u1 kept,inStockOnly=true,"category=""electronics"" inStockOnly=true maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,7,pass,u1 kept,inStockOnly=true,"category=""electronics"" inStockOnly=true maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,8,pass,u1 kept,inStockOnly=true,"category=""electronics"" inStockOnly=true maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,9,fail,lost what u1 set: inStockOnly,inStockOnly=true,maxPrice=100
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,10,pass,u1 kept,inStockOnly=true,"category=""electronics"" inStockOnly=true maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,1,fail,lost what u1 set: sort,"sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,2,fail,lost what u1 set: sort,"sort=""rating_desc""","category=""electronics"" maxPrice=100 minRating=4"
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,3,pass,u1 kept,"sort=""rating_desc""","category=""electronics"" maxPrice=100 minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,4,fail,lost what u1 set: sort,"sort=""rating_desc""","category=""electronics"" maxPrice=100 minRating=4"
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,5,pass,u1 kept,"sort=""rating_desc""","category=""electronics"" maxPrice=100 minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,6,pass,u1 kept,"sort=""rating_desc""","category=""electronics"" maxPrice=100 minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,7,fail,lost what u1 set: sort,"sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,8,fail,lost what u1 set: sort,"sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,9,pass,u1 kept,"sort=""rating_desc""","category=""electronics"" maxPrice=100 minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,10,fail,lost what u1 set: sort,"sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,MR_AC-001,MR_AC,1,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-001,MR_AC,2,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-001,MR_AC,3,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-001,MR_AC,4,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-001,MR_AC,5,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-001,MR_AC,6,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-001,MR_AC,7,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-001,MR_AC,8,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-001,MR_AC,9,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-001,MR_AC,10,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-002,MR_AC,1,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-002,MR_AC,2,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-002,MR_AC,3,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-002,MR_AC,4,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-002,MR_AC,5,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-002,MR_AC,6,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-002,MR_AC,7,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-002,MR_AC,8,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-002,MR_AC,9,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-002,MR_AC,10,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-003,MR_AC,1,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-003,MR_AC,2,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-003,MR_AC,3,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-003,MR_AC,4,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-003,MR_AC,5,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-003,MR_AC,6,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-003,MR_AC,7,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-003,MR_AC,8,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-003,MR_AC,9,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-003,MR_AC,10,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-004,MR_AC,1,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-004,MR_AC,2,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-004,MR_AC,3,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-004,MR_AC,4,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-004,MR_AC,5,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-004,MR_AC,6,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-004,MR_AC,7,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-004,MR_AC,8,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-004,MR_AC,9,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-004,MR_AC,10,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_AC-005,MR_AC,1,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-005,MR_AC,2,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-005,MR_AC,3,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-005,MR_AC,4,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-005,MR_AC,5,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-005,MR_AC,6,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-005,MR_AC,7,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-005,MR_AC,8,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-005,MR_AC,9,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-005,MR_AC,10,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-006,MR_AC,1,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-006,MR_AC,2,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-006,MR_AC,3,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-006,MR_AC,4,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-006,MR_AC,5,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-006,MR_AC,6,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-006,MR_AC,7,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-006,MR_AC,8,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-006,MR_AC,9,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-006,MR_AC,10,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-007,MR_AC,1,pass,V_ref = V_base[d ↦ w],minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-007,MR_AC,2,pass,V_ref = V_base[d ↦ w],minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-007,MR_AC,3,pass,V_ref = V_base[d ↦ w],minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-007,MR_AC,4,pass,V_ref = V_base[d ↦ w],minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-007,MR_AC,5,pass,V_ref = V_base[d ↦ w],minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-007,MR_AC,6,pass,V_ref = V_base[d ↦ w],minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-007,MR_AC,7,pass,V_ref = V_base[d ↦ w],minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-007,MR_AC,8,pass,V_ref = V_base[d ↦ w],minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-007,MR_AC,9,pass,V_ref = V_base[d ↦ w],minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-007,MR_AC,10,pass,V_ref = V_base[d ↦ w],minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_AC-008,MR_AC,1,pass,V_ref = V_base[d ↦ w],minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-008,MR_AC,2,pass,V_ref = V_base[d ↦ w],minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-008,MR_AC,3,pass,V_ref = V_base[d ↦ w],minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-008,MR_AC,4,pass,V_ref = V_base[d ↦ w],minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-008,MR_AC,5,pass,V_ref = V_base[d ↦ w],minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-008,MR_AC,6,pass,V_ref = V_base[d ↦ w],minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-008,MR_AC,7,pass,V_ref = V_base[d ↦ w],minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-008,MR_AC,8,pass,V_ref = V_base[d ↦ w],minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-008,MR_AC,9,pass,V_ref = V_base[d ↦ w],minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-008,MR_AC,10,pass,V_ref = V_base[d ↦ w],minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_AC-009,MR_AC,1,pass,V_ref = V_base[d ↦ w],minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-009,MR_AC,2,pass,V_ref = V_base[d ↦ w],minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-009,MR_AC,3,pass,V_ref = V_base[d ↦ w],minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-009,MR_AC,4,pass,V_ref = V_base[d ↦ w],minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-009,MR_AC,5,pass,V_ref = V_base[d ↦ w],minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-009,MR_AC,6,pass,V_ref = V_base[d ↦ w],minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-009,MR_AC,7,pass,V_ref = V_base[d ↦ w],minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-009,MR_AC,8,pass,V_ref = V_base[d ↦ w],minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-009,MR_AC,9,pass,V_ref = V_base[d ↦ w],minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-009,MR_AC,10,pass,V_ref = V_base[d ↦ w],minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-010,MR_AC,1,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-010,MR_AC,2,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-010,MR_AC,3,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-010,MR_AC,4,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-010,MR_AC,5,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-010,MR_AC,6,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-010,MR_AC,7,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-010,MR_AC,8,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-010,MR_AC,9,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-010,MR_AC,10,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_AC-011,MR_AC,1,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-011,MR_AC,2,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-011,MR_AC,3,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-011,MR_AC,4,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-011,MR_AC,5,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-011,MR_AC,6,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-011,MR_AC,7,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-011,MR_AC,8,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-011,MR_AC,9,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-011,MR_AC,10,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_AC-012,MR_AC,1,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-012,MR_AC,2,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-012,MR_AC,3,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-012,MR_AC,4,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-012,MR_AC,5,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-012,MR_AC,6,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-012,MR_AC,7,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-012,MR_AC,8,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-012,MR_AC,9,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_AC-012,MR_AC,10,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_CA-001,MR_CA,1,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-001,MR_CA,2,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-001,MR_CA,3,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-001,MR_CA,4,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-001,MR_CA,5,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-001,MR_CA,6,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-001,MR_CA,7,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-001,MR_CA,8,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-001,MR_CA,9,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-001,MR_CA,10,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-002,MR_CA,1,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_CA-002,MR_CA,2,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_CA-002,MR_CA,3,fail,"V′ ≠ V″ on: category, minRating",minRating=4,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-002,MR_CA,4,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_CA-002,MR_CA,5,fail,"V′ ≠ V″ on: category, minRating",minRating=4,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-002,MR_CA,6,fail,"V′ ≠ V″ on: category, minRating",minRating=4,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-002,MR_CA,7,fail,"V′ ≠ V″ on: category, minRating",minRating=4,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-002,MR_CA,8,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_CA-002,MR_CA,9,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_CA-002,MR_CA,10,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_CA-003,MR_CA,1,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_CA-003,MR_CA,2,fail,V′ ≠ V″ on: inStockOnly,"category=""electronics"" inStockOnly=true","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-003,MR_CA,3,fail,V′ ≠ V″ on: inStockOnly,"category=""electronics"" inStockOnly=true","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-003,MR_CA,4,fail,V′ ≠ V″ on: inStockOnly,"category=""electronics"" inStockOnly=true","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-003,MR_CA,5,pass,V′ = V″,"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_CA-003,MR_CA,6,fail,V′ ≠ V″ on: inStockOnly,"category=""electronics"" inStockOnly=true","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-003,MR_CA,7,fail,"V′ ≠ V″ on: category, inStockOnly",inStockOnly=true,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-003,MR_CA,8,fail,V′ ≠ V″ on: inStockOnly,"category=""electronics"" inStockOnly=true","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-003,MR_CA,9,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_CA-003,MR_CA,10,fail,"V′ ≠ V″ on: category, inStockOnly",inStockOnly=true,"category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-004,MR_CA,1,fail,"V′ ≠ V″ on: category, sort","sort=""rating_desc""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-004,MR_CA,2,fail,"V′ ≠ V″ on: category, sort","sort=""rating_desc""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-004,MR_CA,3,fail,"V′ ≠ V″ on: category, sort","sort=""rating_desc""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-004,MR_CA,4,fail,V′ ≠ V″ on: sort,"category=""electronics"" sort=""rating_desc""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-004,MR_CA,5,fail,V′ ≠ V″ on: sort,"category=""electronics"" sort=""rating_desc""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-004,MR_CA,6,fail,V′ ≠ V″ on: sort,"category=""electronics"" sort=""rating_desc""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-004,MR_CA,7,fail,"V′ ≠ V″ on: category, sort","sort=""rating_desc""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-004,MR_CA,8,fail,"V′ ≠ V″ on: category, sort","sort=""rating_desc""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-004,MR_CA,9,fail,"V′ ≠ V″ on: category, sort","sort=""rating_desc""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CA-004,MR_CA,10,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CA-005,MR_CA,1,fail,"V′ ≠ V″ on: maxPrice, minRating",minRating=4,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-005,MR_CA,2,fail,"V′ ≠ V″ on: maxPrice, minRating",minRating=4,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-005,MR_CA,3,fail,"V′ ≠ V″ on: maxPrice, minRating",minRating=4,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-005,MR_CA,4,fail,"V′ ≠ V″ on: maxPrice, minRating",minRating=4,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-005,MR_CA,5,fail,"V′ ≠ V″ on: maxPrice, minRating",minRating=4,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-005,MR_CA,6,fail,"V′ ≠ V″ on: maxPrice, minRating",minRating=4,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-005,MR_CA,7,fail,"V′ ≠ V″ on: maxPrice, minRating",minRating=4,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-005,MR_CA,8,fail,"V′ ≠ V″ on: maxPrice, minRating",minRating=4,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-005,MR_CA,9,fail,"V′ ≠ V″ on: maxPrice, minRating",minRating=4,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-005,MR_CA,10,fail,"V′ ≠ V″ on: maxPrice, minRating",minRating=4,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-006,MR_CA,1,fail,V′ ≠ V″ on: inStockOnly,inStockOnly=true maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-006,MR_CA,2,fail,"V′ ≠ V″ on: inStockOnly, maxPrice",inStockOnly=true,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-006,MR_CA,3,fail,V′ ≠ V″ on: inStockOnly,inStockOnly=true maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-006,MR_CA,4,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-006,MR_CA,5,fail,"V′ ≠ V″ on: inStockOnly, maxPrice",inStockOnly=true,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-006,MR_CA,6,fail,V′ ≠ V″ on: inStockOnly,inStockOnly=true maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-006,MR_CA,7,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-006,MR_CA,8,fail,"V′ ≠ V″ on: inStockOnly, maxPrice",inStockOnly=true,maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-006,MR_CA,9,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-006,MR_CA,10,pass,V′ = V″,inStockOnly=true maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-007,MR_CA,1,fail,V′ ≠ V″ on: sort,"maxPrice=100 sort=""rating_desc""",maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-007,MR_CA,2,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-007,MR_CA,3,fail,V′ ≠ V″ on: sort,"maxPrice=100 sort=""rating_desc""",maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-007,MR_CA,4,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-007,MR_CA,5,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-007,MR_CA,6,fail,V′ ≠ V″ on: sort,"maxPrice=100 sort=""rating_desc""",maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-007,MR_CA,7,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-007,MR_CA,8,fail,V′ ≠ V″ on: sort,"maxPrice=100 sort=""rating_desc""",maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-007,MR_CA,9,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-007,MR_CA,10,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+gpt-6-luna-default-rnone,MR_CA-008,MR_CA,1,fail,V′ ≠ V″ on: inStockOnly,inStockOnly=true minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CA-008,MR_CA,2,fail,V′ ≠ V″ on: inStockOnly,inStockOnly=true minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CA-008,MR_CA,3,fail,V′ ≠ V″ on: inStockOnly,inStockOnly=true minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CA-008,MR_CA,4,fail,V′ ≠ V″ on: inStockOnly,inStockOnly=true minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CA-008,MR_CA,5,fail,V′ ≠ V″ on: inStockOnly,inStockOnly=true minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CA-008,MR_CA,6,fail,V′ ≠ V″ on: inStockOnly,inStockOnly=true minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CA-008,MR_CA,7,fail,V′ ≠ V″ on: inStockOnly,inStockOnly=true minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CA-008,MR_CA,8,fail,V′ ≠ V″ on: inStockOnly,inStockOnly=true minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CA-008,MR_CA,9,pass,V′ = V″,inStockOnly=true minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_CA-008,MR_CA,10,fail,V′ ≠ V″ on: inStockOnly,inStockOnly=true minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CA-009,MR_CA,1,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,MR_CA-009,MR_CA,2,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,MR_CA-009,MR_CA,3,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,MR_CA-009,MR_CA,4,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,MR_CA-009,MR_CA,5,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CA-009,MR_CA,6,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,MR_CA-009,MR_CA,7,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,MR_CA-009,MR_CA,8,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,MR_CA-009,MR_CA,9,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,MR_CA-009,MR_CA,10,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+gpt-6-luna-default-rnone,MR_CA-010,MR_CA,1,fail,V′ ≠ V″ on: sort,"inStockOnly=true sort=""rating_desc""",inStockOnly=true
+gpt-6-luna-default-rnone,MR_CA-010,MR_CA,2,fail,V′ ≠ V″ on: sort,"inStockOnly=true sort=""rating_desc""",inStockOnly=true
+gpt-6-luna-default-rnone,MR_CA-010,MR_CA,3,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CA-010,MR_CA,4,fail,V′ ≠ V″ on: sort,"inStockOnly=true sort=""rating_desc""",inStockOnly=true
+gpt-6-luna-default-rnone,MR_CA-010,MR_CA,5,fail,V′ ≠ V″ on: sort,"inStockOnly=true sort=""rating_desc""",inStockOnly=true
+gpt-6-luna-default-rnone,MR_CA-010,MR_CA,6,fail,V′ ≠ V″ on: sort,"inStockOnly=true sort=""rating_desc""",inStockOnly=true
+gpt-6-luna-default-rnone,MR_CA-010,MR_CA,7,fail,V′ ≠ V″ on: sort,"inStockOnly=true sort=""rating_desc""",inStockOnly=true
+gpt-6-luna-default-rnone,MR_CA-010,MR_CA,8,fail,V′ ≠ V″ on: sort,"inStockOnly=true sort=""rating_desc""",inStockOnly=true
+gpt-6-luna-default-rnone,MR_CA-010,MR_CA,9,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CA-010,MR_CA,10,fail,V′ ≠ V″ on: sort,"inStockOnly=true sort=""rating_desc""",inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-001,MR_CE,1,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-001,MR_CE,2,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-001,MR_CE,3,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-001,MR_CE,4,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-001,MR_CE,5,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-001,MR_CE,6,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-001,MR_CE,7,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-001,MR_CE,8,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-001,MR_CE,9,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-001,MR_CE,10,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-002,MR_CE,1,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-002,MR_CE,2,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-002,MR_CE,3,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-002,MR_CE,4,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-002,MR_CE,5,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-002,MR_CE,6,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-002,MR_CE,7,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-002,MR_CE,8,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-002,MR_CE,9,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-002,MR_CE,10,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-003,MR_CE,1,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-003,MR_CE,2,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-003,MR_CE,3,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-003,MR_CE,4,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-003,MR_CE,5,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-003,MR_CE,6,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-003,MR_CE,7,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-003,MR_CE,8,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-003,MR_CE,9,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-003,MR_CE,10,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-004,MR_CE,1,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-004,MR_CE,2,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-004,MR_CE,3,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-004,MR_CE,4,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-004,MR_CE,5,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-004,MR_CE,6,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-004,MR_CE,7,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-004,MR_CE,8,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-004,MR_CE,9,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-004,MR_CE,10,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-005,MR_CE,1,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-005,MR_CE,2,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-005,MR_CE,3,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-005,MR_CE,4,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-005,MR_CE,5,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-005,MR_CE,6,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-005,MR_CE,7,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-005,MR_CE,8,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-005,MR_CE,9,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-005,MR_CE,10,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_CE-006,MR_CE,1,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-006,MR_CE,2,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-006,MR_CE,3,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-006,MR_CE,4,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-006,MR_CE,5,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-006,MR_CE,6,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-006,MR_CE,7,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-006,MR_CE,8,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-006,MR_CE,9,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-006,MR_CE,10,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-007,MR_CE,1,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-007,MR_CE,2,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-007,MR_CE,3,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-007,MR_CE,4,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-007,MR_CE,5,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-007,MR_CE,6,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-007,MR_CE,7,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-007,MR_CE,8,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-007,MR_CE,9,fail,V′ ≠ V″ on: maxPrice,maxPrice=100,maxPrice=99.99
+gpt-6-luna-default-rnone,MR_CE-007,MR_CE,10,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-008,MR_CE,1,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-008,MR_CE,2,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-008,MR_CE,3,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-008,MR_CE,4,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-008,MR_CE,5,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-008,MR_CE,6,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-008,MR_CE,7,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-008,MR_CE,8,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-008,MR_CE,9,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-008,MR_CE,10,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-009,MR_CE,1,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-009,MR_CE,2,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-009,MR_CE,3,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-009,MR_CE,4,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-009,MR_CE,5,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-009,MR_CE,6,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-009,MR_CE,7,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-009,MR_CE,8,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-009,MR_CE,9,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-009,MR_CE,10,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-010,MR_CE,1,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-010,MR_CE,2,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-010,MR_CE,3,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-010,MR_CE,4,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-010,MR_CE,5,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-010,MR_CE,6,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-010,MR_CE,7,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-010,MR_CE,8,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-010,MR_CE,9,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-010,MR_CE,10,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_CE-011,MR_CE,1,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-011,MR_CE,2,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-011,MR_CE,3,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-011,MR_CE,4,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-011,MR_CE,5,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-011,MR_CE,6,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-011,MR_CE,7,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-011,MR_CE,8,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-011,MR_CE,9,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-011,MR_CE,10,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-012,MR_CE,1,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-012,MR_CE,2,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-012,MR_CE,3,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-012,MR_CE,4,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-012,MR_CE,5,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-012,MR_CE,6,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-012,MR_CE,7,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-012,MR_CE,8,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-012,MR_CE,9,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-012,MR_CE,10,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-013,MR_CE,1,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-013,MR_CE,2,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-013,MR_CE,3,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-013,MR_CE,4,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-013,MR_CE,5,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-013,MR_CE,6,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-013,MR_CE,7,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-013,MR_CE,8,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-013,MR_CE,9,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-013,MR_CE,10,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-014,MR_CE,1,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-014,MR_CE,2,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-014,MR_CE,3,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-014,MR_CE,4,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-014,MR_CE,5,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-014,MR_CE,6,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-014,MR_CE,7,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-014,MR_CE,8,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-014,MR_CE,9,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-014,MR_CE,10,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-015,MR_CE,1,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-015,MR_CE,2,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-015,MR_CE,3,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-015,MR_CE,4,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-015,MR_CE,5,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-015,MR_CE,6,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-015,MR_CE,7,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-015,MR_CE,8,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-015,MR_CE,9,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-015,MR_CE,10,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_CE-016,MR_CE,1,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-016,MR_CE,2,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-016,MR_CE,3,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-016,MR_CE,4,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-016,MR_CE,5,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-016,MR_CE,6,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-016,MR_CE,7,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-016,MR_CE,8,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-016,MR_CE,9,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-016,MR_CE,10,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-017,MR_CE,1,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-017,MR_CE,2,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-017,MR_CE,3,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-017,MR_CE,4,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-017,MR_CE,5,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-017,MR_CE,6,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-017,MR_CE,7,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-017,MR_CE,8,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-017,MR_CE,9,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-017,MR_CE,10,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-018,MR_CE,1,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-018,MR_CE,2,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-018,MR_CE,3,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-018,MR_CE,4,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-018,MR_CE,5,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-018,MR_CE,6,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-018,MR_CE,7,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-018,MR_CE,8,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-018,MR_CE,9,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-018,MR_CE,10,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-019,MR_CE,1,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-019,MR_CE,2,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-019,MR_CE,3,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-019,MR_CE,4,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-019,MR_CE,5,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-019,MR_CE,6,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-019,MR_CE,7,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-019,MR_CE,8,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-019,MR_CE,9,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-019,MR_CE,10,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-020,MR_CE,1,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-020,MR_CE,2,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-020,MR_CE,3,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-020,MR_CE,4,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-020,MR_CE,5,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-020,MR_CE,6,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-020,MR_CE,7,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-020,MR_CE,8,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-020,MR_CE,9,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-020,MR_CE,10,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_CE-021,MR_CE,1,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-021,MR_CE,2,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-021,MR_CE,3,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-021,MR_CE,4,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-021,MR_CE,5,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-021,MR_CE,6,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-021,MR_CE,7,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-021,MR_CE,8,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-021,MR_CE,9,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-021,MR_CE,10,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-022,MR_CE,1,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-022,MR_CE,2,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-022,MR_CE,3,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-022,MR_CE,4,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-022,MR_CE,5,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-022,MR_CE,6,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-022,MR_CE,7,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-022,MR_CE,8,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-022,MR_CE,9,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-022,MR_CE,10,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-023,MR_CE,1,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-023,MR_CE,2,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-023,MR_CE,3,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-023,MR_CE,4,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-023,MR_CE,5,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-023,MR_CE,6,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-023,MR_CE,7,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-023,MR_CE,8,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-023,MR_CE,9,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-023,MR_CE,10,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-024,MR_CE,1,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-024,MR_CE,2,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-024,MR_CE,3,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-024,MR_CE,4,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-024,MR_CE,5,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-024,MR_CE,6,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-024,MR_CE,7,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-024,MR_CE,8,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-024,MR_CE,9,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-024,MR_CE,10,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-025,MR_CE,1,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-025,MR_CE,2,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-025,MR_CE,3,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-025,MR_CE,4,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-025,MR_CE,5,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-025,MR_CE,6,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-025,MR_CE,7,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-025,MR_CE,8,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-025,MR_CE,9,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_CE-025,MR_CE,10,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-001,MR_COMP,1,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_COMP-001,MR_COMP,2,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_COMP-001,MR_COMP,3,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_COMP-001,MR_COMP,4,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_COMP-001,MR_COMP,5,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_COMP-001,MR_COMP,6,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_COMP-001,MR_COMP,7,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_COMP-001,MR_COMP,8,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_COMP-001,MR_COMP,9,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_COMP-001,MR_COMP,10,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+gpt-6-luna-default-rnone,MR_COMP-002,MR_COMP,1,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_COMP-002,MR_COMP,2,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_COMP-002,MR_COMP,3,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_COMP-002,MR_COMP,4,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_COMP-002,MR_COMP,5,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_COMP-002,MR_COMP,6,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_COMP-002,MR_COMP,7,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_COMP-002,MR_COMP,8,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_COMP-002,MR_COMP,9,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_COMP-002,MR_COMP,10,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+gpt-6-luna-default-rnone,MR_COMP-003,MR_COMP,1,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_COMP-003,MR_COMP,2,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_COMP-003,MR_COMP,3,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_COMP-003,MR_COMP,4,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_COMP-003,MR_COMP,5,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_COMP-003,MR_COMP,6,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_COMP-003,MR_COMP,7,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_COMP-003,MR_COMP,8,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_COMP-003,MR_COMP,9,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_COMP-003,MR_COMP,10,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+gpt-6-luna-default-rnone,MR_COMP-004,MR_COMP,1,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_COMP-004,MR_COMP,2,pass,V′ = V″,"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_COMP-004,MR_COMP,3,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_COMP-004,MR_COMP,4,pass,V′ = V″,"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_COMP-004,MR_COMP,5,pass,V′ = V″,"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_COMP-004,MR_COMP,6,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_COMP-004,MR_COMP,7,pass,V′ = V″,"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_COMP-004,MR_COMP,8,pass,V′ = V″,"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_COMP-004,MR_COMP,9,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_COMP-004,MR_COMP,10,pass,V′ = V″,"category=""electronics"" inStockOnly=true","category=""electronics"" inStockOnly=true"
+gpt-6-luna-default-rnone,MR_COMP-005,MR_COMP,1,fail,V′ ≠ V″ on: category,"sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-005,MR_COMP,2,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-005,MR_COMP,3,fail,V′ ≠ V″ on: category,"sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-005,MR_COMP,4,fail,V′ ≠ V″ on: category,"sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-005,MR_COMP,5,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-005,MR_COMP,6,fail,V′ ≠ V″ on: category,"sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-005,MR_COMP,7,fail,V′ ≠ V″ on: category,"sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-005,MR_COMP,8,fail,V′ ≠ V″ on: category,"sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-005,MR_COMP,9,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-005,MR_COMP,10,fail,V′ ≠ V″ on: category,"sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-006,MR_COMP,1,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-006,MR_COMP,2,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-006,MR_COMP,3,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-006,MR_COMP,4,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-006,MR_COMP,5,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-006,MR_COMP,6,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-006,MR_COMP,7,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-006,MR_COMP,8,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-006,MR_COMP,9,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-006,MR_COMP,10,pass,V′ = V″,maxPrice=100,maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-007,MR_COMP,1,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_COMP-007,MR_COMP,2,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_COMP-007,MR_COMP,3,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_COMP-007,MR_COMP,4,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_COMP-007,MR_COMP,5,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_COMP-007,MR_COMP,6,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_COMP-007,MR_COMP,7,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_COMP-007,MR_COMP,8,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_COMP-007,MR_COMP,9,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_COMP-007,MR_COMP,10,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+gpt-6-luna-default-rnone,MR_COMP-008,MR_COMP,1,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-008,MR_COMP,2,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-008,MR_COMP,3,pass,V′ = V″,inStockOnly=true maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-008,MR_COMP,4,pass,V′ = V″,inStockOnly=true maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-008,MR_COMP,5,pass,V′ = V″,inStockOnly=true maxPrice=100,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-008,MR_COMP,6,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-008,MR_COMP,7,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=99.99
+gpt-6-luna-default-rnone,MR_COMP-008,MR_COMP,8,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-008,MR_COMP,9,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-008,MR_COMP,10,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+gpt-6-luna-default-rnone,MR_COMP-009,MR_COMP,1,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-009,MR_COMP,2,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-009,MR_COMP,3,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-009,MR_COMP,4,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-009,MR_COMP,5,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-009,MR_COMP,6,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-009,MR_COMP,7,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-009,MR_COMP,8,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-009,MR_COMP,9,pass,V′ = V″,"maxPrice=100 sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-009,MR_COMP,10,pass,V′ = V″,"maxPrice=100 sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-010,MR_COMP,1,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_COMP-010,MR_COMP,2,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_COMP-010,MR_COMP,3,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_COMP-010,MR_COMP,4,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_COMP-010,MR_COMP,5,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_COMP-010,MR_COMP,6,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_COMP-010,MR_COMP,7,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_COMP-010,MR_COMP,8,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_COMP-010,MR_COMP,9,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_COMP-010,MR_COMP,10,pass,V′ = V″,minRating=4,minRating=4
+gpt-6-luna-default-rnone,MR_COMP-011,MR_COMP,1,pass,V′ = V″,inStockOnly=true minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_COMP-011,MR_COMP,2,pass,V′ = V″,inStockOnly=true minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_COMP-011,MR_COMP,3,pass,V′ = V″,inStockOnly=true minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_COMP-011,MR_COMP,4,pass,V′ = V″,inStockOnly=true minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_COMP-011,MR_COMP,5,pass,V′ = V″,inStockOnly=true minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_COMP-011,MR_COMP,6,pass,V′ = V″,inStockOnly=true minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_COMP-011,MR_COMP,7,pass,V′ = V″,inStockOnly=true minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_COMP-011,MR_COMP,8,pass,V′ = V″,inStockOnly=true minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_COMP-011,MR_COMP,9,pass,V′ = V″,inStockOnly=true minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_COMP-011,MR_COMP,10,pass,V′ = V″,inStockOnly=true minRating=4,inStockOnly=true minRating=4
+gpt-6-luna-default-rnone,MR_COMP-012,MR_COMP,1,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-012,MR_COMP,2,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-012,MR_COMP,3,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-012,MR_COMP,4,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-012,MR_COMP,5,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-012,MR_COMP,6,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-012,MR_COMP,7,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-012,MR_COMP,8,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-012,MR_COMP,9,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-012,MR_COMP,10,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-013,MR_COMP,1,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_COMP-013,MR_COMP,2,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_COMP-013,MR_COMP,3,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_COMP-013,MR_COMP,4,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_COMP-013,MR_COMP,5,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_COMP-013,MR_COMP,6,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_COMP-013,MR_COMP,7,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_COMP-013,MR_COMP,8,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_COMP-013,MR_COMP,9,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_COMP-013,MR_COMP,10,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+gpt-6-luna-default-rnone,MR_COMP-014,MR_COMP,1,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-014,MR_COMP,2,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-014,MR_COMP,3,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-014,MR_COMP,4,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-014,MR_COMP,5,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-014,MR_COMP,6,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-014,MR_COMP,7,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-014,MR_COMP,8,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-014,MR_COMP,9,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-014,MR_COMP,10,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-015,MR_COMP,1,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-015,MR_COMP,2,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-015,MR_COMP,3,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-015,MR_COMP,4,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-015,MR_COMP,5,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-015,MR_COMP,6,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-015,MR_COMP,7,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-015,MR_COMP,8,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-015,MR_COMP,9,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_COMP-015,MR_COMP,10,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+gpt-6-luna-default-rnone,MR_REV-001,MR_REV,1,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-001,MR_REV,2,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-001,MR_REV,3,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-001,MR_REV,4,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-001,MR_REV,5,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-001,MR_REV,6,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-001,MR_REV,7,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-001,MR_REV,8,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-001,MR_REV,9,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-001,MR_REV,10,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-002,MR_REV,1,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-002,MR_REV,2,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-002,MR_REV,3,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-002,MR_REV,4,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-002,MR_REV,5,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-002,MR_REV,6,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-002,MR_REV,7,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-002,MR_REV,8,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-002,MR_REV,9,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-002,MR_REV,10,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-003,MR_REV,1,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-003,MR_REV,2,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-003,MR_REV,3,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-003,MR_REV,4,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-003,MR_REV,5,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-003,MR_REV,6,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-003,MR_REV,7,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-003,MR_REV,8,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-003,MR_REV,9,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-003,MR_REV,10,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-004,MR_REV,1,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-004,MR_REV,2,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-004,MR_REV,3,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-004,MR_REV,4,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-004,MR_REV,5,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-004,MR_REV,6,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-004,MR_REV,7,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-004,MR_REV,8,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-004,MR_REV,9,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-004,MR_REV,10,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-005,MR_REV,1,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-005,MR_REV,2,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-005,MR_REV,3,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-005,MR_REV,4,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-005,MR_REV,5,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-005,MR_REV,6,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-005,MR_REV,7,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-005,MR_REV,8,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-005,MR_REV,9,pass,V″ = V0,,
+gpt-6-luna-default-rnone,MR_REV-005,MR_REV,10,pass,V″ = V0,,

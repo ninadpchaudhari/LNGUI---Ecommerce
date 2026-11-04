@@ -1,61 +1,66 @@
 relation = "CONTEXT_AMNESIA"
 
+# ── C = category ──────────────────────────────────────────────────────────────────────────────────
+
 [[case]]
 id = "CONTEXT_AMNESIA-001"
 source = "show electronics items"
-followup = ["show electronics items", "show items under $100", "show items rated 4 stars and up", "hide out-of-stock items", "sort by rating"]
+followup = ["show electronics items", "show items under $100", "show items rated 4 stars and up", "hide out-of-stock items"]
 
 [case.writes]
 "show electronics items" = ["category"]
 "show items under $100" = ["maxPrice"]
 "show items rated 4 stars and up" = ["minRating"]
 "hide out-of-stock items" = ["inStockOnly"]
-"sort by rating" = ["sort"]
+
+# ── C = maxPrice ──────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "CONTEXT_AMNESIA-002"
 source = "show items under $100"
-followup = ["show items under $100", "show electronics items", "show items rated 4 stars and up", "hide out-of-stock items", "sort by rating"]
+followup = ["show items under $100", "show items rated 4 stars and up", "hide out-of-stock items", "sort by rating"]
 
 [case.writes]
 "show items under $100" = ["maxPrice"]
-"show electronics items" = ["category"]
 "show items rated 4 stars and up" = ["minRating"]
 "hide out-of-stock items" = ["inStockOnly"]
 "sort by rating" = ["sort"]
+
+# ── C = minRating ─────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "CONTEXT_AMNESIA-003"
 source = "show items rated 4 stars and up"
-followup = ["show items rated 4 stars and up", "show electronics items", "show items under $100", "hide out-of-stock items", "sort by rating"]
+followup = ["show items rated 4 stars and up", "hide out-of-stock items", "sort by rating", "show electronics items"]
 
 [case.writes]
 "show items rated 4 stars and up" = ["minRating"]
-"show electronics items" = ["category"]
-"show items under $100" = ["maxPrice"]
 "hide out-of-stock items" = ["inStockOnly"]
 "sort by rating" = ["sort"]
+"show electronics items" = ["category"]
+
+# ── C = inStockOnly ───────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "CONTEXT_AMNESIA-004"
 source = "hide out-of-stock items"
-followup = ["hide out-of-stock items", "show electronics items", "show items under $100", "show items rated 4 stars and up", "sort by rating"]
+followup = ["hide out-of-stock items", "sort by rating", "show electronics items", "show items under $100"]
 
 [case.writes]
 "hide out-of-stock items" = ["inStockOnly"]
+"sort by rating" = ["sort"]
 "show electronics items" = ["category"]
 "show items under $100" = ["maxPrice"]
-"show items rated 4 stars and up" = ["minRating"]
-"sort by rating" = ["sort"]
+
+# ── C = sort ──────────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "CONTEXT_AMNESIA-005"
 source = "sort by rating"
-followup = ["sort by rating", "show electronics items", "show items under $100", "show items rated 4 stars and up", "hide out-of-stock items"]
+followup = ["sort by rating", "show electronics items", "show items under $100", "show items rated 4 stars and up"]
 
 [case.writes]
 "sort by rating" = ["sort"]
 "show electronics items" = ["category"]
 "show items under $100" = ["maxPrice"]
 "show items rated 4 stars and up" = ["minRating"]
-"hide out-of-stock items" = ["inStockOnly"]

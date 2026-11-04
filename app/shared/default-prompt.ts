@@ -1,5 +1,5 @@
 /**
- * The server's default system prompt: the output schema and nothing else.
+ * The server's default system prompt: the output schema, and what null means.
  * Kept identical to prompts/default.txt (after its header); a test fails if
  * the two differ. The app's original prompt, the one Figure 1.2 was recorded
  * with (fnv1a32:5a348657), is prompts/student-x.txt.
@@ -21,5 +21,7 @@ export const DEFAULT_SYSTEM_PROMPT = `You are a product filter assistant. Given 
   "sort": <one of ["price_asc","price_desc","rating_desc","name_asc"] or null>,
   "explanation": "<short summary of what you set>"
 }
+
+- null means no filter (no category, no price limit, no minimum rating, out-of-stock items shown, default order). Use null for a filter that is not set, or that the user asks to remove.
 
 Output ONLY the JSON object. No markdown fences, no extra text.`;

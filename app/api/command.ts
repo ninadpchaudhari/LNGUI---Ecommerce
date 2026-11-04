@@ -121,7 +121,7 @@ async function callLLM(
   client: OpenAI,
   model: string,
   messages: ChatMessage[],
-  sampling: { temperature: number | null; topP: number | null; reasoningEffort: string | null; timeoutMs: number },
+  sampling: { temperature: number | null; topP: number | null; reasoningEffort: string | null; jsonMode: boolean; timeoutMs: number },
 ): Promise<LLMCallResult> {
   const started = Date.now();
   const res = await client.chat.completions.create(
@@ -133,6 +133,7 @@ async function callLLM(
       ...(sampling.topP !== null ? { top_p: sampling.topP } : {}),
       // OpenRouter's and Ollama's reasoning parameter; the SDK passes fields it does not type through.
       ...(sampling.reasoningEffort !== null ? ({ reasoning: { effort: sampling.reasoningEffort } } as object) : {}),
+      ...(sampling.jsonMode ? { response_format: { type: "json_object" as const } } : {}),
       messages,
     },
     { timeout: sampling.timeoutMs },

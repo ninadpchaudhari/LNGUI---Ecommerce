@@ -1,5 +1,7 @@
 relation = "MR_REV"
 
+# ── C = category ──────────────────────────────────────────────────────────────────────────────────
+
 [[case]]
 id = "MR_REV-001"
 source = []
@@ -8,6 +10,8 @@ followup = ["show electronics items", "show all categories"]
 [case.writes]
 "show electronics items" = ["category"]
 "show all categories" = ["category"]
+
+# ── C = maxPrice ──────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "MR_REV-002"
@@ -18,6 +22,8 @@ followup = ["show items under $100", "remove the price limit"]
 "show items under $100" = ["maxPrice"]
 "remove the price limit" = ["maxPrice"]
 
+# ── C = minRating ─────────────────────────────────────────────────────────────────────────────────
+
 [[case]]
 id = "MR_REV-003"
 source = []
@@ -27,6 +33,8 @@ followup = ["show items rated 4 stars and up", "remove the rating filter"]
 "show items rated 4 stars and up" = ["minRating"]
 "remove the rating filter" = ["minRating"]
 
+# ── C = inStockOnly ───────────────────────────────────────────────────────────────────────────────
+
 [[case]]
 id = "MR_REV-004"
 source = []
@@ -35,6 +43,8 @@ followup = ["hide out-of-stock items", "show out-of-stock items again"]
 [case.writes]
 "hide out-of-stock items" = ["inStockOnly"]
 "show out-of-stock items again" = ["inStockOnly"]
+
+# ── C = sort ──────────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "MR_REV-005"

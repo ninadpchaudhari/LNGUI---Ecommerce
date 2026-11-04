@@ -1,5 +1,7 @@
 relation = "MR_AC"
 
+# ── C = category ──────────────────────────────────────────────────────────────────────────────────
+
 [[case]]
 id = "MR_AC-001"
 source = "show electronics items"
@@ -29,6 +31,8 @@ refine = {control = "inStockOnly", value = true}
 [case.writes]
 "show electronics items" = ["category"]
 "show electronics items that are in stock" = ["category", "inStockOnly"]
+
+# ── C = maxPrice ──────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "MR_AC-004"
@@ -60,6 +64,8 @@ refine = {control = "inStockOnly", value = true}
 "show items under $100" = ["maxPrice"]
 "show items under $100 that are in stock" = ["maxPrice", "inStockOnly"]
 
+# ── C = minRating ─────────────────────────────────────────────────────────────────────────────────
+
 [[case]]
 id = "MR_AC-007"
 source = "show items rated 4 stars and up"
@@ -89,6 +95,8 @@ refine = {control = "inStockOnly", value = true}
 [case.writes]
 "show items rated 4 stars and up" = ["minRating"]
 "show items rated 4 stars and up that are in stock" = ["minRating", "inStockOnly"]
+
+# ── C = inStockOnly ───────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "MR_AC-010"

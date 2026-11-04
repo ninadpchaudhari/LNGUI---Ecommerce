@@ -6,8 +6,11 @@ Nothing here is needed to run the experiment. The experiment is `harness/` (see 
   harness ran. `pilot-cases/` is that 100-case pilot set in the new TOML format (from `cases/pilot.jsonl`); `cases/`
   now holds the rule-based set instead. `old-verdicts.ts` judges about 100,000 made-up outcomes on the pilot cases
   with the old `check()` (run it against a checkout of commit `5d3d6ba`); `same-verdicts.py` judges the same
-  outcomes, and every recorded trial in `results/`, with the new relations. On 2026-11-02: 0 of 100,000 and 0 of
+  outcomes, and every recorded trial in `results/`, with the relations of commit `a4827c5` (run it against a
+  checkout of that commit; the harness has been simplified since). On 2026-11-02: 0 of 100,000 and 0 of
   12,200 differ (an old pass is a new pass or ◌).
+- `prompt-v1/`: the first prompt, which did not say what null does, with its configurations and results.
+- `prompt-v2-diff/`: the second prompt, which asked for changes only, with its results.
 
 The rest is the earlier, larger version of the harness, kept for reference:
 

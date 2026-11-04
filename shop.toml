@@ -1,16 +1,15 @@
-# The shop's controls: the filters and sort the "ask" bar can set, their values, and each one's start value (σ0).
-# run.py reads σ0 and the control names from here; the cases use these names in [case.writes].
-# The app itself is built from app/control-surface.yaml. setup.py checks that the running app has exactly these controls
-# and start values, so the two cannot drift apart.
+# The model of the shop: the filters and sort the "ask" bar can set, their values, and each one's start
+# value, as in app/control-surface.yaml. The cases use these names in [case.writes]. Each control is one test
+# requirement: every relation must have cases that change every control it admits (run.py --check counts them).
 #
 # A control is a choice (values = [...]) or a number (min, max). No `start`: it starts unset (⊥), e.g. no category.
-# constraining: it narrows the products shown. MR_AC's δ may only set one of these.
+# constraining: it narrows the products shown. MR_AC's added constraint may only set one of these.
 # reversible:   a sentence can set it back. MR_REV may only use these.
 
 [control.category]
 values = ["electronics", "books", "clothing", "home", "sports"]
-constraining = true
-reversible = true
+constraining = true # C_con
+reversible = true #C_rev
 
 [control.maxPrice]
 min = 0
@@ -32,10 +31,5 @@ reversible = true
 
 [control.sort]
 values = ["price_asc", "price_desc", "rating_desc", "name_asc"]
-constraining = false          # reorders the products, never removes one
+constraining = false  
 reversible = true
-
-[control.clearFilters]
-values = ["invoked"]          # "clear all filters": puts every filter back to its start; stays "invoked" until reset
-constraining = false
-reversible = false            # what was cleared cannot be asked back in one sentence

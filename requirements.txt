@@ -1,4 +1,2 @@
-# The harness (python harness/*.py) needs only Python 3.11 or later.
-
-# helpful_utility_to_generate_cases/ (writes TOML)
-tomlkit
+# harness/summary.py needs pandas; the rest of the harness needs only Python 3.11 or later.
+pandas

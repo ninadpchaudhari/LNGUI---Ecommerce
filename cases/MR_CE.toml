@@ -1,5 +1,7 @@
 relation = "MR_CE"
 
+# ── C = category ──────────────────────────────────────────────────────────────────────────────────
+
 [[case]]
 id = "MR_CE-001"
 source = "show electronics items"
@@ -11,69 +13,6 @@ followup = "filter to electronics only"
 
 [[case]]
 id = "MR_CE-002"
-source = "show items under $100"
-followup = "show items cheaper than $100"
-
-[case.writes]
-"show items under $100" = ["maxPrice"]
-"show items cheaper than $100" = ["maxPrice"]
-
-[[case]]
-id = "MR_CE-003"
-source = "sort by rating"
-followup = "order the results by rating"
-
-[case.writes]
-"sort by rating" = ["sort"]
-"order the results by rating" = ["sort"]
-
-[[case]]
-id = "MR_CE-004"
-source = "sort by rating"
-followup = "sort by best rated first"
-
-[case.writes]
-"sort by rating" = ["sort"]
-"sort by best rated first" = ["sort"]
-
-[[case]]
-id = "MR_CE-005"
-source = "order the results by rating"
-followup = "order the results by best rated first"
-
-[case.writes]
-"order the results by rating" = ["sort"]
-"order the results by best rated first" = ["sort"]
-
-[[case]]
-id = "MR_CE-006"
-source = "show electronics under $100 sorted by rating"
-followup = "list the tech products below $100, best rated first"
-
-[case.writes]
-"show electronics under $100 sorted by rating" = ["category", "maxPrice", "sort"]
-"list the tech products below $100, best rated first" = ["category", "maxPrice", "sort"]
-
-[[case]]
-id = "MR_CE-007"
-source = "hide out-of-stock items"
-followup = "only show me things that are available right now"
-
-[case.writes]
-"hide out-of-stock items" = ["inStockOnly"]
-"only show me things that are available right now" = ["inStockOnly"]
-
-[[case]]
-id = "MR_CE-008"
-source = "show books"
-followup = "I'm looking for something to read"
-
-[case.writes]
-"show books" = ["category"]
-"I'm looking for something to read" = ["category"]
-
-[[case]]
-id = "MR_CE-009"
 source = "show electronics items"
 followup = "SHOW ELECTRONICS ITEMS"
 
@@ -82,16 +21,45 @@ followup = "SHOW ELECTRONICS ITEMS"
 "SHOW ELECTRONICS ITEMS" = ["category"]
 
 [[case]]
-id = "MR_CE-010"
-source = "filter to electronics only"
-followup = "FILTER TO ELECTRONICS ONLY"
+id = "MR_CE-003"
+source = "show electronics items"
+followup = "could you please show electronics items"
 
 [case.writes]
-"filter to electronics only" = ["category"]
-"FILTER TO ELECTRONICS ONLY" = ["category"]
+"show electronics items" = ["category"]
+"could you please show electronics items" = ["category"]
 
 [[case]]
-id = "MR_CE-011"
+id = "MR_CE-004"
+source = "show electronics items"
+followup = "show electronics items, thanks"
+
+[case.writes]
+"show electronics items" = ["category"]
+"show electronics items, thanks" = ["category"]
+
+[[case]]
+id = "MR_CE-005"
+source = "show electronics items"
+followup = "hey, show electronics items"
+
+[case.writes]
+"show electronics items" = ["category"]
+"hey, show electronics items" = ["category"]
+
+# ── C = maxPrice ──────────────────────────────────────────────────────────────────────────────────
+
+[[case]]
+id = "MR_CE-006"
+source = "show items under $100"
+followup = "show items cheaper than $100"
+
+[case.writes]
+"show items under $100" = ["maxPrice"]
+"show items cheaper than $100" = ["maxPrice"]
+
+[[case]]
+id = "MR_CE-007"
 source = "show items under $100"
 followup = "SHOW ITEMS UNDER $100"
 
@@ -100,16 +68,45 @@ followup = "SHOW ITEMS UNDER $100"
 "SHOW ITEMS UNDER $100" = ["maxPrice"]
 
 [[case]]
-id = "MR_CE-012"
-source = "show items cheaper than $100"
-followup = "SHOW ITEMS CHEAPER THAN $100"
+id = "MR_CE-008"
+source = "show items under $100"
+followup = "could you please show items under $100"
 
 [case.writes]
-"show items cheaper than $100" = ["maxPrice"]
-"SHOW ITEMS CHEAPER THAN $100" = ["maxPrice"]
+"show items under $100" = ["maxPrice"]
+"could you please show items under $100" = ["maxPrice"]
 
 [[case]]
-id = "MR_CE-013"
+id = "MR_CE-009"
+source = "show items under $100"
+followup = "show items under $100, thanks"
+
+[case.writes]
+"show items under $100" = ["maxPrice"]
+"show items under $100, thanks" = ["maxPrice"]
+
+[[case]]
+id = "MR_CE-010"
+source = "show items under $100"
+followup = "hey, show items under $100"
+
+[case.writes]
+"show items under $100" = ["maxPrice"]
+"hey, show items under $100" = ["maxPrice"]
+
+# ── C = minRating ─────────────────────────────────────────────────────────────────────────────────
+
+[[case]]
+id = "MR_CE-011"
+source = "show items rated 4 stars and up"
+followup = "show items with at least 4 stars"
+
+[case.writes]
+"show items rated 4 stars and up" = ["minRating"]
+"show items with at least 4 stars" = ["minRating"]
+
+[[case]]
+id = "MR_CE-012"
 source = "show items rated 4 stars and up"
 followup = "SHOW ITEMS RATED 4 STARS AND UP"
 
@@ -118,7 +115,45 @@ followup = "SHOW ITEMS RATED 4 STARS AND UP"
 "SHOW ITEMS RATED 4 STARS AND UP" = ["minRating"]
 
 [[case]]
+id = "MR_CE-013"
+source = "show items rated 4 stars and up"
+followup = "could you please show items rated 4 stars and up"
+
+[case.writes]
+"show items rated 4 stars and up" = ["minRating"]
+"could you please show items rated 4 stars and up" = ["minRating"]
+
+[[case]]
 id = "MR_CE-014"
+source = "show items rated 4 stars and up"
+followup = "show items rated 4 stars and up, thanks"
+
+[case.writes]
+"show items rated 4 stars and up" = ["minRating"]
+"show items rated 4 stars and up, thanks" = ["minRating"]
+
+[[case]]
+id = "MR_CE-015"
+source = "show items rated 4 stars and up"
+followup = "hey, show items rated 4 stars and up"
+
+[case.writes]
+"show items rated 4 stars and up" = ["minRating"]
+"hey, show items rated 4 stars and up" = ["minRating"]
+
+# ── C = inStockOnly ───────────────────────────────────────────────────────────────────────────────
+
+[[case]]
+id = "MR_CE-016"
+source = "hide out-of-stock items"
+followup = "only show items that are in stock"
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"only show items that are in stock" = ["inStockOnly"]
+
+[[case]]
+id = "MR_CE-017"
 source = "hide out-of-stock items"
 followup = "HIDE OUT-OF-STOCK ITEMS"
 
@@ -127,7 +162,45 @@ followup = "HIDE OUT-OF-STOCK ITEMS"
 "HIDE OUT-OF-STOCK ITEMS" = ["inStockOnly"]
 
 [[case]]
-id = "MR_CE-015"
+id = "MR_CE-018"
+source = "hide out-of-stock items"
+followup = "could you please hide out-of-stock items"
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"could you please hide out-of-stock items" = ["inStockOnly"]
+
+[[case]]
+id = "MR_CE-019"
+source = "hide out-of-stock items"
+followup = "hide out-of-stock items, thanks"
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"hide out-of-stock items, thanks" = ["inStockOnly"]
+
+[[case]]
+id = "MR_CE-020"
+source = "hide out-of-stock items"
+followup = "hey, hide out-of-stock items"
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+"hey, hide out-of-stock items" = ["inStockOnly"]
+
+# ── C = sort ──────────────────────────────────────────────────────────────────────────────────────
+
+[[case]]
+id = "MR_CE-021"
+source = "sort by rating"
+followup = "order the results by rating"
+
+[case.writes]
+"sort by rating" = ["sort"]
+"order the results by rating" = ["sort"]
+
+[[case]]
+id = "MR_CE-022"
 source = "sort by rating"
 followup = "SORT BY RATING"
 
@@ -136,154 +209,28 @@ followup = "SORT BY RATING"
 "SORT BY RATING" = ["sort"]
 
 [[case]]
-id = "MR_CE-016"
-source = "order the results by rating"
-followup = "ORDER THE RESULTS BY RATING"
-
-[case.writes]
-"order the results by rating" = ["sort"]
-"ORDER THE RESULTS BY RATING" = ["sort"]
-
-[[case]]
-id = "MR_CE-017"
-source = "show electronics under $100 sorted by rating"
-followup = "SHOW ELECTRONICS UNDER $100 SORTED BY RATING"
-
-[case.writes]
-"show electronics under $100 sorted by rating" = ["category", "maxPrice", "sort"]
-"SHOW ELECTRONICS UNDER $100 SORTED BY RATING" = ["category", "maxPrice", "sort"]
-
-[[case]]
-id = "MR_CE-018"
-source = "show electronics items"
-followup = "display electronics items"
-
-[case.writes]
-"show electronics items" = ["category"]
-"display electronics items" = ["category"]
-
-[[case]]
-id = "MR_CE-019"
-source = "show items under $100"
-followup = "display items under $100"
-
-[case.writes]
-"show items under $100" = ["maxPrice"]
-"display items under $100" = ["maxPrice"]
-
-[[case]]
-id = "MR_CE-020"
-source = "show items cheaper than $100"
-followup = "display items cheaper than $100"
-
-[case.writes]
-"show items cheaper than $100" = ["maxPrice"]
-"display items cheaper than $100" = ["maxPrice"]
-
-[[case]]
-id = "MR_CE-021"
-source = "show items rated 4 stars and up"
-followup = "display items rated 4 stars and up"
-
-[case.writes]
-"show items rated 4 stars and up" = ["minRating"]
-"display items rated 4 stars and up" = ["minRating"]
-
-[[case]]
-id = "MR_CE-022"
-source = "show electronics under $100 sorted by rating"
-followup = "display electronics under $100 sorted by rating"
-
-[case.writes]
-"show electronics under $100 sorted by rating" = ["category", "maxPrice", "sort"]
-"display electronics under $100 sorted by rating" = ["category", "maxPrice", "sort"]
-
-[[case]]
 id = "MR_CE-023"
-source = "show electronics items"
-followup = "show electronics items in a table"
-
-[case.writes]
-"show electronics items" = ["category"]
-"show electronics items in a table" = ["category"]
-
-[[case]]
-id = "MR_CE-024"
-source = "filter to electronics only"
-followup = "filter to electronics only in a table"
-
-[case.writes]
-"filter to electronics only" = ["category"]
-"filter to electronics only in a table" = ["category"]
-
-[[case]]
-id = "MR_CE-025"
-source = "show items under $100"
-followup = "show items under $100 in a table"
-
-[case.writes]
-"show items under $100" = ["maxPrice"]
-"show items under $100 in a table" = ["maxPrice"]
-
-[[case]]
-id = "MR_CE-026"
-source = "show items cheaper than $100"
-followup = "show items cheaper than $100 in a table"
-
-[case.writes]
-"show items cheaper than $100" = ["maxPrice"]
-"show items cheaper than $100 in a table" = ["maxPrice"]
-
-[[case]]
-id = "MR_CE-027"
-source = "show items rated 4 stars and up"
-followup = "show items rated 4 stars and up in a table"
-
-[case.writes]
-"show items rated 4 stars and up" = ["minRating"]
-"show items rated 4 stars and up in a table" = ["minRating"]
-
-[[case]]
-id = "MR_CE-028"
-source = "hide out-of-stock items"
-followup = "hide out-of-stock items in a table"
-
-[case.writes]
-"hide out-of-stock items" = ["inStockOnly"]
-"hide out-of-stock items in a table" = ["inStockOnly"]
-
-[[case]]
-id = "MR_CE-029"
 source = "sort by rating"
-followup = "sort by rating in a table"
+followup = "could you please sort by rating"
 
 [case.writes]
 "sort by rating" = ["sort"]
-"sort by rating in a table" = ["sort"]
+"could you please sort by rating" = ["sort"]
 
 [[case]]
-id = "MR_CE-030"
-source = "order the results by rating"
-followup = "order the results by rating in a table"
+id = "MR_CE-024"
+source = "sort by rating"
+followup = "sort by rating, thanks"
 
 [case.writes]
-"order the results by rating" = ["sort"]
-"order the results by rating in a table" = ["sort"]
+"sort by rating" = ["sort"]
+"sort by rating, thanks" = ["sort"]
 
 [[case]]
-id = "MR_CE-031"
-source = "show electronics under $100 sorted by rating"
-followup = "show electronics under $100 sorted by rating in a table"
+id = "MR_CE-025"
+source = "sort by rating"
+followup = "hey, sort by rating"
 
 [case.writes]
-"show electronics under $100 sorted by rating" = ["category", "maxPrice", "sort"]
-"show electronics under $100 sorted by rating in a table" = ["category", "maxPrice", "sort"]
-
-[[case]]
-id = "MR_CE-032"
-source = "show electronics under $100 sorted by rating"
-followup = "sorted by rating show electronics under $100"
-
-[case.writes]
-"show electronics under $100 sorted by rating" = ["category", "maxPrice", "sort"]
-"sorted by rating show electronics under $100" = ["category", "maxPrice", "sort"]
+"sort by rating" = ["sort"]
+"hey, sort by rating" = ["sort"]

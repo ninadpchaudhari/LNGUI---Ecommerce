@@ -41,6 +41,8 @@ export type CommandRuntimeEnv = {
   LLM_TOP_P?: string;
   /** reasoning.effort, e.g. minimal or none. Sent to OpenRouter and Ollama, not to direct OpenAI. */
   LLM_REASONING_EFFORT?: string;
+  /** true: ask for a JSON object (response_format json_object). Unset: not sent. */
+  LLM_JSON_MODE?: string;
   LLM_TIMEOUT_MS?: string;
   /** full | last-k | none. "none" seeds the display-only-history fault. */
   HISTORY_POLICY?: string;
@@ -120,6 +122,8 @@ export interface LLMConfig {
   topP: number | null;
   /** Null means "not sent". OpenRouter and Ollama take it; direct OpenAI resolves it to null. */
   reasoningEffort: string | null;
+  /** Sends response_format json_object, so the model must answer with a JSON object. */
+  jsonMode: boolean;
   timeoutMs: number;
 }
 
@@ -141,6 +145,7 @@ export function resolveLLMConfig(env: RuntimeEnv): LLMConfig {
     temperature: optNum(env, "LLM_TEMPERATURE"),
     topP: optNum(env, "LLM_TOP_P"),
     reasoningEffort: str(env, "LLM_REASONING_EFFORT") ?? null,
+    jsonMode: str(env, "LLM_JSON_MODE")?.toLowerCase() === "true",
     timeoutMs: num(env, "LLM_TIMEOUT_MS", DEFAULT_TIMEOUT_MS),
   };
   const explicit = str(env, "LLM_PROVIDER")?.toLowerCase();

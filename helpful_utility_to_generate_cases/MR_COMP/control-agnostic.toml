@@ -1,4 +1,0 @@
-# MR_COMP, control-agnostic: how the turns of a sequence are said as one sentence.
-
-two = "{a} {b}"                                 # "show electronics items", "that are in stock" → "show electronics items that are in stock"
-three = "{a} {b} sorted by {c|after sort by}"   # …, "sort by rating" → "… sorted by rating"
