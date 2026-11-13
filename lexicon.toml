@@ -1,0 +1,71 @@
+# The lexicon of the shop's test design: everything the tester writes by hand.
+# python make_design.py turns it into design/<relation>.toml by applying each relation's transformations;
+# python blind.py then makes cases/ from the design. Edit this file, not design/ or cases/.
+#
+# Each [control] block: the base utterance `u` that sets that control and its `target`. Optional, also by hand:
+#   reword   other wordings with the same target (Paraphrase, MR_CE)
+#   undo     `back`: the utterance that sets the control back to its start value (Undo, MR_REV)
+#   narrow   a phrase that adds this control to another utterance (Restrict, MR_AC), e.g. "under $100"
+
+# Edit (MR_CE): applied to every base utterance. {u|upper} is the utterance in upper case.
+edits = ["{u|upper}", "could you please {u}", "{u}, thanks", "hey, {u}"]
+
+# Conjoin (MR_COMP): how two utterances are said as one.
+join = "{a} and {b}"
+
+# Swap (MR_CA) and Conjoin (MR_COMP): pairs of independent controls (here, every pair).
+pairs = [
+  ["category", "maxPrice"],
+  ["category", "minRating"],
+  ["category", "inStockOnly"],
+  ["category", "sort"],
+  ["maxPrice", "minRating"],
+  ["maxPrice", "inStockOnly"],
+  ["maxPrice", "sort"],
+  ["minRating", "inStockOnly"],
+  ["minRating", "sort"],
+  ["inStockOnly", "sort"],
+]
+
+# Append (CONTEXT_AMNESIA): set the first control, then the other three.
+sequences = [
+  ["category", "maxPrice", "minRating", "inStockOnly"],
+  ["maxPrice", "minRating", "inStockOnly", "sort"],
+  ["minRating", "inStockOnly", "sort", "category"],
+  ["inStockOnly", "sort", "category", "maxPrice"],
+  ["sort", "category", "maxPrice", "minRating"],
+]
+
+[category]
+u = "show electronics items"
+target = { category = "electronics" }
+reword = ["filter to electronics only"]
+undo = { back = "show all categories" }
+narrow = "in electronics"
+
+[maxPrice]
+u = "show items under $100"
+target = { maxPrice = 100 }
+reword = ["show items cheaper than $100"]
+undo = { back = "remove the price limit" }
+narrow = "under $100"
+
+[minRating]
+u = "show items rated 4 stars and up"
+target = { minRating = 4 }
+reword = ["show items with at least 4 stars"]
+undo = { back = "remove the rating filter" }
+narrow = "rated 4 stars and up"
+
+[inStockOnly]
+u = "hide out-of-stock items"
+target = { inStockOnly = true }
+reword = ["only show items that are in stock"]
+undo = { back = "show out-of-stock items again" }
+narrow = "that are in stock"
+
+[sort]
+u = "sort by rating"
+target = { sort = "rating_desc" }
+reword = ["order the results by rating"]
+undo = { back = "use the default order" }

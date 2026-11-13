@@ -1,6 +1,5 @@
+# Made by blind.py from design/CONTEXT_AMNESIA.toml: do not edit here, edit the design and run blind.py again.
 relation = "CONTEXT_AMNESIA"
-
-# ── C = category ──────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "CONTEXT_AMNESIA-001"
@@ -13,8 +12,6 @@ followup = ["show electronics items", "show items under $100", "show items rated
 "show items rated 4 stars and up" = ["minRating"]
 "hide out-of-stock items" = ["inStockOnly"]
 
-# ── C = maxPrice ──────────────────────────────────────────────────────────────────────────────────
-
 [[case]]
 id = "CONTEXT_AMNESIA-002"
 source = "show items under $100"
@@ -25,8 +22,6 @@ followup = ["show items under $100", "show items rated 4 stars and up", "hide ou
 "show items rated 4 stars and up" = ["minRating"]
 "hide out-of-stock items" = ["inStockOnly"]
 "sort by rating" = ["sort"]
-
-# ── C = minRating ─────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "CONTEXT_AMNESIA-003"
@@ -39,8 +34,6 @@ followup = ["show items rated 4 stars and up", "hide out-of-stock items", "sort 
 "sort by rating" = ["sort"]
 "show electronics items" = ["category"]
 
-# ── C = inStockOnly ───────────────────────────────────────────────────────────────────────────────
-
 [[case]]
 id = "CONTEXT_AMNESIA-004"
 source = "hide out-of-stock items"
@@ -51,8 +44,6 @@ followup = ["hide out-of-stock items", "sort by rating", "show electronics items
 "sort by rating" = ["sort"]
 "show electronics items" = ["category"]
 "show items under $100" = ["maxPrice"]
-
-# ── C = sort ──────────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "CONTEXT_AMNESIA-005"

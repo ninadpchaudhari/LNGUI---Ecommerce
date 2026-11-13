@@ -1,6 +1,5 @@
+# Made by blind.py from design/MR_COMP.toml: do not edit here, edit the design and run blind.py again.
 relation = "MR_COMP"
-
-# ── C = category ──────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "MR_COMP-001"
@@ -9,6 +8,38 @@ followup = "show electronics items"
 
 [case.writes]
 "show electronics items" = ["category"]
+
+[[case]]
+id = "MR_COMP-006"
+source = ["show items under $100", "show items under $100"]
+followup = "show items under $100"
+
+[case.writes]
+"show items under $100" = ["maxPrice"]
+
+[[case]]
+id = "MR_COMP-010"
+source = ["show items rated 4 stars and up", "show items rated 4 stars and up"]
+followup = "show items rated 4 stars and up"
+
+[case.writes]
+"show items rated 4 stars and up" = ["minRating"]
+
+[[case]]
+id = "MR_COMP-013"
+source = ["hide out-of-stock items", "hide out-of-stock items"]
+followup = "hide out-of-stock items"
+
+[case.writes]
+"hide out-of-stock items" = ["inStockOnly"]
+
+[[case]]
+id = "MR_COMP-015"
+source = ["sort by rating", "sort by rating"]
+followup = "sort by rating"
+
+[case.writes]
+"sort by rating" = ["sort"]
 
 [[case]]
 id = "MR_COMP-002"
@@ -50,16 +81,6 @@ followup = "show electronics items and sort by rating"
 "sort by rating" = ["sort"]
 "show electronics items and sort by rating" = ["category", "sort"]
 
-# ── C = maxPrice ──────────────────────────────────────────────────────────────────────────────────
-
-[[case]]
-id = "MR_COMP-006"
-source = ["show items under $100", "show items under $100"]
-followup = "show items under $100"
-
-[case.writes]
-"show items under $100" = ["maxPrice"]
-
 [[case]]
 id = "MR_COMP-007"
 source = ["show items under $100", "show items rated 4 stars and up"]
@@ -90,16 +111,6 @@ followup = "show items under $100 and sort by rating"
 "sort by rating" = ["sort"]
 "show items under $100 and sort by rating" = ["maxPrice", "sort"]
 
-# ── C = minRating ─────────────────────────────────────────────────────────────────────────────────
-
-[[case]]
-id = "MR_COMP-010"
-source = ["show items rated 4 stars and up", "show items rated 4 stars and up"]
-followup = "show items rated 4 stars and up"
-
-[case.writes]
-"show items rated 4 stars and up" = ["minRating"]
-
 [[case]]
 id = "MR_COMP-011"
 source = ["show items rated 4 stars and up", "hide out-of-stock items"]
@@ -120,16 +131,6 @@ followup = "show items rated 4 stars and up and sort by rating"
 "sort by rating" = ["sort"]
 "show items rated 4 stars and up and sort by rating" = ["minRating", "sort"]
 
-# ── C = inStockOnly ───────────────────────────────────────────────────────────────────────────────
-
-[[case]]
-id = "MR_COMP-013"
-source = ["hide out-of-stock items", "hide out-of-stock items"]
-followup = "hide out-of-stock items"
-
-[case.writes]
-"hide out-of-stock items" = ["inStockOnly"]
-
 [[case]]
 id = "MR_COMP-014"
 source = ["hide out-of-stock items", "sort by rating"]
@@ -139,13 +140,3 @@ followup = "hide out-of-stock items and sort by rating"
 "hide out-of-stock items" = ["inStockOnly"]
 "sort by rating" = ["sort"]
 "hide out-of-stock items and sort by rating" = ["inStockOnly", "sort"]
-
-# ── C = sort ──────────────────────────────────────────────────────────────────────────────────────
-
-[[case]]
-id = "MR_COMP-015"
-source = ["sort by rating", "sort by rating"]
-followup = "sort by rating"
-
-[case.writes]
-"sort by rating" = ["sort"]

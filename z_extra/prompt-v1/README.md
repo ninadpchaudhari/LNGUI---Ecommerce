@@ -1,6 +1,6 @@
 # prompt-v1/: the first prompt, which did not say what null does
 
-`default-v1.txt` lists every field as "<value> or null" and asks for every field (`implementation: full`), but never
+`incomplete.txt` (formerly `default-v1.txt`; incomplete because it never says what null does) lists every field as "<value> or null" and asks for every field (`implementation: full`), but never
 says what null does. The app reads null as "reset to the default". The models sent null for every field a sentence
 did not mention, so each turn erased the filters the earlier turns set. MR_CA and CONTEXT_AMNESIA failed on most
 trials for every model but Llama 3.2 3B, which mostly did not answer in JSON.

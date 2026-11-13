@@ -1,0 +1,8 @@
+﻿config,CE,AC,CA,Amnesia,REV,COMP,All
+claude-haiku-5.5-default,0.0,0.0,100.0,84.0,0.0,34.7,26.9
+claude-opus-5.5-default,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+gpt-4o-mini-default,0.0,0.0,100.0,100.0,0.0,66.7,34.7
+gpt-5-nano-default,8.4,16.7,77.0,68.0,0.0,34.7,28.3
+gpt-6-luna-default,0.0,0.0,16.0,12.0,0.0,7.3,4.6
+gpt-6.1-sol-default,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+qwen3.5-9b-default,8.0,23.3,86.9,76.0,12.0,36.0,32.3

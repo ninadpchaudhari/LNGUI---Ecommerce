@@ -1,22 +1,25 @@
 """
-From every results/<config>.csv, writes:
+From every studies/<study>/results/<config>.csv, writes into the study's folder:
 
-    results/summary.csv   per configuration and relation: cases, trials, fails, no_effect, infra, fail_rate, fail@2, fail@5
-    results/table.csv     the paper's table: the fail rate of each fault model per configuration, and All (local left out)
+    summary.csv   per configuration and relation: cases, trials, fails, no_effect, infra, fail_rate, fail@2, fail@5
+    table.csv     the paper's table: the fail rate of each fault model per configuration, and All (local left out)
 
 Rates are percentages, with infra trials left out. fail@k is the chance that at least one of k trials of a case
 fails, 1 − C(N−f, k) / C(N, k) for a case with f fails in N trials, averaged over the relation's cases.
 
-    python3 harness/summary.py
+    python summary.py studies/<study>
 """
 
+import sys
 from math import comb, nan
 from pathlib import Path
 
 import pandas as pd
 
-RESULTS = Path(__file__).parent.parent / "results"
-OUTPUTS = {"summary.csv", "table.csv"}
+if len(sys.argv) != 2:
+    raise SystemExit(__doc__)
+STUDY = Path(sys.argv[1])
+RESULTS = STUDY / "results"
 # The paper's table: one column per fault model, from the relation whose cases expose it (the relations table's
 # "Fault exposed"). Context amnesia is MR_CA's fault over more turns, from the CONTEXT_AMNESIA cases.
 FAULTS = {
@@ -29,7 +32,7 @@ FAULTS = {
 }
 K = [2, 5]
 
-trials = pd.concat([pd.read_csv(f, encoding="utf-8-sig") for f in sorted(RESULTS.glob("*.csv")) if f.name not in OUTPUTS],
+trials = pd.concat([pd.read_csv(f, encoding="utf-8-sig") for f in sorted(RESULTS.glob("*.csv"))],
                    ignore_index=True)
 infra = trials[trials.verdict == "infra"].groupby(["config", "relation"]).size()
 trials = trials[trials.verdict != "infra"].assign(failed=lambda t: t.verdict == "fail", no_effect=lambda t: t.verdict == "no-effect")
@@ -45,7 +48,7 @@ summary["infra"] = infra.reindex(summary.index, fill_value=0)
 summary["fail_rate"] = 100 * summary.fails / summary.trials
 for k in K:
     summary[f"fail@{k}"] = 100 * cases.groupby(["config", "relation"])[f"fail@{k}"].mean()
-summary.round(1).to_csv(RESULTS / "summary.csv", encoding="utf-8-sig")
+summary.round(1).to_csv(STUDY / "summary.csv", encoding="utf-8-sig")
 
 # table.csv
 paper = trials[(trials.config != "local") & trials.relation.isin(FAULTS)]
@@ -53,4 +56,4 @@ fails = paper.pivot_table(index="config", columns="relation", values="failed", a
 table = 100 * fails["sum"][list(FAULTS)] / fails["count"][list(FAULTS)]  # fails / trials, as in summary.csv
 table["All"] = 100 * fails["sum"].sum(axis=1) / fails["count"].sum(axis=1)
 table = table.rename(columns=FAULTS)
-table.round(1).to_csv(RESULTS / "table.csv", encoding="utf-8-sig")
+table.round(1).to_csv(STUDY / "table.csv", encoding="utf-8-sig")

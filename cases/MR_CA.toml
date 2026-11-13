@@ -1,6 +1,5 @@
+# Made by blind.py from design/MR_CA.toml: do not edit here, edit the design and run blind.py again.
 relation = "MR_CA"
-
-# ── C = category ──────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "MR_CA-001"
@@ -38,8 +37,6 @@ followup = ["sort by rating", "show electronics items"]
 "show electronics items" = ["category"]
 "sort by rating" = ["sort"]
 
-# ── C = maxPrice ──────────────────────────────────────────────────────────────────────────────────
-
 [[case]]
 id = "MR_CA-005"
 source = ["show items under $100", "show items rated 4 stars and up"]
@@ -67,8 +64,6 @@ followup = ["sort by rating", "show items under $100"]
 "show items under $100" = ["maxPrice"]
 "sort by rating" = ["sort"]
 
-# ── C = minRating ─────────────────────────────────────────────────────────────────────────────────
-
 [[case]]
 id = "MR_CA-008"
 source = ["show items rated 4 stars and up", "hide out-of-stock items"]
@@ -86,8 +81,6 @@ followup = ["sort by rating", "show items rated 4 stars and up"]
 [case.writes]
 "show items rated 4 stars and up" = ["minRating"]
 "sort by rating" = ["sort"]
-
-# ── C = inStockOnly ───────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "MR_CA-010"

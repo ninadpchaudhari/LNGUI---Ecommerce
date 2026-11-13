@@ -1,0 +1,76 @@
+# CONTEXT_AMNESIA: the design of the CONTEXT_AMNESIA cases, made by make_design.py from lexicon.toml: do not edit here.
+# Each utterance has its target: the controls it sets, and to what. Cases that share a source list it once.
+# blind.py makes cases/CONTEXT_AMNESIA.toml from this file, the same cases without the values. No oracle reads the values;
+# judge/truth.py uses them to grade the oracles.
+
+relation = "CONTEXT_AMNESIA"
+
+[[case]]
+source = [
+  { u = "show electronics items", target = { category = "electronics" } },
+]
+
+[[case.followup]]
+id = "CONTEXT_AMNESIA-001"
+trace = [
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "show items under $100", target = { maxPrice = 100 } },
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case]]
+source = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "CONTEXT_AMNESIA-002"
+trace = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case]]
+source = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case.followup]]
+id = "CONTEXT_AMNESIA-003"
+trace = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+  { u = "show electronics items", target = { category = "electronics" } },
+]
+
+[[case]]
+source = [
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "CONTEXT_AMNESIA-004"
+trace = [
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case]]
+source = [
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "CONTEXT_AMNESIA-005"
+trace = [
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "show items under $100", target = { maxPrice = 100 } },
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+]

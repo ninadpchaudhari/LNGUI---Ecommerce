@@ -1,0 +1,98 @@
+# MR_AC: the design of the MR_AC cases, made by make_design.py from lexicon.toml: do not edit here.
+# Each utterance has its target: the controls it sets, and to what. Cases that share a source list it once.
+# blind.py makes cases/MR_AC.toml from this file, the same cases without the values. No oracle reads the values;
+# judge/truth.py uses them to grade the oracles.
+
+relation = "MR_AC"
+
+[[case]]
+source = [
+  { u = "show electronics items", target = { category = "electronics" } },
+]
+
+[[case.followup]]
+id = "MR_AC-001"
+trace = [
+  { u = "show electronics items under $100", target = { category = "electronics", maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "MR_AC-002"
+trace = [
+  { u = "show electronics items rated 4 stars and up", target = { category = "electronics", minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_AC-003"
+trace = [
+  { u = "show electronics items that are in stock", target = { category = "electronics", inStockOnly = true } },
+]
+
+[[case]]
+source = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "MR_AC-004"
+trace = [
+  { u = "show items under $100 in electronics", target = { maxPrice = 100, category = "electronics" } },
+]
+
+[[case.followup]]
+id = "MR_AC-005"
+trace = [
+  { u = "show items under $100 rated 4 stars and up", target = { maxPrice = 100, minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_AC-006"
+trace = [
+  { u = "show items under $100 that are in stock", target = { maxPrice = 100, inStockOnly = true } },
+]
+
+[[case]]
+source = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_AC-007"
+trace = [
+  { u = "show items rated 4 stars and up in electronics", target = { minRating = 4, category = "electronics" } },
+]
+
+[[case.followup]]
+id = "MR_AC-008"
+trace = [
+  { u = "show items rated 4 stars and up under $100", target = { minRating = 4, maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "MR_AC-009"
+trace = [
+  { u = "show items rated 4 stars and up that are in stock", target = { minRating = 4, inStockOnly = true } },
+]
+
+[[case]]
+source = [
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_AC-010"
+trace = [
+  { u = "hide out-of-stock items in electronics", target = { inStockOnly = true, category = "electronics" } },
+]
+
+[[case.followup]]
+id = "MR_AC-011"
+trace = [
+  { u = "hide out-of-stock items under $100", target = { inStockOnly = true, maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "MR_AC-012"
+trace = [
+  { u = "hide out-of-stock items rated 4 stars and up", target = { inStockOnly = true, minRating = 4 } },
+]

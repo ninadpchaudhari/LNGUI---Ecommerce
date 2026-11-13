@@ -44,3 +44,9 @@ runs/
 .venv/
 __pycache__/
 servers/
+
+# Each study's server logs and turn records
+studies/*/logs/
+
+# Files set aside for deletion
+this_is_trash/

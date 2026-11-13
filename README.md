@@ -14,26 +14,39 @@ with the follow-up sentences, and checks the relation between the two outcomes.
 | File | What it is |
 |---|---|
 | `shop.toml` | The model: the shop's controls (filters and sort), their values, and each one's start value |
-| `cases/<relation>.toml` | The test cases: two sides of sentences, and the controls each sentence should change |
-| `configs/<config>.env` | One configuration under test: its port, the model, and the model's settings |
-| `helpful_utility_to_generate_cases/` | The sentences we wrote for each control, and a short script that prints one control's cases to paste into `cases/` |
+| `lexicon.toml` | What the tester writes by hand: each control's base sentence and its target, rewording, undo sentence and narrowing phrase |
+| `design/<relation>.toml` | Made by `make_design.py` from the lexicon: every case, each sentence with its target. The answer key; no oracle reads it |
+| `cases/<relation>.toml` | Made by `blind.py` from the design: the test cases, the same sentences with only the controls each one changes |
 
-**The harness** (`harness/`, plain Python; only `summary.py` needs a package, pandas)
+**The scripts** (plain Python; only `summary.py` needs a package, pandas)
 
 | File | What it does |
 |---|---|
-| `relations.py` | The six relations: is a case valid, and the verdict on one trial. **Start here** |
-| `run.py` | Runs every case N times on one configuration; `--check` checks the cases and their coverage |
-| `shop.py` | Talks to the running app: `reset()`, `say(sentence)` |
-| `summary.py` | Writes `results/summary.csv` and the paper's table, `results/table.csv` (pandas) |
+| `run_study.sh` | Runs a whole study unattended: every configuration at once, then its summary |
+| `serve.sh` | Starts the app's server for one configuration of a study |
+| `run.py` | Runs every case N times on one configuration of a study; `--check` checks the cases and their coverage |
+| `summary.py` | Writes a study's `summary.csv` and the paper's table, `table.csv` (pandas) |
+| `combine.py` | Combines every study into `studies/all-trials.csv` and `studies/all-table.csv` (pandas) |
+| `harness/relations.py` | The six relations: is a case valid, and the verdict on one trial. **Start here** |
+| `harness/shop.py` | Talks to the running app: `reset()`, `say(sentence)` |
 
-**What it produces**
+**The studies** (`studies/<study>/`: everything one study used and produced, and nothing is written outside it)
 
 | File | What it holds |
 |---|---|
+| `configs/<config>.env` | One configuration under test: its port, the model, and the model's settings |
+| `prompt.txt` | The study's system prompt, if not `app/prompts/default.txt` (same format) |
 | `results/<config>.csv` | One row per trial: verdict, reason, and what each side changed |
-| `results/summary.csv` | Fail rate, fail@2, fail@5 per configuration and relation |
-| `results/table.csv` | The paper's table: each relation's fail rate per configuration, and All 5 |
+| `summary.csv` | Fail rate, fail@2, fail@5 per configuration and relation |
+| `table.csv` | The paper's table: each relation's fail rate per configuration, and All 5 |
+| `logs/` | Each server's log and turn records (not committed) |
+
+- `studies/icst-2027/`: the ICST 2027 paper's study, with `app/prompts/default.txt`. Done; leave it as it is.
+- `studies/A-minimal-prompt/` and `studies/B-student-x-prompt/`: the next two studies, the same 7 models (the 5 above
+  plus GPT-6.1 Sol and Claude Opus 5.5) at provider default settings, with `app/prompts/default.txt` and
+  `app/prompts/student-x.txt`. The plan and checklist are in `studies/PLAN.md`.
+
+A new study is a new folder with a `configs/` (and a `prompt.txt` if its prompt differs).
 
 **The app** (`app/`, the system under test: a Node project of its own, with its build files)
 
@@ -57,21 +70,21 @@ cp app/.env.example app/.env
 (cd app && nvm use && npm ci)
 
 # 2. Check the cases: every precondition, and every relation covers every control it admits
-python3 harness/run.py --check
+python3 run.py --check
 
-# 3. Start one configuration's server: its settings are environment variables, read from its file
-(set -a; . configs/gpt-4o-mini-default-t1-p1.env; cd app && npx tsx server.ts) > servers/gpt-4o-mini-default-t1-p1.log 2>&1 &
+# 3. Start one configuration's server (log in studies/A-minimal-prompt/logs/)
+./serve.sh studies/A-minimal-prompt gpt-6.1-sol-default
 
-# 4. Run every case 10 times on it → results/gpt-4o-mini-default-t1-p1.csv
-python3 harness/run.py configs/gpt-4o-mini-default-t1-p1.env
+# 4. Run every case 10 times on it → studies/A-minimal-prompt/results/gpt-6.1-sol-default.csv
+python3 run.py studies/A-minimal-prompt gpt-6.1-sol-default
 
-# 5. Over every configuration: results/summary.csv and results/table.csv (needs pandas)
+# 5. Over every configuration: the study's summary.csv and table.csv (needs pandas)
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-.venv/bin/python harness/summary.py
+.venv/bin/python summary.py studies/A-minimal-prompt
 ```
 
 Each configuration has its own port, so several can run at once. Stop a server with `kill $(lsof -ti tcp:<PORT>)`.
-`python3 harness/run.py configs/local.env 2` runs the whole pipeline for free, with the app's rule-based parser
+`python3 run.py studies/<study> local 2` runs the whole pipeline for free, with the app's rule-based parser
 instead of a model. `cd app && npm run dev` serves the app at http://localhost:5173 to try sentences by hand, and
 `cd app && npm test` runs its unit tests.
 
@@ -96,16 +109,15 @@ and `PORT`.
 
 **The prompt** gives the reply's format, asks for every filter in every reply, and says what null means: no filter.
 Two earlier prompts are in `z_extra/`: `prompt-v1/` did not say what null means, and `prompt-v2-diff/` asked for
-changes only. Another prompt can be tried by setting `SYSTEM_PROMPT` (its text) and `LNGUI_COMMAND_MODE` (`full` or
-`diff`) in a configuration's environment.
+changes only. Another prompt is tried by putting it in a study's `prompt.txt`; `serve.sh` passes it to the server
+as `SYSTEM_PROMPT`, and its `implementation:` header as `LNGUI_COMMAND_MODE`.
 
 ## The cases
 
 Each control in `shop.toml` is one test requirement, and every relation must cover every control it admits (MR_REV
 admits only reversible controls, MR_AC only constraining ones). For each control we picked one value other than its start
-value and wrote its sentences by hand. Each relation then combines them by one rule. For one control,
-`helpful_utility_to_generate_cases/make.py` prints its cases to paste into `cases/`, where each control's cases sit
-under a `# ── C = <control>` line:
+value and wrote its sentences by hand, in `lexicon.toml`. Each relation then combines them by one rule:
+`python3 make_design.py` writes `design/`, and `python3 blind.py` writes `cases/` from it:
 
 | Relation | Rule | Cases |
 |---|---|---|
@@ -134,7 +146,7 @@ refine = {control = "maxPrice", value = 100}              # MR_AC only: the cont
 
 ## Reading the results
 
-`results/<config>.csv` has one row per trial: the verdict, the reason, and what each side changed from the reset
+A study's `results/<config>.csv` has one row per trial: the verdict, the reason, and what each side changed from the reset
 (`category="electronics" maxPrice=100`), so a failure can be read without rerunning it. The verdicts:
 
 | Verdict | Means |
@@ -144,6 +156,6 @@ refine = {control = "maxPrice", value = 100}              # MR_AC only: the cont
 | no-effect | the relation held, but only because the command it is about changed nothing, so it proves nothing. For example, MR_REV-001 says "show electronics items", then "show all categories": if the first is ignored, the shop is still as the reset left it and the check holds, but nothing was reversed |
 | infra | the plumbing failed (the server, or the model provider answering with an error), not the shop. Left out of every rate |
 
-`results/summary.csv` (from `harness/summary.py`) has one row per configuration and relation: fail_rate
+A study's `summary.csv` (from `summary.py`) has one row per configuration and relation: fail_rate
 (failed trials / trials), fail@k (the chance that at least one of k runs of a case fails, averaged over the
 relation's cases), and how many trials had no effect.

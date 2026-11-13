@@ -1,0 +1,136 @@
+# MR_CA: the design of the MR_CA cases, made by make_design.py from lexicon.toml: do not edit here.
+# Each utterance has its target: the controls it sets, and to what. Cases that share a source list it once.
+# blind.py makes cases/MR_CA.toml from this file, the same cases without the values. No oracle reads the values;
+# judge/truth.py uses them to grade the oracles.
+
+relation = "MR_CA"
+
+[[case]]
+source = [
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "MR_CA-001"
+trace = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+  { u = "show electronics items", target = { category = "electronics" } },
+]
+
+[[case]]
+source = [
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_CA-002"
+trace = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+  { u = "show electronics items", target = { category = "electronics" } },
+]
+
+[[case]]
+source = [
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_CA-003"
+trace = [
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+  { u = "show electronics items", target = { category = "electronics" } },
+]
+
+[[case]]
+source = [
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_CA-004"
+trace = [
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+  { u = "show electronics items", target = { category = "electronics" } },
+]
+
+[[case]]
+source = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_CA-005"
+trace = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+  { u = "show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case]]
+source = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_CA-006"
+trace = [
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+  { u = "show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case]]
+source = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_CA-007"
+trace = [
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+  { u = "show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case]]
+source = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_CA-008"
+trace = [
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case]]
+source = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_CA-009"
+trace = [
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case]]
+source = [
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_CA-010"
+trace = [
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]

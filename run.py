@@ -1,12 +1,13 @@
 """
-Runs every case N times on one configuration, and checks the cases.
+Runs every case N times on one configuration of a study, and checks the cases.
 
-    python harness/run.py configs/<config>.env [N]     its server must be running (see the README); N defaults to 10
-    python harness/run.py --check                      checks the cases and prints each relation's control coverage
+    python run.py studies/<study> <config> [N]     its server must be running (./serve.sh); N defaults to 10
+    python run.py --check                          checks the cases and prints each relation's control coverage
 
 For each case, N times: reset and say the source sentences; reset and say the follow-up sentences; the case's relation
-(relations.py) gives the verdict. Each trial is one row of results/<config>.csv; a run replaces the file.
-A trial whose plumbing failed (the server or the model provider, not the shop) is recorded as infra.
+(harness/relations.py) gives the verdict. Each trial is one row of studies/<study>/results/<config>.csv; a run replaces
+the file. A trial whose plumbing failed (the server or the model provider, not the shop) is recorded as infra.
+Nothing is written outside the study's folder.
 """
 
 import csv
@@ -15,10 +16,12 @@ import sys
 import tomllib
 from pathlib import Path
 
-from relations import FAIL, RELATIONS, SHOP, changed
-from shop import InfraError, Shop
+ROOT = Path(__file__).parent
+sys.path.insert(0, str(ROOT / "harness"))
 
-ROOT = Path(__file__).parent.parent
+from relations import FAIL, RELATIONS, SHOP, changed  # noqa: E402
+from shop import InfraError, Shop  # noqa: E402
+
 ADMITS = {"MR_REV": "reversible", "MR_AC": "constraining"}  # the controls these two relations admit; the others admit all
 
 
@@ -97,18 +100,23 @@ def main():
     if args[0] == "--check":
         print(f"{len(cases)} cases, all fine. Controls covered, per relation:")
         return coverage(cases)
+    if len(args) < 2:
+        raise SystemExit(__doc__)
 
-    config, n = Path(args[0]), int(args[1]) if len(args) > 1 else 10
+    study, name = Path(args[0]), Path(args[1]).name.removesuffix(".env")  # not .stem: names hold dots (opus-5.5)
+    config, n = study / "configs" / f"{name}.env", int(args[2]) if len(args) > 2 else 10
+    if not config.exists():
+        raise SystemExit(f"no {config}")
     port = next(line.split("=", 1)[1].strip() for line in config.read_text().splitlines() if line.startswith("PORT="))
     shop = Shop(port)
-    (ROOT / "results").mkdir(exist_ok=True)
-    with open(ROOT / "results" / f"{config.stem}.csv", "w", newline="", encoding="utf-8-sig") as f:
+    (study / "results").mkdir(exist_ok=True)
+    with open(study / "results" / f"{name}.csv", "w", newline="", encoding="utf-8-sig") as f:
         out = csv.writer(f)
         out.writerow(["config", "case", "relation", "trial", "verdict", "reason", "source_changed", "followup_changed"])
         for case in cases:
             for trial in range(1, n + 1):
                 verdict, reason, source, followup = run_trial(shop, case)
-                out.writerow([config.stem, case["id"], case["relation"], trial, verdict, reason, source, followup])
+                out.writerow([name, case["id"], case["relation"], trial, verdict, reason, source, followup])
                 f.flush()
                 print(f"{case['id']} {trial}/{n} {verdict}" + ("" if verdict == "pass" else f": {reason}"))
 

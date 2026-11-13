@@ -1,0 +1,181 @@
+# MR_CE: the design of the MR_CE cases, made by make_design.py from lexicon.toml: do not edit here.
+# Each utterance has its target: the controls it sets, and to what. Cases that share a source list it once.
+# blind.py makes cases/MR_CE.toml from this file, the same cases without the values. No oracle reads the values;
+# judge/truth.py uses them to grade the oracles.
+
+relation = "MR_CE"
+
+[[case]]
+source = [
+  { u = "show electronics items", target = { category = "electronics" } },
+]
+
+[[case.followup]]
+id = "MR_CE-001"
+trace = [
+  { u = "filter to electronics only", target = { category = "electronics" } },
+]
+
+[[case.followup]]
+id = "MR_CE-002"
+trace = [
+  { u = "SHOW ELECTRONICS ITEMS", target = { category = "electronics" } },
+]
+
+[[case.followup]]
+id = "MR_CE-003"
+trace = [
+  { u = "could you please show electronics items", target = { category = "electronics" } },
+]
+
+[[case.followup]]
+id = "MR_CE-004"
+trace = [
+  { u = "show electronics items, thanks", target = { category = "electronics" } },
+]
+
+[[case.followup]]
+id = "MR_CE-005"
+trace = [
+  { u = "hey, show electronics items", target = { category = "electronics" } },
+]
+
+[[case]]
+source = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "MR_CE-006"
+trace = [
+  { u = "show items cheaper than $100", target = { maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "MR_CE-007"
+trace = [
+  { u = "SHOW ITEMS UNDER $100", target = { maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "MR_CE-008"
+trace = [
+  { u = "could you please show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "MR_CE-009"
+trace = [
+  { u = "show items under $100, thanks", target = { maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "MR_CE-010"
+trace = [
+  { u = "hey, show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case]]
+source = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_CE-011"
+trace = [
+  { u = "show items with at least 4 stars", target = { minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_CE-012"
+trace = [
+  { u = "SHOW ITEMS RATED 4 STARS AND UP", target = { minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_CE-013"
+trace = [
+  { u = "could you please show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_CE-014"
+trace = [
+  { u = "show items rated 4 stars and up, thanks", target = { minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_CE-015"
+trace = [
+  { u = "hey, show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case]]
+source = [
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_CE-016"
+trace = [
+  { u = "only show items that are in stock", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_CE-017"
+trace = [
+  { u = "HIDE OUT-OF-STOCK ITEMS", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_CE-018"
+trace = [
+  { u = "could you please hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_CE-019"
+trace = [
+  { u = "hide out-of-stock items, thanks", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_CE-020"
+trace = [
+  { u = "hey, hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case]]
+source = [
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_CE-021"
+trace = [
+  { u = "order the results by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_CE-022"
+trace = [
+  { u = "SORT BY RATING", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_CE-023"
+trace = [
+  { u = "could you please sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_CE-024"
+trace = [
+  { u = "sort by rating, thanks", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_CE-025"
+trace = [
+  { u = "hey, sort by rating", target = { sort = "rating_desc" } },
+]

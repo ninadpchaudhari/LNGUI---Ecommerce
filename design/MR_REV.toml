@@ -1,0 +1,45 @@
+# MR_REV: the design of the MR_REV cases, made by make_design.py from lexicon.toml: do not edit here.
+# Each utterance has its target: the controls it sets, and to what. Cases that share a source list it once.
+# blind.py makes cases/MR_REV.toml from this file, the same cases without the values. No oracle reads the values;
+# judge/truth.py uses them to grade the oracles.
+
+relation = "MR_REV"
+
+[[case]]
+source = [
+]
+
+[[case.followup]]
+id = "MR_REV-001"
+trace = [
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "show all categories", target = { category = "unset" } },
+]
+
+[[case.followup]]
+id = "MR_REV-002"
+trace = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+  { u = "remove the price limit", target = { maxPrice = 500 } },
+]
+
+[[case.followup]]
+id = "MR_REV-003"
+trace = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+  { u = "remove the rating filter", target = { minRating = "unset" } },
+]
+
+[[case.followup]]
+id = "MR_REV-004"
+trace = [
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+  { u = "show out-of-stock items again", target = { inStockOnly = false } },
+]
+
+[[case.followup]]
+id = "MR_REV-005"
+trace = [
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+  { u = "use the default order", target = { sort = "unset" } },
+]

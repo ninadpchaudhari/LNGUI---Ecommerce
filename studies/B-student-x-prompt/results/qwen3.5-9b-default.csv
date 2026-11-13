@@ -1,0 +1,721 @@
+﻿config,case,relation,trial,verdict,reason,source_changed,followup_changed
+qwen3.5-9b-default,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,1,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+qwen3.5-9b-default,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,2,fail,"mediator error on ""show electronics items"": Invalid command",,inStockOnly=true
+qwen3.5-9b-default,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,3,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+qwen3.5-9b-default,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,4,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+qwen3.5-9b-default,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,5,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+qwen3.5-9b-default,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,6,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+qwen3.5-9b-default,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,7,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+qwen3.5-9b-default,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,8,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+qwen3.5-9b-default,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,9,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+qwen3.5-9b-default,CONTEXT_AMNESIA-001,CONTEXT_AMNESIA,10,fail,lost what u1 set: category,"category=""electronics""",inStockOnly=true
+qwen3.5-9b-default,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,1,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,2,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,3,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,4,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,5,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,6,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,7,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,8,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,9,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-002,CONTEXT_AMNESIA,10,fail,lost what u1 set: maxPrice,maxPrice=100,"sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,1,fail,lost what u1 set: minRating,"minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,2,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,3,fail,lost what u1 set: minRating,"minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,4,fail,lost what u1 set: minRating,minRating=4,"category=""electronics"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,5,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,6,fail,lost what u1 set: minRating,minRating=4,"category=""electronics"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,7,fail,lost what u1 set: minRating,"minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,8,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,9,fail,lost what u1 set: minRating,"minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-003,CONTEXT_AMNESIA,10,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,1,fail,lost what u1 set: inStockOnly,inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,2,fail,lost what u1 set: inStockOnly,inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,3,fail,lost what u1 set: inStockOnly,inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,4,fail,lost what u1 set: inStockOnly,inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,5,fail,lost what u1 set: inStockOnly,inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,6,fail,lost what u1 set: inStockOnly,inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,7,fail,lost what u1 set: inStockOnly,inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,8,fail,lost what u1 set: inStockOnly,inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,9,fail,lost what u1 set: inStockOnly,inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,CONTEXT_AMNESIA-004,CONTEXT_AMNESIA,10,fail,lost what u1 set: inStockOnly,inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,1,fail,"mediator error on ""sort by rating"": Invalid command",,"minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,2,pass,u1 kept,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,3,fail,"mediator error on ""sort by rating"": Invalid command",,"minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,4,pass,u1 kept,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,5,fail,"mediator error on ""sort by rating"": Invalid command","sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,6,fail,"mediator error on ""sort by rating"": Invalid command",,"minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,7,pass,u1 kept,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,8,fail,"mediator error on ""sort by rating"": Invalid command",,"minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,9,fail,"mediator error on ""sort by rating"": Invalid command","sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,CONTEXT_AMNESIA-005,CONTEXT_AMNESIA,10,fail,"mediator error on ""sort by rating"": Invalid command","sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_AC-001,MR_AC,1,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-001,MR_AC,2,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-001,MR_AC,3,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-001,MR_AC,4,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-001,MR_AC,5,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-001,MR_AC,6,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-001,MR_AC,7,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-001,MR_AC,8,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-001,MR_AC,9,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-001,MR_AC,10,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-002,MR_AC,1,fail,"mediator error on ""show electronics items rated 4 stars and up"": Invalid command","category=""electronics""",
+qwen3.5-9b-default,MR_AC-002,MR_AC,2,fail,base not kept on: sort,"category=""electronics""","category=""electronics"" minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_AC-002,MR_AC,3,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_AC-002,MR_AC,4,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"" minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_AC-002,MR_AC,5,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_AC-002,MR_AC,6,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"" minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_AC-002,MR_AC,7,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_AC-002,MR_AC,8,fail,base not kept on: sort,"category=""electronics""","category=""electronics"" minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_AC-002,MR_AC,9,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_AC-002,MR_AC,10,fail,base not kept on: sort,"category=""electronics""","category=""electronics"" minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_AC-003,MR_AC,1,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-003,MR_AC,2,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-003,MR_AC,3,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-003,MR_AC,4,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-003,MR_AC,5,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-003,MR_AC,6,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-003,MR_AC,7,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-003,MR_AC,8,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-003,MR_AC,9,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-003,MR_AC,10,pass,V_ref = V_base[d ↦ w],"category=""electronics""","category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-004,MR_AC,1,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-004,MR_AC,2,fail,"mediator error on ""show items under $100"": Invalid command",,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-004,MR_AC,3,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-004,MR_AC,4,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-004,MR_AC,5,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-004,MR_AC,6,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-004,MR_AC,7,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-004,MR_AC,8,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-004,MR_AC,9,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-004,MR_AC,10,pass,V_ref = V_base[d ↦ w],maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_AC-005,MR_AC,1,fail,"mediator error on ""show items under $100 rated 4 stars and up"": Invalid command",maxPrice=100,
+qwen3.5-9b-default,MR_AC-005,MR_AC,2,fail,"mediator error on ""show items under $100"": Invalid command",,maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-005,MR_AC,3,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-005,MR_AC,4,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-005,MR_AC,5,fail,"mediator error on ""show items under $100"": Invalid command",,maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-005,MR_AC,6,fail,"mediator error on ""show items under $100"": Invalid command",,"maxPrice=100 minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_AC-005,MR_AC,7,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-005,MR_AC,8,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-005,MR_AC,9,fail,base not kept on: sort,maxPrice=100,"maxPrice=100 minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_AC-005,MR_AC,10,pass,V_ref = V_base[d ↦ w],maxPrice=100,maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-006,MR_AC,1,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-006,MR_AC,2,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-006,MR_AC,3,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-006,MR_AC,4,fail,"mediator error on ""show items under $100"": Invalid command",,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-006,MR_AC,5,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-006,MR_AC,6,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-006,MR_AC,7,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-006,MR_AC,8,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-006,MR_AC,9,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-006,MR_AC,10,pass,V_ref = V_base[d ↦ w],maxPrice=100,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-007,MR_AC,1,fail,base not kept on: sort,minRating=4,"category=""electronics"" minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_AC-007,MR_AC,2,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_AC-007,MR_AC,3,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_AC-007,MR_AC,4,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"category=""electronics"" minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_AC-007,MR_AC,5,pass,V_ref = V_base[d ↦ w],"minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_AC-007,MR_AC,6,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_AC-007,MR_AC,7,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_AC-007,MR_AC,8,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_AC-007,MR_AC,9,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_AC-007,MR_AC,10,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_AC-008,MR_AC,1,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-008,MR_AC,2,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-008,MR_AC,3,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-008,MR_AC,4,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-008,MR_AC,5,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""","maxPrice=100 minRating=4 sort=""price_asc"""
+qwen3.5-9b-default,MR_AC-008,MR_AC,6,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-008,MR_AC,7,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-008,MR_AC,8,pass,V_ref = V_base[d ↦ w],"minRating=4 sort=""rating_desc""","maxPrice=100 minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_AC-008,MR_AC,9,fail,"mediator error on ""show items rated 4 stars and up under $100"": Invalid command","minRating=4 sort=""rating_desc""",
+qwen3.5-9b-default,MR_AC-008,MR_AC,10,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_AC-009,MR_AC,1,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""",inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-009,MR_AC,2,pass,V_ref = V_base[d ↦ w],minRating=4,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-009,MR_AC,3,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-009,MR_AC,4,fail,"mediator error on ""show items rated 4 stars and up that are in stock"": Invalid command","minRating=4 sort=""rating_desc""",
+qwen3.5-9b-default,MR_AC-009,MR_AC,5,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-009,MR_AC,6,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""",inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-009,MR_AC,7,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""",inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-009,MR_AC,8,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-009,MR_AC,9,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""",inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-009,MR_AC,10,fail,base not kept on: sort,"minRating=4 sort=""rating_desc""",inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-010,MR_AC,1,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-010,MR_AC,2,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-010,MR_AC,3,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-010,MR_AC,4,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-010,MR_AC,5,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-010,MR_AC,6,fail,"mediator error on ""hide out-of-stock items in electronics"": Invalid command",inStockOnly=true,
+qwen3.5-9b-default,MR_AC-010,MR_AC,7,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-010,MR_AC,8,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-010,MR_AC,9,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-010,MR_AC,10,pass,V_ref = V_base[d ↦ w],inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_AC-011,MR_AC,1,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-011,MR_AC,2,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-011,MR_AC,3,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-011,MR_AC,4,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-011,MR_AC,5,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-011,MR_AC,6,fail,"mediator error on ""hide out-of-stock items under $100"": Invalid command",inStockOnly=true,
+qwen3.5-9b-default,MR_AC-011,MR_AC,7,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-011,MR_AC,8,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-011,MR_AC,9,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_AC-011,MR_AC,10,fail,"mediator error on ""hide out-of-stock items under $100"": Invalid command",inStockOnly=true,
+qwen3.5-9b-default,MR_AC-012,MR_AC,1,fail,"mediator error on ""hide out-of-stock items rated 4 stars and up"": Invalid command",inStockOnly=true,
+qwen3.5-9b-default,MR_AC-012,MR_AC,2,fail,"mediator error on ""hide out-of-stock items rated 4 stars and up"": Invalid command",inStockOnly=true,
+qwen3.5-9b-default,MR_AC-012,MR_AC,3,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-012,MR_AC,4,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-012,MR_AC,5,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-012,MR_AC,6,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-012,MR_AC,7,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-012,MR_AC,8,fail,"mediator error on ""hide out-of-stock items rated 4 stars and up"": Invalid command",inStockOnly=true,
+qwen3.5-9b-default,MR_AC-012,MR_AC,9,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_AC-012,MR_AC,10,pass,V_ref = V_base[d ↦ w],inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_CA-001,MR_CA,1,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-001,MR_CA,2,fail,"mediator error on ""show electronics items"": Invalid command",maxPrice=100,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-001,MR_CA,3,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-001,MR_CA,4,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-001,MR_CA,5,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-001,MR_CA,6,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-001,MR_CA,7,fail,"mediator error on ""show electronics items"": Invalid command",maxPrice=100,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-001,MR_CA,8,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-001,MR_CA,9,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-001,MR_CA,10,fail,"V′ ≠ V″ on: category, maxPrice",maxPrice=100,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-002,MR_CA,1,fail,"V′ ≠ V″ on: category, minRating, sort","minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-002,MR_CA,2,fail,"V′ ≠ V″ on: category, minRating, sort","minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-002,MR_CA,3,fail,"V′ ≠ V″ on: category, minRating, sort","minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-002,MR_CA,4,fail,"V′ ≠ V″ on: category, minRating, sort","minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-002,MR_CA,5,fail,"V′ ≠ V″ on: category, minRating, sort","minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-002,MR_CA,6,fail,"mediator error on ""show electronics items"": Invalid command","minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-002,MR_CA,7,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command","minRating=4 sort=""rating_desc""",
+qwen3.5-9b-default,MR_CA-002,MR_CA,8,fail,"V′ ≠ V″ on: category, minRating, sort","minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-002,MR_CA,9,fail,"V′ ≠ V″ on: category, minRating, sort","minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-002,MR_CA,10,fail,"V′ ≠ V″ on: category, minRating, sort","minRating=4 sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-003,MR_CA,1,fail,"V′ ≠ V″ on: category, inStockOnly",inStockOnly=true,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-003,MR_CA,2,fail,"mediator error on ""show electronics items"": Invalid command",inStockOnly=true,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-003,MR_CA,3,fail,"mediator error on ""show electronics items"": Invalid command",inStockOnly=true,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-003,MR_CA,4,fail,"V′ ≠ V″ on: category, inStockOnly",inStockOnly=true,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-003,MR_CA,5,fail,V′ ≠ V″ on: inStockOnly,"category=""electronics"" inStockOnly=true","category=""electronics"""
+qwen3.5-9b-default,MR_CA-003,MR_CA,6,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-003,MR_CA,7,fail,"V′ ≠ V″ on: category, inStockOnly",inStockOnly=true,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-003,MR_CA,8,fail,"mediator error on ""hide out-of-stock items"": Invalid command",inStockOnly=true,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-003,MR_CA,9,fail,V′ ≠ V″ on: inStockOnly,"category=""electronics"" inStockOnly=true","category=""electronics"""
+qwen3.5-9b-default,MR_CA-003,MR_CA,10,fail,"mediator error on ""show electronics items"": Invalid command",inStockOnly=true,"category=""electronics"""
+qwen3.5-9b-default,MR_CA-004,MR_CA,1,fail,"mediator error on ""sort by rating"": Invalid command","category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+qwen3.5-9b-default,MR_CA-004,MR_CA,2,fail,V′ ≠ V″ on: sort,"category=""electronics"" sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-004,MR_CA,3,fail,V′ ≠ V″ on: sort,"category=""electronics"" sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-004,MR_CA,4,fail,"mediator error on ""sort by rating"": Invalid command","category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-004,MR_CA,5,fail,V′ ≠ V″ on: sort,"category=""electronics"" sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-004,MR_CA,6,fail,V′ ≠ V″ on: sort,"category=""electronics"" sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-004,MR_CA,7,fail,V′ ≠ V″ on: sort,"category=""electronics"" sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-004,MR_CA,8,fail,"mediator error on ""sort by rating"": Invalid command","category=""electronics"" sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-004,MR_CA,9,fail,V′ ≠ V″ on: sort,"category=""electronics"" sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-004,MR_CA,10,fail,V′ ≠ V″ on: sort,"category=""electronics"" sort=""rating_desc""","category=""electronics"""
+qwen3.5-9b-default,MR_CA-005,MR_CA,1,fail,"V′ ≠ V″ on: maxPrice, minRating, sort","minRating=4 sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-005,MR_CA,2,fail,"V′ ≠ V″ on: maxPrice, minRating, sort","minRating=4 sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-005,MR_CA,3,fail,"V′ ≠ V″ on: maxPrice, minRating, sort","minRating=4 sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-005,MR_CA,4,fail,"V′ ≠ V″ on: maxPrice, minRating, sort","minRating=4 sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-005,MR_CA,5,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",minRating=4,
+qwen3.5-9b-default,MR_CA-005,MR_CA,6,fail,"V′ ≠ V″ on: maxPrice, minRating, sort","minRating=4 sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-005,MR_CA,7,fail,"V′ ≠ V″ on: maxPrice, minRating, sort","minRating=4 sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-005,MR_CA,8,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command","minRating=4 sort=""rating_desc""",
+qwen3.5-9b-default,MR_CA-005,MR_CA,9,fail,"V′ ≠ V″ on: maxPrice, minRating, sort","minRating=4 sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-005,MR_CA,10,fail,"V′ ≠ V″ on: maxPrice, minRating",minRating=4,maxPrice=100
+qwen3.5-9b-default,MR_CA-006,MR_CA,1,fail,"V′ ≠ V″ on: inStockOnly, maxPrice",inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,MR_CA-006,MR_CA,2,fail,"V′ ≠ V″ on: inStockOnly, maxPrice",inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,MR_CA-006,MR_CA,3,fail,"V′ ≠ V″ on: inStockOnly, maxPrice",inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,MR_CA-006,MR_CA,4,fail,"V′ ≠ V″ on: inStockOnly, maxPrice",inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,MR_CA-006,MR_CA,5,fail,"V′ ≠ V″ on: inStockOnly, maxPrice",inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,MR_CA-006,MR_CA,6,fail,"mediator error on ""hide out-of-stock items"": Invalid command",inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,MR_CA-006,MR_CA,7,fail,"V′ ≠ V″ on: inStockOnly, maxPrice",inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,MR_CA-006,MR_CA,8,fail,"V′ ≠ V″ on: inStockOnly, maxPrice",inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,MR_CA-006,MR_CA,9,fail,"V′ ≠ V″ on: inStockOnly, maxPrice",inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,MR_CA-006,MR_CA,10,fail,"V′ ≠ V″ on: inStockOnly, maxPrice",inStockOnly=true,maxPrice=100
+qwen3.5-9b-default,MR_CA-007,MR_CA,1,fail,"mediator error on ""sort by rating"": Invalid command","sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-007,MR_CA,2,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-007,MR_CA,3,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-007,MR_CA,4,fail,V′ ≠ V″ on: sort,"maxPrice=100 sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-007,MR_CA,5,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-007,MR_CA,6,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-007,MR_CA,7,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-007,MR_CA,8,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-007,MR_CA,9,fail,"mediator error on ""sort by rating"": Invalid command","maxPrice=100 sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-007,MR_CA,10,fail,"V′ ≠ V″ on: maxPrice, sort","sort=""rating_desc""",maxPrice=100
+qwen3.5-9b-default,MR_CA-008,MR_CA,1,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",inStockOnly=true,minRating=4
+qwen3.5-9b-default,MR_CA-008,MR_CA,2,fail,"V′ ≠ V″ on: inStockOnly, minRating, sort",inStockOnly=true,"minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CA-008,MR_CA,3,fail,"V′ ≠ V″ on: inStockOnly, minRating",inStockOnly=true,minRating=4
+qwen3.5-9b-default,MR_CA-008,MR_CA,4,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",inStockOnly=true,"minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CA-008,MR_CA,5,fail,"V′ ≠ V″ on: inStockOnly, minRating, sort",inStockOnly=true,"minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CA-008,MR_CA,6,fail,"V′ ≠ V″ on: inStockOnly, minRating, sort",inStockOnly=true,"minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CA-008,MR_CA,7,fail,"V′ ≠ V″ on: inStockOnly, minRating",inStockOnly=true,minRating=4
+qwen3.5-9b-default,MR_CA-008,MR_CA,8,fail,"V′ ≠ V″ on: inStockOnly, minRating, sort",inStockOnly=true,"minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CA-008,MR_CA,9,fail,"V′ ≠ V″ on: inStockOnly, minRating",inStockOnly=true,minRating=4
+qwen3.5-9b-default,MR_CA-008,MR_CA,10,fail,"V′ ≠ V″ on: inStockOnly, minRating",inStockOnly=true,minRating=4
+qwen3.5-9b-default,MR_CA-009,MR_CA,1,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,minRating=4
+qwen3.5-9b-default,MR_CA-009,MR_CA,2,fail,"V′ ≠ V″ on: minRating, sort","sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CA-009,MR_CA,3,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CA-009,MR_CA,4,fail,"V′ ≠ V″ on: minRating, sort","sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CA-009,MR_CA,5,fail,"V′ ≠ V″ on: minRating, sort","sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CA-009,MR_CA,6,fail,"V′ ≠ V″ on: minRating, sort","sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CA-009,MR_CA,7,fail,"V′ ≠ V″ on: minRating, sort","sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CA-009,MR_CA,8,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command","sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CA-009,MR_CA,9,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CA-009,MR_CA,10,fail,"mediator error on ""sort by rating"": Invalid command","sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CA-010,MR_CA,1,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_CA-010,MR_CA,2,fail,"mediator error on ""sort by rating"": Invalid command","inStockOnly=true sort=""rating_desc""",inStockOnly=true
+qwen3.5-9b-default,MR_CA-010,MR_CA,3,fail,"V′ ≠ V″ on: inStockOnly, sort","sort=""rating_desc""",inStockOnly=true
+qwen3.5-9b-default,MR_CA-010,MR_CA,4,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_CA-010,MR_CA,5,fail,"V′ ≠ V″ on: inStockOnly, sort","sort=""rating_desc""",inStockOnly=true
+qwen3.5-9b-default,MR_CA-010,MR_CA,6,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_CA-010,MR_CA,7,fail,"V′ ≠ V″ on: inStockOnly, sort","sort=""rating_desc""",inStockOnly=true
+qwen3.5-9b-default,MR_CA-010,MR_CA,8,fail,"V′ ≠ V″ on: inStockOnly, minRating, sort","minRating=4 sort=""rating_desc""",inStockOnly=true
+qwen3.5-9b-default,MR_CA-010,MR_CA,9,fail,"mediator error on ""sort by rating"": Invalid command","sort=""rating_desc""",inStockOnly=true
+qwen3.5-9b-default,MR_CA-010,MR_CA,10,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-001,MR_CE,1,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-001,MR_CE,2,fail,"mediator error on ""filter to electronics only"": Invalid command","category=""electronics""",
+qwen3.5-9b-default,MR_CE-001,MR_CE,3,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-001,MR_CE,4,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-001,MR_CE,5,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,MR_CE-001,MR_CE,6,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-001,MR_CE,7,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-001,MR_CE,8,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-001,MR_CE,9,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-001,MR_CE,10,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-002,MR_CE,1,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-002,MR_CE,2,fail,"mediator error on ""SHOW ELECTRONICS ITEMS"": Invalid command","category=""electronics""",
+qwen3.5-9b-default,MR_CE-002,MR_CE,3,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,MR_CE-002,MR_CE,4,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-002,MR_CE,5,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-002,MR_CE,6,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-002,MR_CE,7,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-002,MR_CE,8,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,MR_CE-002,MR_CE,9,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-002,MR_CE,10,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-003,MR_CE,1,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-003,MR_CE,2,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-003,MR_CE,3,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-003,MR_CE,4,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-003,MR_CE,5,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-003,MR_CE,6,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-003,MR_CE,7,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-003,MR_CE,8,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-003,MR_CE,9,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-003,MR_CE,10,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-004,MR_CE,1,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,MR_CE-004,MR_CE,2,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,MR_CE-004,MR_CE,3,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-004,MR_CE,4,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-004,MR_CE,5,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-004,MR_CE,6,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-004,MR_CE,7,fail,"mediator error on ""show electronics items"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,MR_CE-004,MR_CE,8,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-004,MR_CE,9,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-004,MR_CE,10,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-005,MR_CE,1,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-005,MR_CE,2,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-005,MR_CE,3,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-005,MR_CE,4,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-005,MR_CE,5,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-005,MR_CE,6,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-005,MR_CE,7,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-005,MR_CE,8,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-005,MR_CE,9,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-005,MR_CE,10,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_CE-006,MR_CE,1,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-006,MR_CE,2,fail,"mediator error on ""show items cheaper than $100"": Invalid command",maxPrice=100,
+qwen3.5-9b-default,MR_CE-006,MR_CE,3,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-006,MR_CE,4,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-006,MR_CE,5,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-006,MR_CE,6,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-006,MR_CE,7,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-006,MR_CE,8,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-006,MR_CE,9,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-006,MR_CE,10,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-007,MR_CE,1,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-007,MR_CE,2,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-007,MR_CE,3,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-007,MR_CE,4,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-007,MR_CE,5,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-007,MR_CE,6,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-007,MR_CE,7,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-007,MR_CE,8,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-007,MR_CE,9,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-007,MR_CE,10,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-008,MR_CE,1,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-008,MR_CE,2,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-008,MR_CE,3,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-008,MR_CE,4,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-008,MR_CE,5,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-008,MR_CE,6,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-008,MR_CE,7,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-008,MR_CE,8,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-008,MR_CE,9,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-008,MR_CE,10,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-009,MR_CE,1,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-009,MR_CE,2,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-009,MR_CE,3,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-009,MR_CE,4,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-009,MR_CE,5,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-009,MR_CE,6,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-009,MR_CE,7,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-009,MR_CE,8,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-009,MR_CE,9,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-009,MR_CE,10,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-010,MR_CE,1,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-010,MR_CE,2,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-010,MR_CE,3,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-010,MR_CE,4,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-010,MR_CE,5,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-010,MR_CE,6,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-010,MR_CE,7,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-010,MR_CE,8,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-010,MR_CE,9,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-010,MR_CE,10,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_CE-011,MR_CE,1,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-011,MR_CE,2,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-011,MR_CE,3,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-011,MR_CE,4,pass,V′ = V″,minRating=4,minRating=4
+qwen3.5-9b-default,MR_CE-011,MR_CE,5,pass,V′ = V″,minRating=4,minRating=4
+qwen3.5-9b-default,MR_CE-011,MR_CE,6,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,minRating=4
+qwen3.5-9b-default,MR_CE-011,MR_CE,7,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-011,MR_CE,8,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-011,MR_CE,9,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-011,MR_CE,10,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-012,MR_CE,1,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-012,MR_CE,2,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-012,MR_CE,3,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-012,MR_CE,4,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-012,MR_CE,5,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-012,MR_CE,6,fail,V′ ≠ V″ on: sort,minRating=4,"minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-012,MR_CE,7,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-012,MR_CE,8,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-012,MR_CE,9,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-012,MR_CE,10,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,"minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-013,MR_CE,1,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-013,MR_CE,2,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-013,MR_CE,3,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-013,MR_CE,4,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-013,MR_CE,5,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-013,MR_CE,6,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-013,MR_CE,7,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-013,MR_CE,8,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-013,MR_CE,9,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-013,MR_CE,10,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-014,MR_CE,1,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-014,MR_CE,2,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-014,MR_CE,3,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-014,MR_CE,4,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-014,MR_CE,5,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-014,MR_CE,6,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-014,MR_CE,7,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-014,MR_CE,8,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-014,MR_CE,9,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,minRating=4
+qwen3.5-9b-default,MR_CE-014,MR_CE,10,fail,"mediator error on ""show items rated 4 stars and up"": Invalid command",,minRating=4
+qwen3.5-9b-default,MR_CE-015,MR_CE,1,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-015,MR_CE,2,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-015,MR_CE,3,fail,V′ ≠ V″ on: sort,minRating=4,"minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-015,MR_CE,4,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-015,MR_CE,5,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-015,MR_CE,6,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-015,MR_CE,7,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-015,MR_CE,8,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-015,MR_CE,9,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-015,MR_CE,10,fail,V′ ≠ V″ on: sort,"minRating=4 sort=""rating_desc""",minRating=4
+qwen3.5-9b-default,MR_CE-016,MR_CE,1,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-016,MR_CE,2,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-016,MR_CE,3,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-016,MR_CE,4,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-016,MR_CE,5,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-016,MR_CE,6,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-016,MR_CE,7,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-016,MR_CE,8,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-016,MR_CE,9,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-016,MR_CE,10,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-017,MR_CE,1,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-017,MR_CE,2,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-017,MR_CE,3,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-017,MR_CE,4,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-017,MR_CE,5,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-017,MR_CE,6,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-017,MR_CE,7,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-017,MR_CE,8,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-017,MR_CE,9,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-017,MR_CE,10,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-018,MR_CE,1,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-018,MR_CE,2,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-018,MR_CE,3,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-018,MR_CE,4,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-018,MR_CE,5,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-018,MR_CE,6,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-018,MR_CE,7,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-018,MR_CE,8,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-018,MR_CE,9,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-018,MR_CE,10,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-019,MR_CE,1,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-019,MR_CE,2,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-019,MR_CE,3,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-019,MR_CE,4,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-019,MR_CE,5,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-019,MR_CE,6,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-019,MR_CE,7,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-019,MR_CE,8,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-019,MR_CE,9,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-019,MR_CE,10,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-020,MR_CE,1,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-020,MR_CE,2,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-020,MR_CE,3,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-020,MR_CE,4,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-020,MR_CE,5,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-020,MR_CE,6,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-020,MR_CE,7,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-020,MR_CE,8,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-020,MR_CE,9,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-020,MR_CE,10,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_CE-021,MR_CE,1,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-021,MR_CE,2,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-021,MR_CE,3,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-021,MR_CE,4,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-021,MR_CE,5,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-021,MR_CE,6,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-021,MR_CE,7,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-021,MR_CE,8,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-021,MR_CE,9,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-021,MR_CE,10,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-022,MR_CE,1,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-022,MR_CE,2,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-022,MR_CE,3,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-022,MR_CE,4,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-022,MR_CE,5,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-022,MR_CE,6,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-022,MR_CE,7,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-022,MR_CE,8,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-022,MR_CE,9,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-022,MR_CE,10,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-023,MR_CE,1,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-023,MR_CE,2,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-023,MR_CE,3,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-023,MR_CE,4,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-023,MR_CE,5,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-023,MR_CE,6,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-023,MR_CE,7,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-023,MR_CE,8,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-023,MR_CE,9,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-023,MR_CE,10,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-024,MR_CE,1,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-024,MR_CE,2,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-024,MR_CE,3,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-024,MR_CE,4,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-024,MR_CE,5,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-024,MR_CE,6,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-024,MR_CE,7,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-024,MR_CE,8,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-024,MR_CE,9,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-024,MR_CE,10,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-025,MR_CE,1,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-025,MR_CE,2,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-025,MR_CE,3,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-025,MR_CE,4,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-025,MR_CE,5,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-025,MR_CE,6,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-025,MR_CE,7,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-025,MR_CE,8,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-025,MR_CE,9,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_CE-025,MR_CE,10,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-001,MR_COMP,1,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_COMP-001,MR_COMP,2,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_COMP-001,MR_COMP,3,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_COMP-001,MR_COMP,4,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_COMP-001,MR_COMP,5,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_COMP-001,MR_COMP,6,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_COMP-001,MR_COMP,7,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_COMP-001,MR_COMP,8,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_COMP-001,MR_COMP,9,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_COMP-001,MR_COMP,10,pass,V′ = V″,"category=""electronics""","category=""electronics"""
+qwen3.5-9b-default,MR_COMP-002,MR_COMP,1,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_COMP-002,MR_COMP,2,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_COMP-002,MR_COMP,3,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_COMP-002,MR_COMP,4,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_COMP-002,MR_COMP,5,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_COMP-002,MR_COMP,6,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_COMP-002,MR_COMP,7,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_COMP-002,MR_COMP,8,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_COMP-002,MR_COMP,9,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_COMP-002,MR_COMP,10,fail,V′ ≠ V″ on: category,maxPrice=100,"category=""electronics"" maxPrice=100"
+qwen3.5-9b-default,MR_COMP-003,MR_COMP,1,fail,"V′ ≠ V″ on: category, sort","minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_COMP-003,MR_COMP,2,fail,"V′ ≠ V″ on: category, sort","minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_COMP-003,MR_COMP,3,fail,"V′ ≠ V″ on: category, sort","minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_COMP-003,MR_COMP,4,fail,"V′ ≠ V″ on: category, sort","minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_COMP-003,MR_COMP,5,fail,"V′ ≠ V″ on: category, sort","minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_COMP-003,MR_COMP,6,fail,V′ ≠ V″ on: category,minRating=4,"category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_COMP-003,MR_COMP,7,fail,"V′ ≠ V″ on: category, sort","minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_COMP-003,MR_COMP,8,fail,"V′ ≠ V″ on: category, sort","minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_COMP-003,MR_COMP,9,fail,"V′ ≠ V″ on: category, sort","minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_COMP-003,MR_COMP,10,fail,"V′ ≠ V″ on: category, sort","minRating=4 sort=""rating_desc""","category=""electronics"" minRating=4"
+qwen3.5-9b-default,MR_COMP-004,MR_COMP,1,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_COMP-004,MR_COMP,2,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_COMP-004,MR_COMP,3,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_COMP-004,MR_COMP,4,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_COMP-004,MR_COMP,5,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_COMP-004,MR_COMP,6,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_COMP-004,MR_COMP,7,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_COMP-004,MR_COMP,8,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_COMP-004,MR_COMP,9,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_COMP-004,MR_COMP,10,fail,V′ ≠ V″ on: category,inStockOnly=true,"category=""electronics"" inStockOnly=true"
+qwen3.5-9b-default,MR_COMP-005,MR_COMP,1,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-005,MR_COMP,2,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-005,MR_COMP,3,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-005,MR_COMP,4,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-005,MR_COMP,5,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-005,MR_COMP,6,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-005,MR_COMP,7,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-005,MR_COMP,8,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-005,MR_COMP,9,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-005,MR_COMP,10,pass,V′ = V″,"category=""electronics"" sort=""rating_desc""","category=""electronics"" sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-006,MR_COMP,1,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_COMP-006,MR_COMP,2,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_COMP-006,MR_COMP,3,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_COMP-006,MR_COMP,4,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_COMP-006,MR_COMP,5,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_COMP-006,MR_COMP,6,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_COMP-006,MR_COMP,7,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_COMP-006,MR_COMP,8,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_COMP-006,MR_COMP,9,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_COMP-006,MR_COMP,10,pass,V′ = V″,maxPrice=100,maxPrice=100
+qwen3.5-9b-default,MR_COMP-007,MR_COMP,1,fail,"V′ ≠ V″ on: maxPrice, sort","minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_COMP-007,MR_COMP,2,fail,"V′ ≠ V″ on: maxPrice, sort","minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_COMP-007,MR_COMP,3,fail,"V′ ≠ V″ on: maxPrice, sort","minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_COMP-007,MR_COMP,4,fail,"V′ ≠ V″ on: maxPrice, sort","minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_COMP-007,MR_COMP,5,fail,"V′ ≠ V″ on: maxPrice, sort","minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_COMP-007,MR_COMP,6,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_COMP-007,MR_COMP,7,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_COMP-007,MR_COMP,8,fail,V′ ≠ V″ on: maxPrice,minRating=4,maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_COMP-007,MR_COMP,9,fail,"V′ ≠ V″ on: maxPrice, sort","minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_COMP-007,MR_COMP,10,fail,"V′ ≠ V″ on: maxPrice, sort","minRating=4 sort=""rating_desc""",maxPrice=100 minRating=4
+qwen3.5-9b-default,MR_COMP-008,MR_COMP,1,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_COMP-008,MR_COMP,2,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_COMP-008,MR_COMP,3,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_COMP-008,MR_COMP,4,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_COMP-008,MR_COMP,5,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_COMP-008,MR_COMP,6,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_COMP-008,MR_COMP,7,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_COMP-008,MR_COMP,8,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_COMP-008,MR_COMP,9,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_COMP-008,MR_COMP,10,fail,V′ ≠ V″ on: maxPrice,inStockOnly=true,inStockOnly=true maxPrice=100
+qwen3.5-9b-default,MR_COMP-009,MR_COMP,1,pass,V′ = V″,"maxPrice=100 sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-009,MR_COMP,2,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-009,MR_COMP,3,pass,V′ = V″,"maxPrice=100 sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-009,MR_COMP,4,pass,V′ = V″,"maxPrice=100 sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-009,MR_COMP,5,pass,V′ = V″,"maxPrice=100 sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-009,MR_COMP,6,pass,V′ = V″,"maxPrice=100 sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-009,MR_COMP,7,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-009,MR_COMP,8,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-009,MR_COMP,9,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-009,MR_COMP,10,fail,V′ ≠ V″ on: maxPrice,"sort=""rating_desc""","maxPrice=100 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-010,MR_COMP,1,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-010,MR_COMP,2,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-010,MR_COMP,3,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-010,MR_COMP,4,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-010,MR_COMP,5,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-010,MR_COMP,6,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-010,MR_COMP,7,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-010,MR_COMP,8,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-010,MR_COMP,9,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-010,MR_COMP,10,pass,V′ = V″,"minRating=4 sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-011,MR_COMP,1,fail,V′ ≠ V″ on: minRating,inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_COMP-011,MR_COMP,2,fail,V′ ≠ V″ on: minRating,inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_COMP-011,MR_COMP,3,fail,V′ ≠ V″ on: minRating,inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_COMP-011,MR_COMP,4,fail,V′ ≠ V″ on: minRating,inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_COMP-011,MR_COMP,5,fail,V′ ≠ V″ on: minRating,inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_COMP-011,MR_COMP,6,fail,V′ ≠ V″ on: minRating,inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_COMP-011,MR_COMP,7,fail,V′ ≠ V″ on: minRating,inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_COMP-011,MR_COMP,8,fail,V′ ≠ V″ on: minRating,inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_COMP-011,MR_COMP,9,fail,V′ ≠ V″ on: minRating,inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_COMP-011,MR_COMP,10,fail,V′ ≠ V″ on: minRating,inStockOnly=true,inStockOnly=true minRating=4
+qwen3.5-9b-default,MR_COMP-012,MR_COMP,1,fail,V′ ≠ V″ on: minRating,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-012,MR_COMP,2,fail,V′ ≠ V″ on: minRating,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-012,MR_COMP,3,fail,V′ ≠ V″ on: minRating,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-012,MR_COMP,4,fail,V′ ≠ V″ on: minRating,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-012,MR_COMP,5,fail,V′ ≠ V″ on: minRating,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-012,MR_COMP,6,fail,V′ ≠ V″ on: minRating,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-012,MR_COMP,7,fail,V′ ≠ V″ on: minRating,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-012,MR_COMP,8,fail,V′ ≠ V″ on: minRating,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-012,MR_COMP,9,fail,V′ ≠ V″ on: minRating,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-012,MR_COMP,10,fail,V′ ≠ V″ on: minRating,"sort=""rating_desc""","minRating=4 sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-013,MR_COMP,1,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_COMP-013,MR_COMP,2,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_COMP-013,MR_COMP,3,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_COMP-013,MR_COMP,4,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_COMP-013,MR_COMP,5,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_COMP-013,MR_COMP,6,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_COMP-013,MR_COMP,7,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_COMP-013,MR_COMP,8,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_COMP-013,MR_COMP,9,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_COMP-013,MR_COMP,10,pass,V′ = V″,inStockOnly=true,inStockOnly=true
+qwen3.5-9b-default,MR_COMP-014,MR_COMP,1,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-014,MR_COMP,2,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-014,MR_COMP,3,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-014,MR_COMP,4,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-014,MR_COMP,5,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-014,MR_COMP,6,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-014,MR_COMP,7,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-014,MR_COMP,8,pass,V′ = V″,"inStockOnly=true sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-014,MR_COMP,9,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-014,MR_COMP,10,fail,V′ ≠ V″ on: inStockOnly,"sort=""rating_desc""","inStockOnly=true sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-015,MR_COMP,1,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-015,MR_COMP,2,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-015,MR_COMP,3,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-015,MR_COMP,4,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-015,MR_COMP,5,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-015,MR_COMP,6,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-015,MR_COMP,7,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-015,MR_COMP,8,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-015,MR_COMP,9,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_COMP-015,MR_COMP,10,pass,V′ = V″,"sort=""rating_desc""","sort=""rating_desc"""
+qwen3.5-9b-default,MR_REV-001,MR_REV,1,fail,"mediator error on ""show all categories"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,MR_REV-001,MR_REV,2,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-001,MR_REV,3,fail,"mediator error on ""show all categories"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,MR_REV-001,MR_REV,4,fail,"mediator error on ""show all categories"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,MR_REV-001,MR_REV,5,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-001,MR_REV,6,fail,"mediator error on ""show all categories"": Invalid command",,"category=""electronics"""
+qwen3.5-9b-default,MR_REV-001,MR_REV,7,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-001,MR_REV,8,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-001,MR_REV,9,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-001,MR_REV,10,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-002,MR_REV,1,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-002,MR_REV,2,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-002,MR_REV,3,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-002,MR_REV,4,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-002,MR_REV,5,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-002,MR_REV,6,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-002,MR_REV,7,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-002,MR_REV,8,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-002,MR_REV,9,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-002,MR_REV,10,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-003,MR_REV,1,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-003,MR_REV,2,fail,V″ ≠ V0 on: sort,,"sort=""rating_desc"""
+qwen3.5-9b-default,MR_REV-003,MR_REV,3,fail,V″ ≠ V0 on: sort,,"sort=""rating_desc"""
+qwen3.5-9b-default,MR_REV-003,MR_REV,4,fail,V″ ≠ V0 on: sort,,"sort=""rating_desc"""
+qwen3.5-9b-default,MR_REV-003,MR_REV,5,fail,V″ ≠ V0 on: sort,,"sort=""rating_desc"""
+qwen3.5-9b-default,MR_REV-003,MR_REV,6,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-003,MR_REV,7,fail,V″ ≠ V0 on: sort,,"sort=""rating_desc"""
+qwen3.5-9b-default,MR_REV-003,MR_REV,8,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-003,MR_REV,9,fail,V″ ≠ V0 on: sort,,"sort=""rating_desc"""
+qwen3.5-9b-default,MR_REV-003,MR_REV,10,fail,V″ ≠ V0 on: sort,,"sort=""rating_desc"""
+qwen3.5-9b-default,MR_REV-004,MR_REV,1,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-004,MR_REV,2,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-004,MR_REV,3,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-004,MR_REV,4,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-004,MR_REV,5,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-004,MR_REV,6,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-004,MR_REV,7,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-004,MR_REV,8,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-004,MR_REV,9,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-004,MR_REV,10,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-005,MR_REV,1,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-005,MR_REV,2,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-005,MR_REV,3,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-005,MR_REV,4,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-005,MR_REV,5,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-005,MR_REV,6,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-005,MR_REV,7,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-005,MR_REV,8,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-005,MR_REV,9,pass,V″ = V0,,
+qwen3.5-9b-default,MR_REV-005,MR_REV,10,pass,V″ = V0,,

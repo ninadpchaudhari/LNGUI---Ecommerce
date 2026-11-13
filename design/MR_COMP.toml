@@ -1,0 +1,186 @@
+# MR_COMP: the design of the MR_COMP cases, made by make_design.py from lexicon.toml: do not edit here.
+# Each utterance has its target: the controls it sets, and to what. Cases that share a source list it once.
+# blind.py makes cases/MR_COMP.toml from this file, the same cases without the values. No oracle reads the values;
+# judge/truth.py uses them to grade the oracles.
+
+relation = "MR_COMP"
+
+[[case]]
+source = [
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "show electronics items", target = { category = "electronics" } },
+]
+
+[[case.followup]]
+id = "MR_COMP-001"
+trace = [
+  { u = "show electronics items", target = { category = "electronics" } },
+]
+
+[[case]]
+source = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+  { u = "show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "MR_COMP-006"
+trace = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case]]
+source = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_COMP-010"
+trace = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case]]
+source = [
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_COMP-013"
+trace = [
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case]]
+source = [
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_COMP-015"
+trace = [
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case]]
+source = [
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "show items under $100", target = { maxPrice = 100 } },
+]
+
+[[case.followup]]
+id = "MR_COMP-002"
+trace = [
+  { u = "show electronics items and show items under $100", target = { category = "electronics", maxPrice = 100 } },
+]
+
+[[case]]
+source = [
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_COMP-003"
+trace = [
+  { u = "show electronics items and show items rated 4 stars and up", target = { category = "electronics", minRating = 4 } },
+]
+
+[[case]]
+source = [
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_COMP-004"
+trace = [
+  { u = "show electronics items and hide out-of-stock items", target = { category = "electronics", inStockOnly = true } },
+]
+
+[[case]]
+source = [
+  { u = "show electronics items", target = { category = "electronics" } },
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_COMP-005"
+trace = [
+  { u = "show electronics items and sort by rating", target = { category = "electronics", sort = "rating_desc" } },
+]
+
+[[case]]
+source = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+]
+
+[[case.followup]]
+id = "MR_COMP-007"
+trace = [
+  { u = "show items under $100 and show items rated 4 stars and up", target = { maxPrice = 100, minRating = 4 } },
+]
+
+[[case]]
+source = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_COMP-008"
+trace = [
+  { u = "show items under $100 and hide out-of-stock items", target = { maxPrice = 100, inStockOnly = true } },
+]
+
+[[case]]
+source = [
+  { u = "show items under $100", target = { maxPrice = 100 } },
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_COMP-009"
+trace = [
+  { u = "show items under $100 and sort by rating", target = { maxPrice = 100, sort = "rating_desc" } },
+]
+
+[[case]]
+source = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+]
+
+[[case.followup]]
+id = "MR_COMP-011"
+trace = [
+  { u = "show items rated 4 stars and up and hide out-of-stock items", target = { minRating = 4, inStockOnly = true } },
+]
+
+[[case]]
+source = [
+  { u = "show items rated 4 stars and up", target = { minRating = 4 } },
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_COMP-012"
+trace = [
+  { u = "show items rated 4 stars and up and sort by rating", target = { minRating = 4, sort = "rating_desc" } },
+]
+
+[[case]]
+source = [
+  { u = "hide out-of-stock items", target = { inStockOnly = true } },
+  { u = "sort by rating", target = { sort = "rating_desc" } },
+]
+
+[[case.followup]]
+id = "MR_COMP-014"
+trace = [
+  { u = "hide out-of-stock items and sort by rating", target = { inStockOnly = true, sort = "rating_desc" } },
+]

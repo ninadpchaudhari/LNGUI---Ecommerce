@@ -1,6 +1,5 @@
+# Made by blind.py from design/MR_CE.toml: do not edit here, edit the design and run blind.py again.
 relation = "MR_CE"
-
-# ── C = category ──────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "MR_CE-001"
@@ -47,8 +46,6 @@ followup = "hey, show electronics items"
 "show electronics items" = ["category"]
 "hey, show electronics items" = ["category"]
 
-# ── C = maxPrice ──────────────────────────────────────────────────────────────────────────────────
-
 [[case]]
 id = "MR_CE-006"
 source = "show items under $100"
@@ -93,8 +90,6 @@ followup = "hey, show items under $100"
 [case.writes]
 "show items under $100" = ["maxPrice"]
 "hey, show items under $100" = ["maxPrice"]
-
-# ── C = minRating ─────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "MR_CE-011"
@@ -141,8 +136,6 @@ followup = "hey, show items rated 4 stars and up"
 "show items rated 4 stars and up" = ["minRating"]
 "hey, show items rated 4 stars and up" = ["minRating"]
 
-# ── C = inStockOnly ───────────────────────────────────────────────────────────────────────────────
-
 [[case]]
 id = "MR_CE-016"
 source = "hide out-of-stock items"
@@ -187,8 +180,6 @@ followup = "hey, hide out-of-stock items"
 [case.writes]
 "hide out-of-stock items" = ["inStockOnly"]
 "hey, hide out-of-stock items" = ["inStockOnly"]
-
-# ── C = sort ──────────────────────────────────────────────────────────────────────────────────────
 
 [[case]]
 id = "MR_CE-021"
